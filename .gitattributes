@@ -1,15 +1,17 @@
-/Assets/Assets[[:space:]]Packs/Models/Suntail[[:space:]]Village/Audio/Suntail[[:space:]]-[[:space:]]Mild[[:space:]]Flight.wav filter=lfs diff=lfs merge=lfs -text
-/Assets/Assets[[:space:]]Packs/Models/Suntail[[:space:]]Village/Demo/Suntail[[:space:]]Village.unity filter=lfs diff=lfs merge=lfs -text
-/Assets/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics[[:space:]]2.75/iOS/libBulletPhysics.a filter=lfs diff=lfs merge=lfs -text
-/Assets/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics[[:space:]]2.75/iOS/libMMD4MecanimBulletPhysics.a filter=lfs diff=lfs merge=lfs -text
-/Assets/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/libBulletPhysics.a filter=lfs diff=lfs merge=lfs -text
-/Assets/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/libMMD4MecanimBulletPhysics.a filter=lfs diff=lfs merge=lfs -text
-/Assets/Art/Models/Suntail[[:space:]]Village/Audio/Suntail[[:space:]]-[[:space:]]Mild[[:space:]]Flight.wav filter=lfs diff=lfs merge=lfs -text
-/Assets/Art/Models/Suntail[[:space:]]Village/Demo/Suntail[[:space:]]Village.unity filter=lfs diff=lfs merge=lfs -text
-/Assets/MySetting/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics[[:space:]]2.75/iOS/libBulletPhysics.a filter=lfs diff=lfs merge=lfs -text
-/Assets/MySetting/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics[[:space:]]2.75/iOS/libMMD4MecanimBulletPhysics.a filter=lfs diff=lfs merge=lfs -text
-/Assets/MySetting/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/libBulletPhysics.a filter=lfs diff=lfs merge=lfs -text
-/Assets/MySetting/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/libMMD4MecanimBulletPhysics.a filter=lfs diff=lfs merge=lfs -text
+# 带空格的路径必须用双引号包裹，避免Git拆分
+"/Assets/Assets Packs/Models/Suntail Village/Audio/Suntail - Mild Flight.wav" filter=lfs diff=lfs merge=lfs -text
+"/Assets/Assets Packs/Models/Suntail Village/Demo/Suntail Village.unity" filter=lfs diff=lfs merge=lfs -text
+"/Assets/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics 2.75/iOS/libBulletPhysics.a" filter=lfs diff=lfs merge=lfs -text
+"/Assets/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics 2.75/iOS/libMMD4MecanimBulletPhysics.a" filter=lfs diff=lfs merge=lfs -text
+"/Assets/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/libBulletPhysics.a" filter=lfs diff=lfs merge=lfs -text
+"/Assets/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/libMMD4MecanimBulletPhysics.a" filter=lfs diff=lfs merge=lfs -text
+"/Assets/Art/Models/Suntail Village/Audio/Suntail - Mild Flight.wav" filter=lfs diff=lfs merge=lfs -text
+"/Assets/Art/Models/Suntail Village/Demo/Suntail Village.unity" filter=lfs diff=lfs merge=lfs -text
+"/Assets/MySetting/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics 2.75/iOS/libBulletPhysics.a" filter=lfs diff=lfs merge=lfs -text
+"/Assets/MySetting/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics 2.75/iOS/libMMD4MecanimBulletPhysics.a" filter=lfs diff=lfs merge=lfs -text
+"/Assets/MySetting/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/libBulletPhysics.a" filter=lfs diff=lfs merge=lfs -text
+"/Assets/MySetting/MMD4Mecanim/Plugins/MMD4MecanimBulletPhysics/iOS/libMMD4MecanimBulletPhysics.a" filter=lfs diff=lfs merge=lfs -text
+
 *.a filter=lfs diff=lfs merge=lfs -text
 *.dll filter=lfs diff=lfs merge=lfs -text
 *.so filter=lfs diff=lfs merge=lfs -text
