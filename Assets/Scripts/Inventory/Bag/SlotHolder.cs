@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SlotHolder : MonoBehaviour
 {
-    public SlotType slotType;
     public ItemUI itemUI;
     [Header("广播")]
     public ItemDataEventSO itemDataEventSO;
@@ -12,50 +11,11 @@ public class SlotHolder : MonoBehaviour
     public InventoryData_SO targetBag;
     public ItemData_SO currentItemData;
 
-    // public void  UpdateItems(ItemType itemType)
-    // {
-    //     // switch (slotType)
-    //     // {
-    //     //     case SlotType.Bag:
-    //     //         itemUI.Bag = bagData;
-    //     //         break;
-    //     //     case SlotType.Equipment:
-
-    //     //         break;
-    //     // }
-
-    //     // var item = itemUI.Bag.items[itemUI.Index];
-    //     // itemUI.SetupItemUI(item.itemData,item.amount);
-    //     if(bagData.items[itemUI.Index].itemData.itemType == itemType)
-    //     {
-    //         var item = bagData.items[itemUI.Index];
-    //         itemUI.SetupItemUI(item.itemData,item.amount);
-    //     }
-
-    // }
-    void Awake()
-    {
-        if (InventoryManager.instance == null)
-        {
-            Debug.LogError("InventoryManager单例未初始化！", this);
-            return;
-        }
-        targetBag = InventoryManager.instance.targetBagData;
-    }
-
     public void UpdateItems()
     {
         if(targetBag == null)
             targetBag = InventoryManager.instance.targetBagData;
-        switch (slotType)
-        {
-            case SlotType.Bag:
-                itemUI.Bag = targetBag;
-                break;
-            case SlotType.Equipment:
 
-                break;
-        }
         // 检查当前物品
         if(itemUI.Index >= targetBag.items.Count)
         {

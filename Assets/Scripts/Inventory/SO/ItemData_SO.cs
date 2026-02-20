@@ -20,4 +20,7 @@ public class ItemData_SO : ScriptableObject
     public GameObject weaponPrefab;
     public EquipmentData_SO equipmentData;
     public ComboListSO comboList;
+
+    [Header("食物信息")]
+    public float hpGain;
 }

@@ -7,8 +7,9 @@ using UnityEngine;
 
 public class CombatControllerBase : MonoBehaviour
 {
-    [SerializeField] protected ComboListSO currentComboList;
     public LayerMask targetMask;
+    [Header("自动获取无需拖拽")]
+    [SerializeField] protected ComboListSO currentComboList;
     public Animator animator;
     public bool canExecuteCombo;
     protected CharacterBase currentCharacter;  
@@ -215,7 +216,7 @@ public class CombatControllerBase : MonoBehaviour
 
     IEnumerator IE_ExecuteMoveOffset(MoveOffsetConfig moveOffsetConfig,Vector3 dir)
     {
-        Debug.Log("位移" + moveOffsetConfig.moveOffsetDirection);
+        //Debug.Log("位移" + moveOffsetConfig.moveOffsetDirection);
         while(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < moveOffsetConfig.duration)
         {
             yield return null;

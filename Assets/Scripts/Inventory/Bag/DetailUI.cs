@@ -48,6 +48,11 @@ public class DetailUI : MonoBehaviour
 
     private void ShowDetail(ItemData_SO itemdata)
     {
+        if(itemdata == null)
+        {
+            detailUI.SetActive(false);
+            return;
+        }
         
         currentItemData = itemdata;
         detailUI.SetActive(true);
@@ -121,7 +126,8 @@ public class DetailUI : MonoBehaviour
 
     private void OnUsedFood()
     {
-        
+        InventoryManager.instance.playerStatsManager.UsedFood(currentItemData);
+        detailUI.SetActive(false);
     }
     
 }

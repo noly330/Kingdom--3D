@@ -7,9 +7,7 @@ public class EquipmentData_SO : ScriptableObject
 {
     // 基础属性加成
     public int healthBonus;
-    public int manaBonus;
     public int damageBonus;
     public int defenseBonus;
-    public float moveSpeedBonus;
     
 }

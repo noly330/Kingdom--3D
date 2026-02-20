@@ -14,6 +14,7 @@ public class InventoryManager : MonoBehaviour
 
     [Header("装备管理")]
     public PlayerStatsManager playerStatsManager;
+    public PlayerStatsUI playerStatsUI;
 
     [Header("Containers")]
     public ContainerUI bagContainer;
@@ -35,6 +36,8 @@ public class InventoryManager : MonoBehaviour
     {
         bagContainer.ReFreshUI(ItemType.Weapon);
         equipmentContainer.ReFreshUI(ItemType.Weapon);
+
+        //游戏一开始就加载装备
         foreach (var i in equipmentData.items)
         {
             if(i.itemData == null) continue;

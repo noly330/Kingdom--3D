@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerCharacter : CharacterBase
 {
     public Transform weaponSlot;
+    private InventoryData_SO equipmentData;
+    public VoidEventSO HealthUpdayeEvent;
 
     protected override void Awake()
     {
@@ -14,6 +16,15 @@ public class PlayerCharacter : CharacterBase
     {
         base.Start();
         UpdateCharacterStats();
+    }
+
+    void OnEnable()
+    {
+
+    }
+    void OnDisable()
+    {
+
     }
 
 
@@ -35,13 +46,21 @@ public class PlayerCharacter : CharacterBase
 
     public void UpdateCharacterStats()
     {
+        float healthPercentage = currentHealth / maxHealth;
+
         currentAttack = baseAttack;
-        InventoryData_SO equipmentData = InventoryManager.instance.equipmentData;
+        maxHealth = baseHealth;
+        equipmentData = InventoryManager.instance.equipmentData;
         foreach (var i in equipmentData.items)
         {
-            if(i.itemData == null) continue;
+            if (i.itemData == null) continue;
             currentAttack += i.itemData.equipmentData.damageBonus;
+            maxHealth += i.itemData.equipmentData.healthBonus;
         }
+
+        currentHealth = maxHealth * healthPercentage;
+        // 确保不溢出
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
     }
 

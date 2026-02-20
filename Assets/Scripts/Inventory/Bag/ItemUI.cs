@@ -7,8 +7,6 @@ public class ItemUI : MonoBehaviour
 {
     public Image itemIcon = null;
     public Text showAmount = null;
-
-    public InventoryData_SO Bag { get; set; }
     public int Index { get; set; } = -1;
 
     public void SetupItemUI(ItemData_SO itemData, int amount = 1)
