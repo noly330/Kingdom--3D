@@ -57,13 +57,13 @@ public class ComboListSO : ScriptableObject
         if(eventIndex >= comboList[comboIndex].sfxConfig.Length)  return null;
         return comboList[comboIndex].sfxConfig[eventIndex];
     }
-    public SelfMoveOffsetConfig TryGetSelfMoveOffsetConfig(int comboIndex,int eventIndex)
+    public MoveOffsetConfig TryGetSelfMoveOffsetConfig(int comboIndex,int eventIndex)
     {
         if(comboIndex >= comboList.Length)  return null;
         if(eventIndex >= comboList[comboIndex].selfMoveOffsetConfig.Length)  return null;
         return comboList[comboIndex].selfMoveOffsetConfig[eventIndex];
     }
-    public TargetMoveOffsetConfig TryGetTargetMoveOffsetConfig(int comboIndex,int eventIndex)
+    public MoveOffsetConfig TryGetTargetMoveOffsetConfig(int comboIndex,int eventIndex)
     {
         if(comboIndex >= comboList.Length)  return null;
         if(eventIndex >= comboList[comboIndex].targetMoveOffsetConfig.Length)  return null;

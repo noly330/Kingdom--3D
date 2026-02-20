@@ -24,10 +24,10 @@ public class ComboConfigSO : ScriptableObject
     public SFXConfig[] sfxConfig;
 
     [Header("自身位移补偿数据")]
-    public SelfMoveOffsetConfig[] selfMoveOffsetConfig;
+    public MoveOffsetConfig[] selfMoveOffsetConfig;
 
     [Header("目标位移补偿数据")]
-    public TargetMoveOffsetConfig[] targetMoveOffsetConfig;
+    public MoveOffsetConfig[] targetMoveOffsetConfig;
 
 }
 
@@ -78,9 +78,8 @@ public class SFXConfig
 }
 
 [System.Serializable]
-public class SelfMoveOffsetConfig
+public class MoveOffsetConfig
 {
-    public float startTime;
     public AnimationCurve animationCurve;
     //方向
     public MoveOffsetDirection moveOffsetDirection;
@@ -88,13 +87,3 @@ public class SelfMoveOffsetConfig
     public float duration;
 }
 
-[System.Serializable]
-public class TargetMoveOffsetConfig
-{
-    public float startTime;
-    public AnimationCurve animationCurve;
-    //方向
-    public MoveOffsetDirection moveOffsetDirection;
-    public float scale;
-    public float duration;
-}
