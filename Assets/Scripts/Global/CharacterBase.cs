@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterBase : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class CharacterBase : MonoBehaviour
 
     [Header("角色状态")]
     public bool isDead;
+    
+    public UnityEvent OnHealthChange;
 
     protected virtual void Awake()
     {
@@ -39,6 +42,8 @@ public class CharacterBase : MonoBehaviour
     {
         float finalDamage = Mathf.Max(1f,damage - defence);
         currentHealth -= finalDamage;
+
+        OnHealthChange?.Invoke();
     }
 
 }

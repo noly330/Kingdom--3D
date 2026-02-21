@@ -15,6 +15,7 @@ public class EnemyDeadState : IEnemyState
     {
         Debug.Log("死亡");
         enemyFSM.animator.SetBool("IsDead", true);
+        
         destoryTime = 3f;
     }
     public void OnUpdate()
@@ -23,7 +24,8 @@ public class EnemyDeadState : IEnemyState
         destoryTime -= Time.deltaTime;
         if (destoryTime <= 0f)
         {
-            GameObject.Destroy(enemyFSM.gameObject);
+            enemyFSM.GetComponent<LootSpawner>().CreatLootItem();
+            enemyFSM.gameObject.SetActive(false);
             enemyFSM = null;
         }
     }

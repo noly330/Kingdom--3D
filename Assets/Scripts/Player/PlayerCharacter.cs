@@ -58,6 +58,8 @@ public class PlayerCharacter : CharacterBase
             maxHealth += i.itemData.equipmentData.healthBonus;
         }
 
+        UIManager.instance.playerStatsUI.UpdateStatsUI(maxHealth, currentAttack);
+
         currentHealth = maxHealth * healthPercentage;
         // 确保不溢出
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);

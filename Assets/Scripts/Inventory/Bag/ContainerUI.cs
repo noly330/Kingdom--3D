@@ -48,6 +48,7 @@ public class ContainerUI : MonoBehaviour
     {
         if (targetBag == null || bagData?.items == null) return;
 
+        UIManager.instance.detailUIManager.detailUI.SetActive(false);
         targetBag.items.Clear();
 
         for (int i = 0; i < bagData.items.Count; i++)

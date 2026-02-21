@@ -28,7 +28,8 @@ public class PlayerStatsManager : MonoBehaviour
         InventoryManager.instance.equipmentData.AddEquipment(equipment);
         equipment.isEquipped = true;
         playerCharacter.UpdateCharacterStats();
-        InventoryManager.instance.playerStatsUI.UpdateEquipmentUI();
+        UIManager.instance.playerStatsUI.UpdateEquipmentUI();
+        UIManager.instance.playerStatsUI.UpdateStatsUI(playerCharacter.maxHealth, playerCharacter.currentAttack);
 
         if (equipment.itemType == ItemType.Weapon)
         {
@@ -50,7 +51,8 @@ public class PlayerStatsManager : MonoBehaviour
         }
 
         playerCharacter.UpdateCharacterStats();
-        InventoryManager.instance.playerStatsUI.UpdateEquipmentUI();
+        UIManager.instance.playerStatsUI.UpdateEquipmentUI();
+        UIManager.instance.playerStatsUI.UpdateStatsUI(playerCharacter.maxHealth, playerCharacter.currentAttack);
         if (itemType == ItemType.Weapon)
         {
             playerCharacter.UnEquipWeapon();

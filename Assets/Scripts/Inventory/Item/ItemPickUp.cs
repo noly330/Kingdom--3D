@@ -22,6 +22,7 @@ public class ItemPickUp : MonoBehaviour
         InventoryManager playerBag = player.GetComponent<InventoryManager>();
         playerBag.inventoryData.AddItem(itemData, itemData.itemAmount);
         playerBag.bagContainer.ReFreshUI(itemData.itemType);
+        UIManager.instance.interactPrompt.HidePrompt();
         Destroy(gameObject);
 
     }
@@ -32,6 +33,7 @@ public class ItemPickUp : MonoBehaviour
         {
             isPlayerInRange = true;
             player = other.gameObject;
+            UIManager.instance.interactPrompt.ShowPrompt(InteractType.PickUp);
         }
     }
 
@@ -41,6 +43,7 @@ public class ItemPickUp : MonoBehaviour
         {
             isPlayerInRange = false;
             player = null;
+            UIManager.instance.interactPrompt.HidePrompt();
         }
     }
 }

@@ -12,17 +12,12 @@ public class InventoryManager : MonoBehaviour
     public InventoryData_SO targetBagData;
 
 
-    [Header("装备管理")]
+    [Header("装备")]
     public PlayerStatsManager playerStatsManager;
-    public PlayerStatsUI playerStatsUI;
 
     [Header("Containers")]
     public ContainerUI bagContainer;
     public ContainerUI equipmentContainer;
-    //public ContainerUI playerStatsContainer;
-    [Header("DragCanvas")]
-    public Canvas dragCanvas;
-    //public DragData currentDrag;
 
     void Awake()
     {

@@ -29,7 +29,7 @@ public enum ItemType
     Food,
     Weapon,Goblet,Headwear,Clothing,Shoes,Accessory
 }
-public enum SlotType
+public enum InteractType
 {
-    Bag,Equipment,
+    None,PickUp,Use
 }

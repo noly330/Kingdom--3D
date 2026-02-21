@@ -22,7 +22,7 @@ public class MoveController : MonoBehaviour
 
     // 地面检测相关
     [Header("Ground Detection")]
-    [SerializeField] private float groundCheckDistance = 0.3f;
+    [SerializeField] private float groundCheckDistance = 0.4f;
     [SerializeField] private LayerMask groundLayer = -1; // 默认所有层
     private RaycastHit groundHit;
 
@@ -56,12 +56,12 @@ public class MoveController : MonoBehaviour
     {
 
         float checkDistance = characterController.height / 2 + groundCheckDistance;
-        Vector3 rayOrigin = transform.position + characterController.center;  //获得胶囊体中心
+        Vector3 rayOrigin = transform.position + characterController.center;  //获得胶囊体中心(角色世界坐标加上胶囊体中心偏移量)
 
         if (Physics.Raycast(rayOrigin, Vector3.down, out groundHit, checkDistance, groundLayer))
         {
             //groundHit.normal：地面的法向量
-            float slopeAngle = Vector3.Angle(groundHit.normal, Vector3.up);  //计算当前地面的「实际坡度」
+            float slopeAngle = Vector3.Angle(groundHit.normal, Vector3.up);  //计算当前地面的
             return slopeAngle <= characterController.slopeLimit;
         }
 

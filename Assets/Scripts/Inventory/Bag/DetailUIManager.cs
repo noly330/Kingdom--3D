@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DetailUI : MonoBehaviour
+public class DetailUIManager : MonoBehaviour
 {
     [Header("物品详细基本信息")]
     public GameObject detailUI;

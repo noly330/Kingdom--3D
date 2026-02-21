@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class UIManager : MonoBehaviour
+public class InputUIManager : MonoBehaviour
 {
     // public static UIManager instance;
     public PlayerInput playerInput;
@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
         else
         {
             bagPanel.SetActive(true);
+            UIManager.instance.interactPrompt.HidePrompt();
             isBagOpen = true;
             playerInput.actions.FindActionMap("Player").Disable();
         }
@@ -60,6 +61,7 @@ public class UIManager : MonoBehaviour
         else
         {
             equipPanel.SetActive(true);
+            UIManager.instance.interactPrompt.HidePrompt();
             isEquipOpen = true;
             playerInput.actions.FindActionMap("Player").Disable();
         }
