@@ -13,7 +13,6 @@ public class EnemyDeadState : IEnemyState
     }
     public void OnEnter()
     {
-        Debug.Log("死亡");
         enemyFSM.animator.SetBool("IsDead", true);
         
         destoryTime = 3f;

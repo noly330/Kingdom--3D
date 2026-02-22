@@ -28,8 +28,12 @@ public class EnemyHealthBar : MonoBehaviour
 
     public void UpdateHealthBar()
     {
-        Debug.Log("更新健康条");
         float target = character.currentHealth / character.maxHealth;
+        if(character.currentHealth <= 0)
+        {
+            healthBar.SetActive(false);
+            return;
+        }
 
         if (healthCoroutine != null)
             StopCoroutine(healthCoroutine);
