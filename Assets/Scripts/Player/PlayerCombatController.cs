@@ -69,7 +69,7 @@ public class PlayerCombatController : CombatControllerBase
 
     private void CheckState()
     {
-        if(currentCharacter.currentHealth <= 0f && !currentCharacter.isDead)
+        if(currentCharacter.currentHealth <= 0.01f && !currentCharacter.isDead)
         {
             animator.SetBool("IsDead",true);
             currentCharacter.isDead = true;

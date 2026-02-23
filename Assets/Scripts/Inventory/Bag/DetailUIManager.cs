@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class DetailUIManager : MonoBehaviour
@@ -14,6 +15,9 @@ public class DetailUIManager : MonoBehaviour
     public Text itemTypeText;
     public Text itemNameText;
     public Text itemDescripText;
+
+    [Header("广播")]
+    public UnityEvent OnHealthChageEvent;
     
     [Header("监听")]
     public ItemDataEventSO itemDataDetailEventSO;
@@ -97,11 +101,13 @@ public class DetailUIManager : MonoBehaviour
         if(currentItemData.itemType == ItemType.Weapon || currentItemData.itemType == ItemType.Goblet)
         {
             UpdateEquipment();
+            OnHealthChageEvent?.Invoke();
             return;
         }
         else if(currentItemData.itemType == ItemType.Food)
         {
             OnUsedFood();
+            OnHealthChageEvent?.Invoke();
             return;
         }
         

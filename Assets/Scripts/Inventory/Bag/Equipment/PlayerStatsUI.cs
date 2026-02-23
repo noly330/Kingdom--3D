@@ -19,7 +19,8 @@ public class PlayerStatsUI : MonoBehaviour
         foreach(var i in equipmentData.items)
         {
             if(i.itemData == null) 
-                continue;
+                continue;  //防止访问空物品报错
+
             if(i.itemData.itemType == ItemType.Weapon)
                 weapon = i.itemData;
             else if(i.itemData.itemType == ItemType.Goblet)

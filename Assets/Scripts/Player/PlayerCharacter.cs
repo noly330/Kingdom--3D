@@ -16,6 +16,7 @@ public class PlayerCharacter : CharacterBase
     {
         base.Start();
         UpdateCharacterStats();
+        UIManager.instance.playerInfoUI.OnHealthChange();
     }
 
     void OnEnable()

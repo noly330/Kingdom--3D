@@ -18,7 +18,7 @@ public class CharacterBase : MonoBehaviour
     [Header("角色状态")]
     public bool isDead;
     
-    public UnityEvent OnHealthChange;
+    public UnityEvent OnHealthChangeEvent;
 
     protected virtual void Awake()
     {
@@ -42,8 +42,8 @@ public class CharacterBase : MonoBehaviour
     {
         float finalDamage = Mathf.Max(1f,damage - defence);
         currentHealth -= finalDamage;
-
-        OnHealthChange?.Invoke();
+        if(currentHealth<0)  currentHealth = 0;
+        OnHealthChangeEvent?.Invoke();
     }
 
 }

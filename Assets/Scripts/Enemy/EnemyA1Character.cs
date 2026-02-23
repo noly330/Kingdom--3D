@@ -13,7 +13,6 @@ public class EnemyA1Character : CharacterBase
     protected override void Start()
     {
         base.Start();
-        enemyHealthBar.UpdateHealthBar();
     }
 
     void OnEnable()

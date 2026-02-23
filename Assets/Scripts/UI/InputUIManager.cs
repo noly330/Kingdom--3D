@@ -12,6 +12,7 @@ public class InputUIManager : MonoBehaviour
     [Header("界面")]
     public GameObject bagPanel;
     public GameObject equipPanel;
+    public GameObject playerInfoPanel;
     private bool isBagOpen = false;
     private bool isEquipOpen = false;
 
@@ -40,6 +41,8 @@ public class InputUIManager : MonoBehaviour
             bagPanel.SetActive(false);
             isBagOpen = false;
             playerInput.actions.FindActionMap("Player").Enable();
+
+            playerInfoPanel.SetActive(true);
         }
         else
         {
@@ -47,6 +50,8 @@ public class InputUIManager : MonoBehaviour
             UIManager.instance.interactPrompt.HidePrompt();
             isBagOpen = true;
             playerInput.actions.FindActionMap("Player").Disable();
+
+            playerInfoPanel.SetActive(false);
         }
     }
     public void OnClickEquip()
@@ -57,6 +62,8 @@ public class InputUIManager : MonoBehaviour
             equipPanel.SetActive(false);
             isEquipOpen = false;
             playerInput.actions.FindActionMap("Player").Enable();
+
+            playerInfoPanel.SetActive(true);
         }
         else
         {
@@ -64,6 +71,8 @@ public class InputUIManager : MonoBehaviour
             UIManager.instance.interactPrompt.HidePrompt();
             isEquipOpen = true;
             playerInput.actions.FindActionMap("Player").Disable();
+
+            playerInfoPanel.SetActive(false);
         }
     }
     

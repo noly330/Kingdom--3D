@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LootSpawner : MonoBehaviour
 {
-    
+
     [System.Serializable]
     public class LootItem
     {
@@ -18,18 +18,18 @@ public class LootSpawner : MonoBehaviour
 
     public void CreatLootItem()
     {
-        float currentValue = Random.value;
-        for(int i = 0; i < lootItems.Length; i++)
+        for (int i = 0; i < lootItems.Length; i++)
         {
-            if(currentValue < lootItems[i].weight)
+            float currentValue = Random.value;
+            if (currentValue < lootItems[i].weight)
             {
-                GameObject obj = Instantiate(lootItems[i].item,transform.position,transform.rotation);
+                GameObject obj = Instantiate(lootItems[i].item, transform.position, transform.rotation);
                 Rigidbody rb = obj.GetComponent<Rigidbody>();
-                if(rb != null)
+                if (rb != null)
                 {
                     Vector3 randomDir = Random.insideUnitCircle.normalized;
-                    Vector3 force = new Vector3(randomDir.x,1f,randomDir.z) *3f;
-                    rb.AddForce(force,ForceMode.Impulse);
+                    Vector3 force = new Vector3(randomDir.x, 1f, randomDir.z) * 3f;
+                    rb.AddForce(force, ForceMode.Impulse);
                 }
 
             }

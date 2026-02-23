@@ -152,6 +152,8 @@ public class CombatControllerBase : MonoBehaviour
         if (interactionConfig == null) return;
         //传递伤害
         currentCharacter.OnBeHit(attacker.TryGetDamage(interactionConfig));
+
+        //以后要搞boss什么的，所以受击动画之类的挪到子类重写
     }
 
     #endregion

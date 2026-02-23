@@ -11,18 +11,20 @@ public class UIManager : MonoBehaviour
     public DetailUIManager detailUIManager;
     public InteractPrompt interactPrompt;
     public FadeManager fadeManager;
+    public PlayerInfoUI playerInfoUI;
 
     private void Awake()
     {
-        if(instance != null)
+        if (instance != null)
             Destroy(gameObject);
         else
             instance = this;
 
-        playerStatsUI=GetComponent<PlayerStatsUI>();
-        detailUIManager=GetComponent<DetailUIManager>();
-        interactPrompt=GetComponent<InteractPrompt>();
-        fadeManager=GetComponent<FadeManager>();
+        playerStatsUI = GetComponent<PlayerStatsUI>();
+        detailUIManager = GetComponent<DetailUIManager>();
+        interactPrompt = GetComponent<InteractPrompt>();
+        fadeManager = GetComponent<FadeManager>();
+        playerInfoUI = GetComponent<PlayerInfoUI>();
 
     }
 }
