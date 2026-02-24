@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager instance { get; private set; }
+    [SerializeField] private VoidEventSO onLoadEvent;
 
     // 存档根路径
     private string SavePath => Path.Combine(Application.persistentDataPath, "Saves");
@@ -42,7 +41,6 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // 核心：文件存储替代PlayerPrefs，保留原有方法签名
     public void Save(Object data, string key)
     {
         if (!Directory.Exists(SavePath))
@@ -53,8 +51,6 @@ public class SaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(data,true);
         string filePath = Path.Combine(SavePath, $"{key}.json");
         File.WriteAllText(filePath, json, System.Text.Encoding.UTF8);
-
-
     }
 
     public void Load(Object data, string key)
@@ -65,6 +61,7 @@ public class SaveManager : MonoBehaviour
         {
             string json = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
             JsonUtility.FromJsonOverwrite(json, data);
+            onLoadEvent?.RaiseEvent();
         }
 
     }

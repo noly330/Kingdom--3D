@@ -12,6 +12,8 @@ public class InteractPrompt : MonoBehaviour
             interactText.text = "F 拾取";
         else if(interactType == InteractType.Use)
             interactText.text = "F 使用";
+        else if(interactType == InteractType.Dialogue)
+            interactText.text = "F 对话";
         prompt.SetActive(true);
     }
     public void HidePrompt()

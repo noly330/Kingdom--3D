@@ -7,6 +7,9 @@ public class EnemyIdleState : IEnemyState
     private EnemyFSM enemyFSM;
     private float idleTime;
     private Transform targetPlayer;
+
+    private float searchTimer = 0f;
+    private float searchInterval = 0.3f; // 每秒检测3-4次
     public EnemyIdleState(EnemyFSM fSM)
     {
         this.enemyFSM = fSM;
@@ -24,7 +27,14 @@ public class EnemyIdleState : IEnemyState
         {
             enemyFSM.TransitionState(StateType.Patrol);
         }
-        FindPlayer();
+
+        // 优化搜索玩家，减少检测次数
+        searchTimer -= Time.deltaTime;
+        if (searchTimer <= 0f)
+        {
+            searchTimer = searchInterval;
+            FindPlayer();
+        }
     }
     public void OnExit()
     {

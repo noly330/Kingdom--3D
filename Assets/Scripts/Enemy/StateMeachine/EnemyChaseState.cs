@@ -9,6 +9,9 @@ public class EnemyChaseState : IEnemyState
     private Transform targetPlayer;
     private CharacterBase currentCharacter;
     private NavMeshAgent agent;
+
+    private float searchTimer = 0f;
+    private float searchInterval = 0.1f;
     public EnemyChaseState(EnemyFSM fSM)
     {
         this.enemyFSM = fSM;
@@ -24,9 +27,16 @@ public class EnemyChaseState : IEnemyState
     }
     public void OnUpdate()
     {
-        FindPlayer();
-        ChasePlayer();
-        FightWithPlayer();
+
+        // 优化搜索玩家，减少检测次数
+        searchTimer -= Time.deltaTime;
+        if (searchTimer <= 0f)
+        {
+            searchTimer = searchInterval;
+            FindPlayer();
+            ChasePlayer();
+            FightWithPlayer();
+        }
     }
 
     public void OnExit()
@@ -58,7 +68,7 @@ public class EnemyChaseState : IEnemyState
 
     void ChasePlayer()
     {
-        if(targetPlayer == null)  return;
+        if (targetPlayer == null) return;
         agent.SetDestination(targetPlayer.transform.position);
     }
 

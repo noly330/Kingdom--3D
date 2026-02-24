@@ -22,7 +22,9 @@ public class SlotHolder : MonoBehaviour
             itemUI.SetupItemUI(null, 0);
             return;
         }
+
         var currentItem = targetBag.items[itemUI.Index];
+        
         if (currentItem == null)
         {
             itemUI.SetupItemUI(null, 0);

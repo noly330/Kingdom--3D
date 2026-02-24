@@ -16,6 +16,10 @@ public class EnemyPatrolState : IEnemyState
 
     private Transform targetPlayer;
 
+
+    private float searchTimer = 0f;
+    private float searchInterval = 0.3f; // 每秒检测3-4次
+
     public EnemyPatrolState(EnemyFSM enemyFSM)
     {
         this.enemyFSM = enemyFSM;
@@ -51,7 +55,13 @@ public class EnemyPatrolState : IEnemyState
             enemyFSM.TransitionState(StateType.Idle);
         }
 
-        FindPlayer();
+        searchTimer -= Time.deltaTime;
+        if (searchTimer <= 0f)
+        {
+            searchTimer = searchInterval;
+            FindPlayer();
+        }
+
     }
     public void OnExit()
     {

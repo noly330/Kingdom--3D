@@ -31,5 +31,5 @@ public enum ItemType
 }
 public enum InteractType
 {
-    None,PickUp,Use
+    None,PickUp,Use,Dialogue
 }

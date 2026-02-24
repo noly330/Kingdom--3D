@@ -17,6 +17,8 @@ public class ContainerUI : MonoBehaviour
     public ItemTypeEventSO itemTypeGobletEventSO;
     public SlotHolder[] slotHolders;
 
+    private ItemType lastItemType = ItemType.Weapon;
+
     void Awake()
     {
         if (InventoryManager.instance == null)
@@ -34,6 +36,7 @@ public class ContainerUI : MonoBehaviour
         itemTypeWeaponEventSO.OnRaiseEvent += ReFreshUI;
         itemTypeFoodEventSO.OnRaiseEvent += ReFreshUI;
         itemTypeGobletEventSO.OnRaiseEvent += ReFreshUI;
+        ReFreshUI(lastItemType);  //每次打开的时候更新一下
 
     }
     void OnDisable()
@@ -46,7 +49,11 @@ public class ContainerUI : MonoBehaviour
 
     public void ReFreshUI(ItemType itemType)
     {
-        if (targetBag == null || bagData?.items == null) return;
+        if (targetBag == null || bagData == null)
+        {
+            bagData = InventoryManager.instance.inventoryData;
+            targetBag = InventoryManager.instance.targetBagData;
+        }
 
         UIManager.instance.detailUIManager.detailUI.SetActive(false);
         targetBag.items.Clear();
@@ -66,6 +73,7 @@ public class ContainerUI : MonoBehaviour
             slotHolders[i].itemUI.Index = i;
             slotHolders[i].UpdateItems();
         }
+        lastItemType = itemType;
     }
 
 }

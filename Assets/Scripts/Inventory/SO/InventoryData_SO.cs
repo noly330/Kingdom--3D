@@ -6,9 +6,8 @@ using UnityEngine;
 public class InventoryData_SO : ScriptableObject
 {
     public List<InventoryItem> items = new List<InventoryItem>();
-    //public List<EquipmentSlot> equipmentSlots = new List<EquipmentSlot>();
 
-    #region 添加物品相关
+    #region 大背包物品相关
     public void AddItem(ItemData_SO newItem, int amount = 1)
     {
         bool found = false;
@@ -95,11 +94,3 @@ public class InventoryItem
 
     public int amount;
 }
-
-// [System.Serializable]
-// public class EquipmentSlot
-// {
-//     public ItemType slotType;
-//     public InventoryItem equippedItem;
-//     public bool isEmpty => equippedItem == null;
-// }
