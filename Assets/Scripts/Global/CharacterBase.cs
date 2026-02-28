@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class CharacterBase : MonoBehaviour
 {
@@ -17,12 +18,16 @@ public class CharacterBase : MonoBehaviour
 
     [Header("角色状态")]
     public bool isDead;
+    public bool isInvulnerable;
+    public float invulnerableTime = 0f;
     
     public UnityEvent OnHealthChangeEvent;
 
+    private Animator animator;
+
     protected virtual void Awake()
     {
-
+        animator = GetComponent<Animator>();
     }
 
     protected virtual void Start()
@@ -30,6 +35,24 @@ public class CharacterBase : MonoBehaviour
         currentHealth = maxHealth;
         currentAttack = baseAttack;
         
+    }
+
+    private void Update()
+    {
+        CheckState();
+    }
+
+    private void CheckState()
+    {
+        if(invulnerableTime > 0.1f)
+        {
+            isInvulnerable = true;
+            invulnerableTime -= Time.deltaTime;
+        }
+        else
+        {
+            isInvulnerable = false;
+        }
     }
     public float TryGetDamage(ComboInteractionConfig comboInteractionConfig)
     {

@@ -150,6 +150,7 @@ public class CombatControllerBase : MonoBehaviour
     protected virtual void CharacterCombatBeHit(ComboInteractionConfig interactionConfig, CharacterBase attacker)
     {
         if (interactionConfig == null) return;
+        
         //传递伤害
         currentCharacter.OnBeHit(attacker.TryGetDamage(interactionConfig));
 

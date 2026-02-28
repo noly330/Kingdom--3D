@@ -50,11 +50,24 @@ public class InventoryManager : MonoBehaviour
 
     void LoadEquipmentData()
     {
+        bool hasWeapon = false;
+        bool hasGoblet = false;
         foreach (var i in equipmentData.items)
         {
             if(i.itemData == null) continue;
             Debug.Log("自动加载装备：" + i.itemData.itemName);
+            if(i.itemData.itemType == ItemType.Weapon)
+                hasWeapon = true;
+            else if(i.itemData.itemType == ItemType.Goblet)
+                hasGoblet = true;
+            
             playerStatsManager.EquipEquipment(i.itemData);
         }
+
+        //自动卸下装备
+        if(!hasWeapon)
+            playerStatsManager.UnEquipEquipment(ItemType.Weapon);
+        if(!hasGoblet)
+            playerStatsManager.UnEquipEquipment(ItemType.Goblet);
     }
 }

@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MoveController : MonoBehaviour
 {
     private CharacterController characterController;
+    private CharacterBase currentCharacter;
     private PlayerInput playerInput;
     private GameObject mainCamera;
     private Vector2 move;
@@ -38,6 +40,7 @@ public class MoveController : MonoBehaviour
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
         characterController = GetComponent<CharacterController>();
+        currentCharacter = GetComponent<CharacterBase>();
         animator = GetComponent<Animator>();
     }
 
@@ -109,7 +112,16 @@ public class MoveController : MonoBehaviour
         {
             animator.CrossFadeInFixedTime("Slide", 0, 0, 0);
             slideColdTime = 1f;
+            currentCharacter.invulnerableTime = 0.6f;
+            StartCoroutine(IE_InputLockout());
         }
+    }
+
+    private IEnumerator IE_InputLockout()
+    {
+        playerInput.actions.FindAction("Fire1").Disable();
+        yield return new WaitForSecondsRealtime(0.45f);
+        playerInput.actions.FindAction("Fire1").Enable();
     }
 
     #endregion
@@ -117,6 +129,7 @@ public class MoveController : MonoBehaviour
     #region 冷却相关
 
     private float slideColdTime = 0f;
+    
     private void ColdTime()
     {
         if (slideColdTime > 0.1f)

@@ -7,7 +7,6 @@ public class PlayerCharacter : CharacterBase
     public Transform weaponSlot;
     private InventoryData_SO equipmentData;
     public VoidEventSO HealthUpdayeEvent;
-
     protected override void Awake()
     {
         base.Awake();

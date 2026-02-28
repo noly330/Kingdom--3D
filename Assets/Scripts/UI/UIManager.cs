@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [Header("无需拖拽方便观察")]
     public PlayerStatsUI playerStatsUI;
     public DetailUIManager detailUIManager;
+    public InputUIManager inputUIManager;
     public InteractPrompt interactPrompt;
     public FadeManager fadeManager;
     public PlayerInfoUI playerInfoUI;
@@ -26,6 +27,7 @@ public class UIManager : MonoBehaviour
 
         playerStatsUI = GetComponent<PlayerStatsUI>();
         detailUIManager = GetComponent<DetailUIManager>();
+        inputUIManager = GetComponent<InputUIManager>();
         interactPrompt = GetComponent<InteractPrompt>();
         fadeManager = GetComponent<FadeManager>();
         playerInfoUI = GetComponent<PlayerInfoUI>();

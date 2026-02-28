@@ -17,8 +17,6 @@ public class PlayerStatsManager : MonoBehaviour
         //targetBagData = GetComponent<InventoryManager>().targetBagData;
     }
 
-
-
     public void EquipEquipment(ItemData_SO equipment)
     {
         if (equipment == null) return;

@@ -75,7 +75,4 @@ public class InputUIManager : MonoBehaviour
             playerInfoPanel.SetActive(false);
         }
     }
-    
-
-
 }
