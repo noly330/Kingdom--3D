@@ -7,8 +7,6 @@ public class PlayerStatsManager : MonoBehaviour
     public InventoryData_SO targetBagData;
     public PlayerCharacter playerCharacter;
     public PlayerCombatController playerCombatController;
-    [Header("广播")]
-    public VoidEventSO UpdateHealthEvent;
 
     void Start()
     {
@@ -70,6 +68,5 @@ public class PlayerStatsManager : MonoBehaviour
         InventoryManager.instance.bagContainer.ReFreshUI(food.itemType);
         playerCharacter.currentHealth += food.hpGain;
         playerCharacter.currentHealth = Mathf.Clamp(playerCharacter.currentHealth, 0, playerCharacter.maxHealth);
-        UpdateHealthEvent.RaiseEvent();
     }
 }

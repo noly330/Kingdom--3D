@@ -35,11 +35,11 @@ public class ComboConfigSO : ScriptableObject
 public class ComboInteractionConfig
 {
     public string hitName;  //攻击类型,可以用来播放对应动画
-    public string hitAirName;
+    public string hitAirName;  //以后写天上受到攻击的效果
     //武器类型
-    public Weapon weapon;
+    public Weapon weapon;  //
     //攻击力度
-    public AttackForce attackForce;
+    public ForceLevel attackForce;
     public float damageMul;
 }
 

@@ -69,15 +69,6 @@ public class EnemyFSM : CombatControllerBase
     protected override void CharacterCombatBeHit(ComboInteractionConfig interactionConfig, CharacterBase attacker)
     {
         base.CharacterCombatBeHit(interactionConfig, attacker);
-
-        //看向攻击者
-        transform.forward = -attacker.transform.forward;
-        //播放受击动画
-        animator.Play(interactionConfig.hitName, 0, 0);
-        //生成受击特效
-        var fxObj = hitFXList[(int)interactionConfig.attackForce].TryGetOneFXObj();
-        ToolManager.instance.PlayOneFX(fxObj, hitPoints[0].position, Vector3.zero, new Vector3(1, 1, 1));
-        //生成音效
     }
 
     private void OnDrawGizmosSelected() 

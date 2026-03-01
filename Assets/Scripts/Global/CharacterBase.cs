@@ -15,11 +15,14 @@ public class CharacterBase : MonoBehaviour
     public float currentAttack;
     public float defence;
     public float speed;
+    public float maxEnergy;
+    public float currentEnergy;
 
     [Header("角色状态")]
     public bool isDead;
     public bool isInvulnerable;
     public float invulnerableTime = 0f;
+    public ForceLevel poise = ForceLevel.Basy;  //韧性（抗打击力）
     
     public UnityEvent OnHealthChangeEvent;
 
@@ -34,17 +37,22 @@ public class CharacterBase : MonoBehaviour
     {
         currentHealth = maxHealth;
         currentAttack = baseAttack;
+        currentEnergy = maxEnergy;
         
     }
 
     private void Update()
     {
         CheckState();
+        if(currentEnergy < maxEnergy)
+        {
+            currentEnergy += Time.deltaTime * 5f;
+        }
     }
 
     private void CheckState()
     {
-        if(invulnerableTime > 0.1f)
+        if(invulnerableTime > 0f)
         {
             isInvulnerable = true;
             invulnerableTime -= Time.deltaTime;

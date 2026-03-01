@@ -11,22 +11,27 @@ public class PlayerCombatController : CombatControllerBase
     public ComboListSO normalComboList;
     [SerializeField] private ComboListSO boxingComboList;
     [SerializeField] private ComboListSO fallComboList;
+    [SerializeField] private ComboListSO[] skillComboList;
     private MoveController moveController;
     private PlayerInput playerInput;
 
-    [Header("残影特效相关")]
+    [Header("完美闪避相关")]
+    public AudioClip perfectAvoidClip;
+    public float perfectAvoidDuration = 0.8f;  // 完美闪避总时间
+    public float meshRefreshRate = 0.2f;  // 残影生成间隔
+    public float tScale = 0.4f;
     private float meshDestoryDelay = 1f;
     private SkinnedMeshRenderer[] skinnedMeshRenderers;
-    public Material trailMaterial;
+    private Material trailMaterial;
 
 
-    private float hitStunDuration = 0.2f;
-    private bool canControl = true;
+    private float hitStunDuration = 0.3f;  //受击僵直
     protected override void Awake()
     {
         base.Awake();
         moveController = GetComponent<MoveController>();
         playerInput = GetComponent<PlayerInput>();
+        skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
     protected override void Start()
@@ -45,9 +50,12 @@ public class PlayerCombatController : CombatControllerBase
 
     private void CheckInput()
     {
-        //TODO：后续无敌要和闪避分开
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt"))
+            return;
+
         if (playerInput.actions["Fire1"].triggered && canExecuteCombo)
         {
+
             //切换普攻，下落攻击，技能等
             if (moveController.isGround)
             {
@@ -64,6 +72,18 @@ public class PlayerCombatController : CombatControllerBase
                 currentComboList = fallComboList;
             }
             ExecuteCombo();
+        }
+        if (playerInput.actions["Skill1"].triggered && canExecuteCombo)
+        {
+            if (currentCharacter.currentEnergy < skillComboList[0].energyCost)
+                return;
+            currentCharacter.currentEnergy -= skillComboList[0].energyCost;
+            Debug.Log("触发技能1");
+            nextComboIndex = 0;
+            currentComboList = skillComboList[0];
+
+            ExecuteCombo();
+            StartCoroutine(IE_ChangePoise(ForceLevel.Mid));
         }
     }
     public void UpdateNormalComboList(ComboListSO comboList)
@@ -86,57 +106,52 @@ public class PlayerCombatController : CombatControllerBase
             currentCharacter.isDead = true;
             GetComponent<PlayerInput>().actions.FindActionMap("Player").Disable();
         }
-
-        //TODO:用协程
-        if (hitStunDuration > 0.02f)
-        {
-            if (canControl)
-            {
-                playerInput.actions.FindActionMap("Player").Disable();
-                canControl = false;
-            }
-            hitStunDuration -= Time.deltaTime;
-        }
-        else
-        {
-            if (!canControl)
-            {
-                playerInput.actions.FindActionMap("Player").Enable();
-                canControl = true;
-            }
-        }
     }
 
     private Coroutine perfectAvoidCoroutine;
     protected override void CharacterCombatBeHit(ComboInteractionConfig interactionConfig, CharacterBase attacker)
     {
+        //完美闪避
         if (currentCharacter.isInvulnerable)
         {
-            Debug.Log("闪避成功");
-            currentCharacter.invulnerableTime += 0.15f;
-
-            if (perfectAvoidCoroutine == null)
+            if (perfectAvoidCoroutine == null)  //确保完美闪避不连续触发
+            {
+                currentCharacter.invulnerableTime += 0.15f;
+                currentCharacter.currentEnergy += 8f;
+                //播放完美闪避音效
+                AudioManager.instance.PlaySFX(perfectAvoidClip, 0.8f);
                 perfectAvoidCoroutine = StartCoroutine(IE_PerfectAvoid());
-
+            }
             return;
         }
-        hitStunDuration = 0.3f;
+
         base.CharacterCombatBeHit(interactionConfig, attacker);
-        //看向攻击者
-        transform.forward = -attacker.transform.forward;
-        //播放受击动画
-        animator.Play(interactionConfig.hitName, 0, 0);
-        //生成受击特效
-        var fxObj = hitFXList[(int)interactionConfig.attackForce].TryGetOneFXObj();
-        if (fxObj != null)
-            ToolManager.instance.PlayOneFX(fxObj, hitPoints[0].position, Vector3.zero, new Vector3(1, 1, 1));
-        //生成音效
+
+        //受击僵直（防止玩家用闪避跳跃之类的取消受击后腰)
+        if (hitStunCoroutine != null)
+            StopCoroutine(hitStunCoroutine);
+        hitStunCoroutine = StartCoroutine(IE_HitStun());
     }
 
-    public float perfectAvoidDuration = 1f;  // 完美闪避总时间
-    public float meshRefreshRate = 0.3f;  // 残影生成间隔
-    public float tScale = 0.3f;
+    #region 受击僵直
+    private Coroutine hitStunCoroutine;
+    private IEnumerator IE_HitStun()
+    {
+        float duration = hitStunDuration;
+        playerInput.actions.FindActionMap("Player").Disable();
+        while (duration > 0)
+        {
+            duration -= Time.deltaTime;
+            yield return null;
+        }
+        playerInput.actions.FindActionMap("Player").Enable();
+        hitStunCoroutine = null;
+    }
 
+
+    #endregion
+
+    #region 完美闪避
     float meshRefreshTimer = 0f;
 
     IEnumerator IE_PerfectAvoid()
@@ -175,7 +190,7 @@ public class PlayerCombatController : CombatControllerBase
             obj.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(rot));
             MeshRenderer mr = obj.AddComponent<MeshRenderer>();
             MeshFilter mf = obj.AddComponent<MeshFilter>();
- 
+
             Mesh mesh = new Mesh();
             skinnedMeshRenderers[i].BakeMesh(mesh);
             mf.mesh = mesh;
@@ -185,5 +200,24 @@ public class PlayerCombatController : CombatControllerBase
         }
 
     }
+    #endregion
+
+
+    #region  韧性切换
+
+    private IEnumerator IE_ChangePoise(ForceLevel newPoise)
+    {
+        float time = animator.GetCurrentAnimatorStateInfo(0).length * 0.4f / animator.speed;
+        currentCharacter.poise = newPoise;
+        while (time > 0)
+        {
+            time -= Time.deltaTime;
+            yield return null;
+        }
+        currentCharacter.poise = ForceLevel.Basy;
+    }
+
+
+    #endregion
 
 }

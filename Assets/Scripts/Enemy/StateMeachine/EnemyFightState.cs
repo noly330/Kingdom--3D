@@ -28,7 +28,7 @@ public class EnemyFightState : IEnemyState
 
     void FightWithPlayer()
     {
-        Collider[] colliderPlayers = Physics.OverlapSphere(enemyFSM.transform.position, 1.5f, enemyFSM.targetMask);
+        Collider[] colliderPlayers = Physics.OverlapSphere(enemyFSM.transform.position, 2f, enemyFSM.targetMask);
         if (colliderPlayers.Length == 0)
         {
             enemyFSM.TransitionState(StateType.Chase);

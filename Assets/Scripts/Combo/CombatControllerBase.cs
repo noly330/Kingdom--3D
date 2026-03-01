@@ -12,7 +12,7 @@ public class CombatControllerBase : MonoBehaviour
     [SerializeField] protected ComboListSO currentComboList;
     public Animator animator;
     public bool canExecuteCombo;
-    protected CharacterBase currentCharacter;  
+    protected CharacterBase currentCharacter;
     private int currentComboIndex;
     protected int nextComboIndex;
     private Coroutine stopComboCoroutine;  //这次一个协程，为了防止多个协程同时触发
@@ -32,7 +32,7 @@ public class CombatControllerBase : MonoBehaviour
 
     protected virtual void Start()
     {
-        
+
     }
 
     protected virtual void Update()
@@ -46,59 +46,81 @@ public class CombatControllerBase : MonoBehaviour
     private void RunEvent()
     {
         if (currentComboList == null) return;
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName(currentComboList.TryGetComboName(currentComboIndex)) || animator.IsInTransition(0)) return;
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName(currentComboList.TryGetComboName(currentComboIndex))
+        || animator.IsInTransition(0)) return;
 
         //攻击检测
-        AttackDetectionConfig attackDetectionConfig = currentComboList.TryGetAttackDetectionConfig(currentComboIndex, runningEventIndex.attackDetectionIndex);
+        AttackDetectionConfig attackDetectionConfig =
+        currentComboList.TryGetAttackDetectionConfig(currentComboIndex, runningEventIndex.attackDetectionIndex);
+
         if (attackDetectionConfig != null)
         {
-            ExecuteMoveOffset(currentComboList.TryGetSelfMoveOffsetConfig(currentComboIndex, runningEventIndex.attackDetectionIndex), transform);
+            //攻击位移
+            ExecuteMoveOffset(currentComboList.TryGetSelfMoveOffsetConfig(currentComboIndex,
+            runningEventIndex.attackDetectionIndex), transform);
+
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > attackDetectionConfig.startTime)
             {
                 //执行攻击检测
-                Vector3 boxPosition = transform.forward * attackDetectionConfig.position.z + transform.up * attackDetectionConfig.position.y + transform.right * attackDetectionConfig.position.x;
+                Vector3 boxPosition = transform.forward * attackDetectionConfig.position.z
+                 + transform.up * attackDetectionConfig.position.y + transform.right * attackDetectionConfig.position.x;
+
                 Collider[] targetList = Physics.OverlapBox(transform.position + boxPosition, attackDetectionConfig.scale, quaternion.identity, targetMask);
                 foreach (var target in targetList)
                 {
                     //攻击位移
-                    
+
                     //攻击敌人
-                    target.GetComponent<CombatControllerBase>().CharacterCombatBeHit(currentComboList.TryGetComboInteractionConfig(currentComboIndex, runningEventIndex.attackDetectionIndex), currentCharacter);
+                    target.GetComponent<CombatControllerBase>().CharacterCombatBeHit(
+                        currentComboList.TryGetComboInteractionConfig(currentComboIndex, runningEventIndex.attackDetectionIndex), currentCharacter
+                        );
                 }
                 //执行一次事件后
                 runningEventIndex.attackDetectionIndex++;
             }
         }
+
         //生成特效
-        FXConfig FXConfig = currentComboList.TryGetFXConfig(currentComboIndex, runningEventIndex.FXIndex);
-        if (FXConfig != null)
+        FXConfig FX_Config = currentComboList.TryGetFXConfig(currentComboIndex, runningEventIndex.FXIndex);
+        if (FX_Config != null)
         {
 
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > FXConfig.startTime)
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > FX_Config.startTime)
             {
-                Vector3 fxPosition = transform.forward * FXConfig.position.z + transform.up * FXConfig.position.y + transform.right * FXConfig.position.x;
-                ToolManager.instance.PlayOneFX(FXConfig.FXObject, fxPosition + transform.position, transform.eulerAngles + FXConfig.rotation, FXConfig.scale);
+                Vector3 fxPosition = transform.forward * FX_Config.position.z
+                 + transform.up * FX_Config.position.y + transform.right * FX_Config.position.x;
+                ToolManager.instance.PlayOneFX(FX_Config.FXObject, fxPosition
+                + transform.position, transform.eulerAngles + FX_Config.rotation, FX_Config.scale);
+
                 runningEventIndex.FXIndex++;
 
             }
         }
 
         //生成音效
+        SFXConfig SFX_Config = currentComboList.TryGetSFXConfig(currentComboIndex, runningEventIndex.SFXIndex);
+        if (SFX_Config != null)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > SFX_Config.startTime)
+            {
+                AudioManager.instance.PlaySFX(SFX_Config.audioClip, SFX_Config.volume);
+                runningEventIndex.SFXIndex++;
+            }
+        }
     }
 
     #region 攻击
     public void ExecuteCombo()
     {
-        if(animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt"))  return;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt")) return;
         FindTarget();
         LookTarget();
-        
+
         runningEventIndex.Reset();
         currentComboIndex = nextComboIndex;
         animator.CrossFadeInFixedTime(currentComboList.TryGetComboName(currentComboIndex), 0.155f, 0, 0);
         //Debug.Log("触发" + currentComboList.TryGetComboName(currentComboIndex));
         UpdateComboIndex();
-        canExecuteCombo = false;
 
         StartCoroutine(IE_ExecuteComboCold(currentComboList.TryGetColdTime(currentComboIndex)));
         if (stopComboCoroutine != null)
@@ -111,6 +133,7 @@ public class CombatControllerBase : MonoBehaviour
 
     IEnumerator IE_ExecuteComboCold(float coldTime)
     {
+        canExecuteCombo = false;
         while (coldTime > 0)
         {
             yield return null;
@@ -120,7 +143,7 @@ public class CombatControllerBase : MonoBehaviour
     }
     IEnumerator IE_ResetComboIndex(float coldTime)
     {
-        float time = 2f * coldTime;
+        float time = 2.5f * coldTime;
         while (time > 0)
         {
             yield return null;
@@ -150,18 +173,33 @@ public class CombatControllerBase : MonoBehaviour
     protected virtual void CharacterCombatBeHit(ComboInteractionConfig interactionConfig, CharacterBase attacker)
     {
         if (interactionConfig == null) return;
-        
+        if(currentCharacter.isInvulnerable) return;
+
         //传递伤害
         currentCharacter.OnBeHit(attacker.TryGetDamage(interactionConfig));
 
-        //以后要搞boss什么的，所以受击动画之类的挪到子类重写
+        //生成受击特效
+        var fxObj = hitFXList[0].TryGetOneFXObj();
+        if (fxObj != null)
+            ToolManager.instance.PlayOneFX(fxObj, hitPoints[0].position, Vector3.zero, new Vector3(1, 1, 1));
+
+        //判断攻击力度是否大于自身的韧性
+        if(interactionConfig.attackForce < currentCharacter.poise)
+            return;
+        //看向攻击者
+        transform.forward = -attacker.transform.forward;
+        //播放受击动画
+        animator.Play(interactionConfig.hitName, 0, 0);
+        //生成音效
     }
 
     #endregion
 
     #region 追踪敌人
+
+    [Header("索敌设置")]
     private Transform currentTarget;
-    private Vector3 checkSize = new Vector3(2, 2, 2);  //检测范围大小
+    public Vector3 checkSize = new Vector3(3, 3, 3);  //检测范围大小
 
     private void FindTarget()
     {
@@ -194,11 +232,11 @@ public class CombatControllerBase : MonoBehaviour
     }
 
     private Coroutine executeMoveOffsetCoroutine;
-    protected void ExecuteMoveOffset(MoveOffsetConfig moveOffsetConfig,Transform user)
+    protected void ExecuteMoveOffset(MoveOffsetConfig moveOffsetConfig, Transform user)
     {
-        if(moveOffsetConfig == null)  return;
+        if (moveOffsetConfig == null) return;
 
-        if(executeMoveOffsetCoroutine != null)
+        if (executeMoveOffsetCoroutine != null)
             StopCoroutine(executeMoveOffsetCoroutine);
 
         Vector3 dir = new Vector3(0, 0, 0);
@@ -213,17 +251,17 @@ public class CombatControllerBase : MonoBehaviour
                 break;
         }
 
-        executeMoveOffsetCoroutine = StartCoroutine(IE_ExecuteMoveOffset(moveOffsetConfig,dir));
-            
+        executeMoveOffsetCoroutine = StartCoroutine(IE_ExecuteMoveOffset(moveOffsetConfig, dir));
+
     }
 
-    IEnumerator IE_ExecuteMoveOffset(MoveOffsetConfig moveOffsetConfig,Vector3 dir)
+    IEnumerator IE_ExecuteMoveOffset(MoveOffsetConfig moveOffsetConfig, Vector3 dir)
     {
         //Debug.Log("位移" + moveOffsetConfig.moveOffsetDirection);
-        while(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < moveOffsetConfig.duration)
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < moveOffsetConfig.duration)
         {
             yield return null;
-            float value = moveOffsetConfig.animationCurve.Evaluate(animator.GetCurrentAnimatorStateInfo(0).normalizedTime) *moveOffsetConfig.scale;
+            float value = moveOffsetConfig.animationCurve.Evaluate(animator.GetCurrentAnimatorStateInfo(0).normalizedTime) * moveOffsetConfig.scale;
             characterController.Move(dir * value * Time.deltaTime);
         }
         executeMoveOffsetCoroutine = null;
@@ -237,11 +275,13 @@ public class RunningEventIndex
 {
     public int attackDetectionIndex = 0;
     public int FXIndex = 0;
+    public int SFXIndex = 0;
     public int AttackFeedbackIndex = 0;
     public void Reset()
     {
         attackDetectionIndex = 0;
         FXIndex = 0;
+        SFXIndex = 0;
         AttackFeedbackIndex = 0;
     }
 }

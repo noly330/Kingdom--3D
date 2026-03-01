@@ -7,6 +7,7 @@ public class ComboListSO : ScriptableObject
 {
     [SerializeField] private ComboConfigSO[] comboList;
     [SerializeField] private AttackType attackType;
+    public float energyCost;
     public AttackType TryGetAttackType => attackType;
 
     public int TryGetComboListCount()

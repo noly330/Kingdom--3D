@@ -14,7 +14,7 @@ public class EnemyPatrolState : IEnemyState
     private float patrolTime;  //防止走不到一直走
     private Vector3 wayPoint;
 
-    private Transform targetPlayer;
+    private Transform targetCharacter;
 
 
     private float searchTimer = 0f;
@@ -82,14 +82,14 @@ public class EnemyPatrolState : IEnemyState
         Collider[] colliderPlayers = Physics.OverlapSphere(enemyFSM.transform.position, enemyFSM.viewDistance, enemyFSM.targetMask);
         if (colliderPlayers.Length == 0)
         {
-            targetPlayer = null;
+            targetCharacter = null;
             return;
         }
 
         foreach (var collider in colliderPlayers)
         {
-            targetPlayer = collider.transform;
-            Vector3 playerDir = targetPlayer.position - enemyFSM.transform.position;
+            targetCharacter = collider.transform;
+            Vector3 playerDir = targetCharacter.position - enemyFSM.transform.position;
             playerDir.y = 0;
             float angle = Vector3.Angle(enemyFSM.transform.forward, playerDir);
 
@@ -97,7 +97,7 @@ public class EnemyPatrolState : IEnemyState
             {
                 if (!Physics.Linecast(
                 enemyFSM.transform.position + Vector3.up, // 射线起点（略高于地面）
-                targetPlayer.position + Vector3.up, // 射线终点（玩家胸口位置）
+                targetCharacter.position + Vector3.up, // 射线终点（玩家胸口位置）
                 enemyFSM.obstacleMask))
                 {
                     enemyFSM.TransitionState(StateType.Chase);
