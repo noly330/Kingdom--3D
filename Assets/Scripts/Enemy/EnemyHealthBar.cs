@@ -13,23 +13,28 @@ public class EnemyHealthBar : MonoBehaviour
     private Coroutine healthCoroutine;
     private Coroutine showTimeCoroutine;
 
-    private void Awake() {
-        character = GetComponentInParent<CharacterBase>();
+    private void Awake()
+    {
+        character = GetComponent<CharacterBase>();
         mainCamera = Camera.main;
     }
 
-    private void LateUpdate() 
+    private void LateUpdate()
     {
-        if(mainCamera == null)
+        if (mainCamera == null)
             mainCamera = Camera.main;
         //用血条坐标，再用相机朝向影响，生成一个点，然后血条看向这个点
         healthBar.transform.LookAt(healthBar.transform.position - mainCamera.transform.forward);
     }
 
+    //在角色自带事件，OnHealthChange里面更新血条
     public void UpdateHealthBar()
     {
+        if (character == null)
+            return;
+        
         float target = character.currentHealth / character.maxHealth;
-        if(character.currentHealth <= 0)
+        if (character.currentHealth <= 0)
         {
             healthBar.SetActive(false);
             return;
@@ -48,7 +53,7 @@ public class EnemyHealthBar : MonoBehaviour
     {
         float startPercent = healthFill.fillAmount;
         float elapsed = 0f;
-        
+
         while (elapsed < smoothTime)
         {
             elapsed += Time.deltaTime;
@@ -56,10 +61,10 @@ public class EnemyHealthBar : MonoBehaviour
             healthFill.fillAmount = Mathf.Lerp(startPercent, target, t);
             yield return null;
         }
-        
+
         healthFill.fillAmount = target;
         healthCoroutine = null;
-        
+
     }
 
     private IEnumerator ShowTime(float showTime)

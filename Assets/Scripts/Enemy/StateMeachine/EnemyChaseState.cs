@@ -22,7 +22,6 @@ public class EnemyChaseState : IEnemyState
         agent.isStopped = false;
         currentCharacter = enemyFSM.M_currentCharacter;
 
-        agent.speed = currentCharacter.speed * 1f;
         enemyFSM.animator.SetBool("IsChase", true);
     }
     public void OnUpdate()

@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyFightState : IEnemyState
 {
 
     private EnemyFSM enemyFSM;
 
-    private Transform targetPlayer;
+    private NavMeshAgent agent;
     public EnemyFightState(EnemyFSM fSM)
     {
         this.enemyFSM = fSM;
     }
     public void OnEnter()
     {
+        agent = enemyFSM.M_agent;
 
     }
 
@@ -37,7 +39,9 @@ public class EnemyFightState : IEnemyState
 
         if (enemyFSM.canExecuteCombo)
         {
+            agent.isStopped = true;
             enemyFSM.ExecuteCombo();
+            agent.isStopped = false;
         }
     }
 

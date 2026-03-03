@@ -45,7 +45,6 @@ public class PlayerCombatController : CombatControllerBase
 
         CheckInput();
 
-        CheckState();
     }
 
     private void CheckInput()
@@ -98,14 +97,10 @@ public class PlayerCombatController : CombatControllerBase
         currentComboList = comboList;
     }
 
-    private void CheckState()
+    public void TransitionToDeadState()
     {
-        if (currentCharacter.currentHealth <= 0.01f && !currentCharacter.isDead)
-        {
-            animator.SetBool("IsDead", true);
-            currentCharacter.isDead = true;
-            GetComponent<PlayerInput>().actions.FindActionMap("Player").Disable();
-        }
+        Debug.Log("触发死亡状态");
+        playerInput.actions.FindActionMap("Player").Disable();
     }
 
     private Coroutine perfectAvoidCoroutine;

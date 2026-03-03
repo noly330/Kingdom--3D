@@ -27,7 +27,6 @@ public class PlayerInfoUI : MonoBehaviour
 
     public void OnHealthChange()
     {
-        Debug.Log("触发血量变化");
         float targetPersent = character.currentHealth / character.maxHealth;
 
         helathText.text = character.currentHealth.ToString("F0") + "/" + character.maxHealth.ToString("F0");
@@ -59,6 +58,5 @@ public class PlayerInfoUI : MonoBehaviour
             energyFill[0].fillAmount = Mathf.Clamp01 (character.currentEnergy / energy3);
             energyFill[1].fillAmount = Mathf.Clamp01((character.currentEnergy - energy3) / energy3);
             energyFill[2].fillAmount = Mathf.Clamp01((character.currentEnergy - 2 * energy3) / energy3);
-
     }
 }

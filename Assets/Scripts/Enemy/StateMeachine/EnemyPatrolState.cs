@@ -31,10 +31,6 @@ public class EnemyPatrolState : IEnemyState
         currentCharacter = enemyFSM.M_currentCharacter;
         GetNewWayPoint();
 
-
-
-        agent.speed = currentCharacter.speed * 0.5f;
-
         agent.SetDestination(wayPoint);
 
 

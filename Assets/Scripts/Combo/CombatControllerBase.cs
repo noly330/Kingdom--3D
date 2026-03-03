@@ -12,20 +12,18 @@ public class CombatControllerBase : MonoBehaviour
     [SerializeField] protected ComboListSO currentComboList;
     public Animator animator;
     public bool canExecuteCombo;
-    protected CharacterBase currentCharacter;
+    public CharacterBase currentCharacter;
     private int currentComboIndex;
     protected int nextComboIndex;
     private Coroutine stopComboCoroutine;  //这次一个协程，为了防止多个协程同时触发
     private RunningEventIndex runningEventIndex;
     //runningEventIndex是 “运行时事件索引”，用来保证每个战斗事件只执行一次（比如一次攻击检测只触发一次，不会每帧重复检测）
-    private CharacterController characterController;
     public CharacterBase M_currentCharacter => currentCharacter;
 
     protected virtual void Awake()
     {
         currentCharacter = GetComponent<CharacterBase>();
         animator = GetComponent<Animator>();
-        characterController = GetComponent<CharacterController>();
         canExecuteCombo = true;
         runningEventIndex = new RunningEventIndex();
     }
@@ -173,10 +171,11 @@ public class CombatControllerBase : MonoBehaviour
     protected virtual void CharacterCombatBeHit(ComboInteractionConfig interactionConfig, CharacterBase attacker)
     {
         if (interactionConfig == null) return;
-        if(currentCharacter.isInvulnerable) return;
+        if (currentCharacter.isInvulnerable) return;
 
         //传递伤害
-        currentCharacter.OnBeHit(attacker.TryGetDamage(interactionConfig));
+        Damage newDamage = attacker.TryGetDamage(interactionConfig);
+        currentCharacter.BeHit(newDamage);
 
         //生成受击特效
         var fxObj = hitFXList[0].TryGetOneFXObj();
@@ -184,7 +183,7 @@ public class CombatControllerBase : MonoBehaviour
             ToolManager.instance.PlayOneFX(fxObj, hitPoints[0].position, Vector3.zero, new Vector3(1, 1, 1));
 
         //判断攻击力度是否大于自身的韧性
-        if(interactionConfig.attackForce < currentCharacter.poise)
+        if (interactionConfig.attackForce < currentCharacter.poise)
             return;
         //看向攻击者
         transform.forward = -attacker.transform.forward;
@@ -262,7 +261,7 @@ public class CombatControllerBase : MonoBehaviour
         {
             yield return null;
             float value = moveOffsetConfig.animationCurve.Evaluate(animator.GetCurrentAnimatorStateInfo(0).normalizedTime) * moveOffsetConfig.scale;
-            characterController.Move(dir * value * Time.deltaTime);
+            //characterController.Move(dir * value * Time.deltaTime);
         }
         executeMoveOffsetCoroutine = null;
     }

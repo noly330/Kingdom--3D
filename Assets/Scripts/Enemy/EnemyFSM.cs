@@ -9,7 +9,7 @@ public class EnemyFSM : CombatControllerBase
 {
     [SerializeField] private ComboListSO normalComboList;
     private IEnemyState currentState;
-    private Dictionary<StateType,IEnemyState> states = new Dictionary<StateType, IEnemyState>();
+    private Dictionary<StateType, IEnemyState> states = new Dictionary<StateType, IEnemyState>();
     private NavMeshAgent agent;
 
     public NavMeshAgent M_agent => agent;
@@ -25,57 +25,53 @@ public class EnemyFSM : CombatControllerBase
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
-        
+        states.Add(StateType.Idle, new EnemyIdleState(this));
+        states.Add(StateType.Patrol, new EnemyPatrolState(this));
+        states.Add(StateType.Chase, new EnemyChaseState(this));
+        states.Add(StateType.Fight, new EnemyFightState(this));
+        states.Add(StateType.Dead, new EnemyDeadState(this));
+
+    }
+
+    private void OnEnable()
+    {
+        TransitionState(StateType.Idle);
+
     }
 
     protected override void Start()
     {
         base.Start();
-        states.Add(StateType.Idle,new EnemyIdleState(this));
-        states.Add(StateType.Patrol,new EnemyPatrolState(this));
-        states.Add(StateType.Chase,new EnemyChaseState(this));
-        states.Add(StateType.Fight,new EnemyFightState(this));
-        states.Add(StateType.Dead,new EnemyDeadState(this));
 
         currentComboList = normalComboList;
-        TransitionState(StateType.Idle);
     }
+
+
 
     protected override void Update()
     {
         base.Update();
         currentState.OnUpdate();
-        CheckState();
     }
 
     public void TransitionState(StateType type)
     {
-        if(currentState != null)
+        if (currentState != null)
             currentState.OnExit();
         currentState = states[type];
         currentState.OnEnter();
     }
-
-    private void CheckState()
+    public void TransitionToDeadState()
     {
-        if(currentCharacter.currentHealth <= 0.01f && !currentCharacter.isDead)
-        {
-            animator.SetBool("IsDead",true);
-            currentCharacter.isDead = true;
-            TransitionState(StateType.Dead);
-        }
+        TransitionState(StateType.Dead);
     }
 
-    protected override void CharacterCombatBeHit(ComboInteractionConfig interactionConfig, CharacterBase attacker)
-    {
-        base.CharacterCombatBeHit(interactionConfig, attacker);
-    }
-
-    private void OnDrawGizmosSelected() 
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position,patrolRange);
+        Gizmos.DrawWireSphere(transform.position, patrolRange);
     }
+
 
 }
 

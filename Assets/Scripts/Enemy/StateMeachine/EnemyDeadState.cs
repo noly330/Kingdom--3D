@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyDeadState : IEnemyState
@@ -13,8 +14,7 @@ public class EnemyDeadState : IEnemyState
     }
     public void OnEnter()
     {
-        enemyFSM.animator.SetBool("IsDead", true);
-        
+        //死亡动画和isDead都在角色基类实现了
         destoryTime = 3f;
     }
     public void OnUpdate()
@@ -24,13 +24,14 @@ public class EnemyDeadState : IEnemyState
         if (destoryTime <= 0f)
         {
             enemyFSM.GetComponent<LootSpawner>().CreatLootItem();
-            enemyFSM.gameObject.SetActive(false);
-            enemyFSM = null;
+            ObjectPool.instance.ReturnPool(enemyFSM.currentCharacter.characterPoolType, enemyFSM.gameObject);
+
         }
     }
     public void OnExit()
     {
         if (enemyFSM == null) return;
+        enemyFSM.currentCharacter.isDead = false;
         enemyFSM.animator.SetBool("IsDead", false);
     }
 }

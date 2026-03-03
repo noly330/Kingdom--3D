@@ -8,12 +8,16 @@ public class CharacterBase : MonoBehaviour
 {
 
     [Header("基础属性")]
+    public ObjectPoolType characterPoolType;
     public float baseHealth;
     public float maxHealth;
     public float currentHealth;
     public float baseAttack;
     public float currentAttack;
-    public float defence;
+    public float baseCritChance = 0.1f;
+    public float currentCritChance;
+    public float baseDefence;
+    public float currentDefence;
     public float speed;
     public float maxEnergy;
     public float currentEnergy;
@@ -23,8 +27,10 @@ public class CharacterBase : MonoBehaviour
     public bool isInvulnerable;
     public float invulnerableTime = 0f;
     public ForceLevel poise = ForceLevel.Basy;  //韧性（抗打击力）
-    
+
+    [Header("广播事件")]
     public UnityEvent OnHealthChangeEvent;
+    public UnityEvent OnDeathEvent;
 
     private Animator animator;
 
@@ -38,13 +44,15 @@ public class CharacterBase : MonoBehaviour
         currentHealth = maxHealth;
         currentAttack = baseAttack;
         currentEnergy = maxEnergy;
-        
+        currentCritChance = baseCritChance;
+        currentDefence = baseDefence;
+
     }
 
     private void Update()
     {
         CheckState();
-        if(currentEnergy < maxEnergy)
+        if (currentEnergy < maxEnergy)
         {
             currentEnergy += Time.deltaTime * 5f;
         }
@@ -52,7 +60,14 @@ public class CharacterBase : MonoBehaviour
 
     private void CheckState()
     {
-        if(invulnerableTime > 0f)
+        if (currentHealth <= 0.01f && !isDead)
+        {
+            animator.SetBool("IsDead", true);
+            isDead = true;
+            OnDeathEvent?.Invoke();
+
+        }
+        if (invulnerableTime > 0f)
         {
             isInvulnerable = true;
             invulnerableTime -= Time.deltaTime;
@@ -62,19 +77,36 @@ public class CharacterBase : MonoBehaviour
             isInvulnerable = false;
         }
     }
-    public float TryGetDamage(ComboInteractionConfig comboInteractionConfig)
+    public Damage TryGetDamage(ComboInteractionConfig comboInteractionConfig)
     {
-        float damage = currentAttack * comboInteractionConfig.damageMul;
+        bool isCrit = Random.value < currentCritChance;
+        float damage = currentAttack * comboInteractionConfig.damageMul * (isCrit ? 1.5f : 1f);
 
-        return damage;
+        return new Damage()
+        {
+            damage = damage,
+            isCrit = isCrit
+        };
     }
 
-    public void OnBeHit(float damage)
+    public void BeHit(Damage newDamage)
     {
-        float finalDamage = Mathf.Max(1f,damage - defence);
+        OnBeHit(newDamage);
+    }
+
+    protected float finalDamage;
+    protected virtual void OnBeHit(Damage newDamage)
+    {
+        finalDamage = Mathf.Max(1f, newDamage.damage - currentDefence);
         currentHealth -= finalDamage;
-        if(currentHealth<0)  currentHealth = 0;
+        if (currentHealth < 0) currentHealth = 0;
         OnHealthChangeEvent?.Invoke();
     }
 
+}
+
+public class Damage
+{
+    public float damage;
+    public bool isCrit;
 }
