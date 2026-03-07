@@ -8,6 +8,10 @@ public class PlayerStatsUI : MonoBehaviour
     public EquipmentSlot weaponSlot;
     public EquipmentSlot gobletSlot;
     private InventoryData_SO equipmentData;
+    public Text maxHealthText;
+    public Text damageText;
+    public Text critChange;
+    public Text defenseText;
 
     public void UpdateEquipmentUI()
     {
@@ -30,13 +34,11 @@ public class PlayerStatsUI : MonoBehaviour
         gobletSlot.UpdateSlot(goblet);
     }
 
-    public Text maxHealthText;
-    public Text damageText;
-    public Text defenseText;
 
-    public void UpdateStatsUI(float currentMaxHealth,float currentAttack)
+    public void UpdateStatsUI(CharacterBase characterBase)
     {
-        maxHealthText.text = "最大生命：" + currentMaxHealth.ToString("F0");
-        damageText.text = "攻击力：" + currentAttack.ToString("F0");
+        maxHealthText.text = "最大生命：" + characterBase.maxHealth.ToString("F0");
+        damageText.text = "攻击力：" + characterBase.currentAttack.ToString("F0");
+        critChange.text = "暴击率：" + (characterBase.currentCritChance * 100).ToString("F0") + "%";
     }
 }

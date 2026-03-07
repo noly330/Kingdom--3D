@@ -11,6 +11,7 @@ public class EnemyFSM : CombatControllerBase
     private IEnemyState currentState;
     private Dictionary<StateType, IEnemyState> states = new Dictionary<StateType, IEnemyState>();
     private NavMeshAgent agent;
+    private Collider collider;
 
     public NavMeshAgent M_agent => agent;
 
@@ -25,6 +26,8 @@ public class EnemyFSM : CombatControllerBase
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
+        collider = GetComponent<Collider>();
+
         states.Add(StateType.Idle, new EnemyIdleState(this));
         states.Add(StateType.Patrol, new EnemyPatrolState(this));
         states.Add(StateType.Chase, new EnemyChaseState(this));
@@ -35,8 +38,9 @@ public class EnemyFSM : CombatControllerBase
 
     private void OnEnable()
     {
+        collider.enabled = true;
+        agent.isStopped = true;
         TransitionState(StateType.Idle);
-
     }
 
     protected override void Start()
@@ -63,6 +67,7 @@ public class EnemyFSM : CombatControllerBase
     }
     public void TransitionToDeadState()
     {
+        collider.enabled = false;
         TransitionState(StateType.Dead);
     }
 

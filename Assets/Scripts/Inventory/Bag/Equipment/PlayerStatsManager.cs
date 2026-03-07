@@ -27,7 +27,7 @@ public class PlayerStatsManager : MonoBehaviour
         //更新UI
         playerCharacter.UpdateCharacterStats();
         UIManager.instance.playerStatsUI.UpdateEquipmentUI();
-        UIManager.instance.playerStatsUI.UpdateStatsUI(playerCharacter.maxHealth, playerCharacter.currentAttack);
+        UIManager.instance.playerStatsUI.UpdateStatsUI(playerCharacter);
 
         if (equipment.itemType == ItemType.Weapon)
         {
@@ -51,7 +51,7 @@ public class PlayerStatsManager : MonoBehaviour
         //更新UI
         playerCharacter.UpdateCharacterStats();
         UIManager.instance.playerStatsUI.UpdateEquipmentUI();
-        UIManager.instance.playerStatsUI.UpdateStatsUI(playerCharacter.maxHealth, playerCharacter.currentAttack);
+        UIManager.instance.playerStatsUI.UpdateStatsUI(playerCharacter);
 
         if (itemType == ItemType.Weapon)
         {

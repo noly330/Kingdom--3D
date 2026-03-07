@@ -9,5 +9,6 @@ public class EquipmentData_SO : ScriptableObject
     public int healthBonus;
     public int damageBonus;
     public int defenseBonus;
+    public float critChangeBonus;
     
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 public class CharacterSpawnPoint : MonoBehaviour
@@ -43,6 +44,13 @@ public class CharacterSpawnPoint : MonoBehaviour
         for(int i = 0; i < spawnPoints.Length; i++)
         {
             GameObject character = ObjectPool.instance.SpawnFromPool(CharacterPoolType, spawnPoints[i].position, spawnPoints[i].rotation);
+
+            //Nav的bug，不得不对敌人做特殊处理了，以后自己写寻路
+            NavMeshAgent agent = character.GetComponent<NavMeshAgent>();
+            if (agent != null)
+            {
+                agent.Warp(spawnPoints[i].position);
+            }
         }
     }
 }

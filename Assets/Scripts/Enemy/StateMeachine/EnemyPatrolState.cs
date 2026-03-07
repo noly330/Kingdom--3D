@@ -10,7 +10,6 @@ public class EnemyPatrolState : IEnemyState
 {
     private EnemyFSM enemyFSM;
     private NavMeshAgent agent;
-    private CharacterBase currentCharacter;
     private float patrolTime;  //防止走不到一直走
     private Vector3 wayPoint;
 
@@ -28,7 +27,6 @@ public class EnemyPatrolState : IEnemyState
     {
         agent = enemyFSM.M_agent;
         agent.isStopped = false;
-        currentCharacter = enemyFSM.M_currentCharacter;
         GetNewWayPoint();
 
         agent.SetDestination(wayPoint);

@@ -22,7 +22,7 @@ public class AudioManager : MonoBehaviour
             _ = clip.loadState;  //随便访问一下，触发加载
         }
 
-        StartCoroutine(IE_PlayBGM(BGM_Clips[RandomBGM()]));
+        //StartCoroutine(IE_PlayBGM(BGM_Clips[RandomBGM()]));
     }
 
     IEnumerator IE_PlayBGM(AudioClip audioClip)

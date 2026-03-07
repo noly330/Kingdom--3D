@@ -81,8 +81,8 @@ public class PlayerCombatController : CombatControllerBase
             nextComboIndex = 0;
             currentComboList = skillComboList[0];
 
-            ExecuteCombo();
             StartCoroutine(IE_ChangePoise(ForceLevel.Mid));
+            ExecuteCombo();
         }
     }
     public void UpdateNormalComboList(ComboListSO comboList)
@@ -202,8 +202,9 @@ public class PlayerCombatController : CombatControllerBase
 
     private IEnumerator IE_ChangePoise(ForceLevel newPoise)
     {
-        float time = animator.GetCurrentAnimatorStateInfo(0).length * 0.4f / animator.speed;
         currentCharacter.poise = newPoise;
+        //float time = animator.GetCurrentAnimatorStateInfo(0).length * 0.4f / animator.speed;
+        float time = 1f;
         while (time > 0)
         {
             time -= Time.deltaTime;

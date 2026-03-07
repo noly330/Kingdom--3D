@@ -8,7 +8,7 @@ public class CharacterBase : MonoBehaviour
 {
 
     [Header("基础属性")]
-    public ObjectPoolType characterPoolType;
+    public ObjectPoolType characterPoolType;  
     public float baseHealth;
     public float maxHealth;
     public float currentHealth;
@@ -56,6 +56,8 @@ public class CharacterBase : MonoBehaviour
         {
             currentEnergy += Time.deltaTime * 5f;
         }
+        else
+            currentEnergy = maxEnergy;
     }
 
     private void CheckState()

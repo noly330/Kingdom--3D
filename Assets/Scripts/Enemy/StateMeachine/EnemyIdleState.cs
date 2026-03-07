@@ -16,6 +16,8 @@ public class EnemyIdleState : IEnemyState
     }
     public void OnEnter()
     {
+        enemyFSM.M_agent.isStopped = true;
+        enemyFSM.M_agent.ResetPath();
         idleTime = 6f;
     }
 

@@ -24,7 +24,7 @@ public class MoveController : MonoBehaviour
 
     // 地面检测相关
     [Header("Ground Detection")]
-    [SerializeField] private float groundCheckDistance = 0.4f;
+    [SerializeField] private float groundCheckDistance = 0.7f;
     [SerializeField] private LayerMask groundLayer = -1; // 默认所有层
     private RaycastHit groundHit;
 
@@ -112,7 +112,7 @@ public class MoveController : MonoBehaviour
         {
             animator.CrossFadeInFixedTime("Slide", 0, 0, 0);
             slideColdTime = 1f;
-            currentCharacter.invulnerableTime = 0.6f;
+            currentCharacter.invulnerableTime = 0.65f;
             StartCoroutine(IE_InputLockout());
         }
     }

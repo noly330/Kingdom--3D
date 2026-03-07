@@ -49,15 +49,17 @@ public class PlayerCharacter : CharacterBase
 
         currentAttack = baseAttack;
         maxHealth = baseHealth;
+        currentCritChance = baseCritChance;
         equipmentData = InventoryManager.instance.equipmentData;
         foreach (var i in equipmentData.items)
         {
             if (i.itemData == null) continue;
             currentAttack += i.itemData.equipmentData.damageBonus;
             maxHealth += i.itemData.equipmentData.healthBonus;
+            currentCritChance += i.itemData.equipmentData.critChangeBonus;
         }
 
-        UIManager.instance.playerStatsUI.UpdateStatsUI(maxHealth, currentAttack);
+        UIManager.instance.playerStatsUI.UpdateStatsUI(this);
 
         currentHealth = maxHealth * healthPercentage;
         // 确保不溢出

@@ -46,19 +46,15 @@ public class DialogueUI : MonoBehaviour
             head.gameObject.SetActive(false);
 
         mainText.text = "";
-        float time = piece.text.Length * 0.1f;
+        float time = piece.text.Length * 0.02f;
         DOTween.To(() => string.Empty, value => mainText.text = value, piece.text, time)
                .SetEase(Ease.Linear);
 
         if (piece.options.Count == 0)
-        {
             nextButton.gameObject.SetActive(true);
-
-        }
         else
-        {
             nextButton.gameObject.SetActive(false);
-        }
+        
 
         CreateOptions(piece);
     }
