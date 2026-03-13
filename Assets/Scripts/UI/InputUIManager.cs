@@ -10,11 +10,11 @@ public class InputUIManager : MonoBehaviour
     public PlayerInput playerInput;
 
     [Header("界面")]
+    public UIState currentUIState = UIState.None;
     public GameObject bagPanel;
     public GameObject equipPanel;
+    public GameObject settingPanel;
     public GameObject playerInfoPanel;
-    private bool isBagOpen = false;
-    private bool isEquipOpen = false;
 
     void Awake()
     {
@@ -31,24 +31,31 @@ public class InputUIManager : MonoBehaviour
         {
             OnClickEquip();
         }
+        if(Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            OnClickSetting();
+        }
+
     }
+
 
     public void OnClickBag()
     {
-        if(isEquipOpen)  return;
+        if(currentUIState!= UIState.None && currentUIState!= UIState.Bag)
+            return;
         if(bagPanel.activeSelf)
         {
+            currentUIState = UIState.None;
             bagPanel.SetActive(false);
-            isBagOpen = false;
             playerInput.actions.FindActionMap("Player").Enable();
 
             playerInfoPanel.SetActive(true);
         }
         else
         {
+            currentUIState = UIState.Bag;
             bagPanel.SetActive(true);
             UIManager.instance.interactPrompt.HidePrompt();
-            isBagOpen = true;
             playerInput.actions.FindActionMap("Player").Disable();
 
             playerInfoPanel.SetActive(false);
@@ -56,23 +63,54 @@ public class InputUIManager : MonoBehaviour
     }
     public void OnClickEquip()
     {
-        if(isBagOpen)  return;
+        if(currentUIState!= UIState.None && currentUIState!= UIState.Equip)
+            return;
         if(equipPanel.activeSelf)
         {
+            currentUIState = UIState.None;
             equipPanel.SetActive(false);
-            isEquipOpen = false;
             playerInput.actions.FindActionMap("Player").Enable();
 
             playerInfoPanel.SetActive(true);
         }
         else
         {
+            currentUIState = UIState.Equip;
             equipPanel.SetActive(true);
             UIManager.instance.interactPrompt.HidePrompt();
-            isEquipOpen = true;
             playerInput.actions.FindActionMap("Player").Disable();
 
             playerInfoPanel.SetActive(false);
         }
     }
+    public void OnClickSetting()
+    {
+        if(currentUIState!= UIState.None && currentUIState!= UIState.Setting)
+            return;
+        if(settingPanel.activeSelf)
+        {
+            currentUIState = UIState.None;
+            settingPanel.SetActive(false);
+            playerInput.actions.FindActionMap("Player").Enable();
+
+            playerInfoPanel.SetActive(true);
+        }
+        else
+        {
+            currentUIState = UIState.Setting;
+            settingPanel.SetActive(true);
+            UIManager.instance.interactPrompt.HidePrompt();
+            playerInput.actions.FindActionMap("Player").Disable();
+
+            playerInfoPanel.SetActive(false);
+        }
+    }
+}
+
+public enum UIState
+{
+    None,
+    Bag,
+    Equip,
+    Setting,
 }

@@ -19,9 +19,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private float targetFov;
 
     [Header("公开的第三人称相机设置")]
-    public float mouseSensitivity = 0.3f;
-    public bool mouseInvert = false;  //是否反转鼠标Y轴
-
+    public float mouseSensitivity = 0.3f; 
     private const float threshold = 0.01f;  //输入阈值，过滤无效的微小输入
     private float cinemachineTargetYaw;  //记录相机 / 角色的水平旋转角度（绕 Y 轴）
     private float cinemachineTargetPitch;  //记录相机的垂直旋转角度（绕 X 轴）
@@ -47,7 +45,7 @@ public class ThirdPersonCamera : MonoBehaviour
         if (look.sqrMagnitude >= threshold)
         {
             cinemachineTargetYaw += look.x * mouseSensitivity;
-            cinemachineTargetPitch +=  (mouseInvert ? -1 : 1) * look.y * mouseSensitivity;
+            cinemachineTargetPitch +=look.y * mouseSensitivity * 0.4f;
         }
 
         //把角度归一化到正确的区间
