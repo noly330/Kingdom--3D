@@ -110,7 +110,10 @@ public class CombatControllerBase : MonoBehaviour
     #region 攻击
     public void ExecuteCombo()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt")) return;
+        if (currentComboList == null)
+            Debug.LogError("当前战斗控制器没有绑定招式表");
+
+        if (!CanAttack()) return;
         FindTarget();
         LookTarget();
 
@@ -158,6 +161,27 @@ public class CombatControllerBase : MonoBehaviour
         {
             nextComboIndex = 0;
         }
+    }
+
+    private bool CanAttack()
+    {
+        if (!canExecuteCombo) 
+            return false;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt")) 
+            return false;
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide"))
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            // 如果动画播放进度小于0.5（50%），不能攻击
+            if (stateInfo.normalizedTime < 0.5f)
+            {
+                return false;
+            }
+        }
+
+
+        return true;
     }
 
     #endregion

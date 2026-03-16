@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DialogueData", menuName = "Dialogue/DialogueData_SO")]
+[CreateAssetMenu(fileName = "DialogueData", menuName = "Assets/Dialogue/DialogueData_SO")]
 public class DialogueData_SO : ScriptableObject
 {
     public List<DialoguePiece> dialoguePieces = new List<DialoguePiece>();

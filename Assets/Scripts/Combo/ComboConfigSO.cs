@@ -8,6 +8,7 @@ public class ComboConfigSO : ScriptableObject
     [Header("基础数据")]
     public string comboName;
     public float coldTime;
+    
     [Header("交互数据")]
     public ComboInteractionConfig[] comboInteractionConfig;
 
@@ -34,13 +35,10 @@ public class ComboConfigSO : ScriptableObject
 [System.Serializable]
 public class ComboInteractionConfig
 {
-    public string hitName;  //攻击类型,可以用来播放对应动画
+    public string hitName;  //攻击的名字,可以让对方播放对应受击动画
     public string hitAirName;  //以后写天上受到攻击的效果
-    //武器类型
-    public Weapon weapon;  //
-    //攻击力度
-    public ForceLevel attackForce;
-    public float damageMul;
+    public ForceLevel attackForce;  //攻击力度
+    public float damageMul;  //伤害倍率
 }
 
 [System.Serializable]
