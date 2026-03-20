@@ -45,6 +45,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        look = GameInputManager.Instance.Look;
+        scroll = GameInputManager.Instance.Scroll;
         if (look.sqrMagnitude >= threshold)
         {
             cinemachineTargetYaw += look.x * mouseSensitivity;
@@ -88,14 +90,14 @@ public class ThirdPersonCamera : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);//Mathf.Clamp限制角度在lfMin~lfMax范围内
     }
 
-    public void OnLook(InputValue value)
-    {
-        look = value.Get<Vector2>();
+    // public void OnLook(InputValue value)
+    // {
+    //     look = value.Get<Vector2>();
 
-    }
+    // }
 
-    public void OnScroll(InputValue value)
-    {
-        scroll = value.Get<Vector2>();
-    }
+    // public void OnScroll(InputValue value)
+    // {
+    //     scroll = value.Get<Vector2>();
+    // }
 }

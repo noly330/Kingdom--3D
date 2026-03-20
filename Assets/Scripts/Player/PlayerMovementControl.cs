@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,8 @@ public class PlayerMovementControl : CharacterMovementControlBase
     private float _angleVelocity = 0f;
     private GameObject _mainCamera;
     [SerializeField] private float _rotationSmoothTime;
+
+    private Vector3 _characterTargetDirection;
 
     protected override void Awake()
     {
@@ -39,8 +42,12 @@ public class PlayerMovementControl : CharacterMovementControlBase
         if (_animator.GetBool("HasInput") &&
         (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Motion") || _animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide")))
         {
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, _rotationAngle, ref _angleVelocity, _rotationSmoothTime);
+            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y,
+             _rotationAngle, ref _angleVelocity, _rotationSmoothTime);
+            //transform.eulerAngles = Vector3.up * _rotationAngle;
+            _characterTargetDirection = Quaternion.Euler(0,_rotationAngle,0) * Vector3.forward;  //拿到要转到的那个方向
         }
+        //_animator.SetFloat("DetalAngle", Vector3.SignedAngle(transform.forward, _characterTargetDirection, Vector3.up));
 
     }
 
@@ -62,14 +69,14 @@ public class PlayerMovementControl : CharacterMovementControlBase
 
         if (_animator.GetBool("HasInput"))
         {
-            _animator.SetFloat("Movement", (_animator.GetBool("IsRun") ? 2f : GameInputManager.Instance.Move.magnitude), 0.25f, Time.deltaTime);
+            _animator.SetFloat("Movement", (_animator.GetBool("IsRun") ? 2f : GameInputManager.Instance.Move.magnitude));
 
             if (GameInputManager.Instance.Run)
                 _animator.SetBool("IsRun", true);
         }
         else
         {
-            _animator.SetFloat("Movement", 0f, 0.25f, Time.deltaTime);
+            _animator.SetFloat("Movement", 0f);
             if (_animator.GetFloat("Movement") < 0.2f)
             {
                 _animator.SetBool("IsRun", false);

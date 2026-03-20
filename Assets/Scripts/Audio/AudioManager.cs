@@ -11,7 +11,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip[] BGM_Clips;
     private void Awake()
     {
-        instance = this;
+        instance = this; 
     }
 
     private void Start()

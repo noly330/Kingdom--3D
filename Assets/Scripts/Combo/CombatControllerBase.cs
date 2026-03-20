@@ -38,6 +38,7 @@ public class CombatControllerBase : MonoBehaviour
         RunEvent();
     }
 
+    #region 运行战斗事件
     /// <summary>
     /// 处理普通攻击的伤害传递，特效和音效
     /// </summary>
@@ -106,6 +107,7 @@ public class CombatControllerBase : MonoBehaviour
             }
         }
     }
+    #endregion
 
     #region 攻击
     public void ExecuteCombo()
@@ -165,21 +167,18 @@ public class CombatControllerBase : MonoBehaviour
 
     private bool CanAttack()
     {
-        if (!canExecuteCombo) 
+        if (!canExecuteCombo)
             return false;
-        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt")) 
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt"))
             return false;
 
-        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide"))
-        {
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            // 如果动画播放进度小于0.5（50%），不能攻击
-            if (stateInfo.normalizedTime < 0.5f)
-            {
-                return false;
-            }
-        }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide") &&
+        animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
+            return false;
 
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Avoid") &&
+        animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
+            return false;
 
         return true;
     }

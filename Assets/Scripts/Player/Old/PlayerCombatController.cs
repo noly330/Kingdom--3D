@@ -8,7 +8,7 @@ public class PlayerCombatController : CombatControllerBase
 {
 
     [Header("玩家战斗招式")]
-    public ComboListSO normalComboList;
+    public ComboListSO normalComboList;  //可以换武器切换普通攻击
     [SerializeField] private ComboListSO boxingComboList;
     [SerializeField] private ComboListSO fallComboList;
     [SerializeField] private ComboListSO[] skillComboList;
@@ -52,9 +52,8 @@ public class PlayerCombatController : CombatControllerBase
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt"))
             return;
 
-        if (playerInput.actions["Fire1"].triggered && canExecuteCombo)
+        if (GameInputManager.Instance.Fire1 && canExecuteCombo)
         {
-
             //切换普攻，下落攻击，技能等
             if (moveController.isGround)
             {
@@ -114,7 +113,9 @@ public class PlayerCombatController : CombatControllerBase
                 currentCharacter.invulnerableTime += 0.15f;
                 currentCharacter.currentEnergy += 8f;
                 //播放完美闪避音效
+                animator.CrossFadeInFixedTime("Avoid", 0, 0, 0);
                 AudioManager.instance.PlaySFX(perfectAvoidClip, 0.8f);
+
                 perfectAvoidCoroutine = StartCoroutine(IE_PerfectAvoid());
             }
             return;
@@ -151,17 +152,21 @@ public class PlayerCombatController : CombatControllerBase
 
     IEnumerator IE_PerfectAvoid()
     {
-        float duration = perfectAvoidDuration;
-        meshRefreshTimer = 0f;
+        yield return null;
+        
+        //一开始不要生成残影
+        meshRefreshTimer = 0.2f;
+
 
         if (skinnedMeshRenderers == null)
         {
             skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         }
         Time.timeScale = tScale;
-        while (duration > 0)
+        while (animator.GetCurrentAnimatorStateInfo(0).IsTag("Avoid") && 
+        animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5)
         {
-            duration -= Time.unscaledDeltaTime;
+            Debug.Log("正在完美闪避");
             meshRefreshTimer -= Time.unscaledDeltaTime;
             if (meshRefreshTimer < 0)
             {
