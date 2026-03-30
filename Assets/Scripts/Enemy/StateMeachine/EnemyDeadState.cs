@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyDeadState : IEnemyState
+public class EnemyDeadState : IEnemyState 
 {
     private EnemyFSM enemyFSM;
 

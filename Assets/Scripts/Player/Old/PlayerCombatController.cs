@@ -59,14 +59,14 @@ public class PlayerCombatController : CombatControllerBase
             {
                 if (currentComboList.TryGetAttackType != AttackType.Normal)
                 {
-                    nextComboIndex = 0;
+                    _nextComboIndex = 0;
                     currentComboList = normalComboList;
                 }
 
             }
             else
             {
-                nextComboIndex = 0;
+                _nextComboIndex = 0;
                 currentComboList = fallComboList;
             }
             ExecuteCombo();
@@ -77,7 +77,7 @@ public class PlayerCombatController : CombatControllerBase
                 return;
             currentCharacter.currentEnergy -= skillComboList[0].energyCost;
             Debug.Log("触发技能1");
-            nextComboIndex = 0;
+            _nextComboIndex = 0;
             currentComboList = skillComboList[0];
 
             StartCoroutine(IE_ChangePoise(ForceLevel.Mid));
@@ -105,12 +105,13 @@ public class PlayerCombatController : CombatControllerBase
     private Coroutine perfectAvoidCoroutine;
     protected override void CharacterCombatBeHit(ComboInteractionConfig interactionConfig, CharacterBase attacker)
     {
+        if(animator.GetCurrentAnimatorStateInfo(0).IsTag("Avoid"))
+            return;
         //完美闪避
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide"))
         {
             if (perfectAvoidCoroutine == null)  //确保完美闪避不连续触发
             {
-                currentCharacter.invulnerableTime += 0.15f;
                 currentCharacter.currentEnergy += 8f;
                 //播放完美闪避音效
                 animator.CrossFadeInFixedTime("Avoid", 0, 0, 0);

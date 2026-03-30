@@ -59,6 +59,11 @@ public class ObjectPool : MonoBehaviour
 
     public void ReturnPool(ObjectPoolType poolType, GameObject obj)
     {
+        if (!_poolDictionary.ContainsKey(poolType))
+        {
+            Debug.LogError("对象池中没有这类物品：" + poolType);
+            return;
+        }
         obj.SetActive(false);
         _poolDictionary[poolType].Enqueue(obj);
 

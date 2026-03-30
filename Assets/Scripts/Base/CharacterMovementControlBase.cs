@@ -17,8 +17,8 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
 
     //重力相关
     protected readonly float _gravity = -9.8f;
-    protected float _verticalVelocity;  //垂直速度
-    protected float _verticalMaxVelocity = 54f;  //低于这个值的时候才应用重力
+    [SerializeField] protected float _verticalVelocity;  //垂直速度
+    protected float _verticalMaxVelocity = -18f;  //低于这个值的时候才应用重力
     protected float _fallOutDeltaTime;
     protected float _fallOutTime = 0.15f;  //防止角色下楼梯鬼畜
     protected Vector3 _verticalDirection;  //Y轴移动方向
@@ -71,10 +71,10 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
             else
             {
                 //说明角色还没落地
-            }
-            if (_verticalVelocity < _verticalMaxVelocity)
-            {
-                _verticalVelocity += _gravity * Time.deltaTime;
+                if (_verticalVelocity > _verticalMaxVelocity)
+                {
+                    _verticalVelocity += _gravity * 1.5f * Time.deltaTime;
+                }
             }
         }
 

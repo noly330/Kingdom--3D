@@ -23,7 +23,7 @@ public class EnemyA1Character : CharacterBase
         enemyHealthBar.UpdateHealthBar();
 
     }
-    void OnDisable()
+     void OnDisable()
     {
 
     }
@@ -37,5 +37,4 @@ public class EnemyA1Character : CharacterBase
             obj.GetComponent<DamageText>().SetDamageText(finalDamage, newDamage.isCrit);
         }
     }
-
 }

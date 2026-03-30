@@ -38,6 +38,5 @@ public enum ObjectPoolType
 {
     Enemy_1,Enemy_2,
     DamageText,
-
     AttackEffect,FootEffect
 }
