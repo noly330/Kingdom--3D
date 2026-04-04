@@ -16,10 +16,10 @@ public static class EventCenter
     {
         if(listener == null)  throw new ArgumentNullException(nameof(listener));
         var type = typeof(T);
-        if(_events.TryGetValue(type,out var value))  //尝试从字典获取已有委托
+        if(_events.TryGetValue(type,out var existingDelegate))  //尝试从字典获取已有委托
         {
             //combine就是+=
-            _events[type] = Delegate.Combine(value,listener);
+            _events[type] = Delegate.Combine(existingDelegate,listener);
         }
         else
         {
@@ -31,9 +31,9 @@ public static class EventCenter
     {
         if(listener == null)  throw new ArgumentNullException(nameof(listener));
         var type = typeof(T);
-        if(_events.TryGetValue(type,out var value))
+        if(_events.TryGetValue(type,out var existingDelegate))
         {
-            var newDelegate = Delegate.Remove(value,listener);
+            var newDelegate = Delegate.Remove(existingDelegate,listener);
             if(newDelegate == null)
             {
                 _events.Remove(type);
@@ -46,7 +46,7 @@ public static class EventCenter
         }
     }
 
-    public static void Broadcast<T>(T message)where T : class,IMessage
+    public static void Broadcast<T>(T message)where T : class
     {
         if(message == null)  throw new ArgumentNullException(nameof(message));
         if(_events.TryGetValue(typeof(T),out var delegateToInvoke))

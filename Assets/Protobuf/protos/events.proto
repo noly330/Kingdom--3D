@@ -8,3 +8,9 @@ message PauseGame{
 message ResumeGame{
     
 }
+
+message SwitchMainCharacter{
+
+    int32 new_index = 1;
+    int32 old_index = 2;
+}

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TargetScanner : MonoBehaviour
+public class TargetScanner
 {
-    public Transform FindNearestTarget(float scanRadius, LayerMask targetLayer)
+    public Transform FindNearestTarget(Transform transform, float scanRadius, LayerMask targetLayer)
     {
         Collider[] targets = Physics.OverlapSphere(transform.position, scanRadius, targetLayer);
         if (targets.Length == 0)
@@ -12,7 +12,7 @@ public class TargetScanner : MonoBehaviour
         return targets[0].transform;
     }
 
-    public Transform FindForwardTarget(float scanRadius, LayerMask targetLayer)
+    public Transform FindForwardTarget(Transform transform, float scanRadius, LayerMask targetLayer)
     {
         Collider[] targets = Physics.OverlapSphere(transform.position, scanRadius, targetLayer);
 

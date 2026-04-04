@@ -37,7 +37,7 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
     protected virtual void Update()
     {
         SetCharacterGravity();
-        UpdateCharacterGravity();
+        //UpdateCharacterGravity();
     }
 
     protected virtual void OnAnimatorMove()
@@ -61,7 +61,7 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
         {
             _fallOutDeltaTime = _fallOutTime;
 
-            if (_verticalVelocity < 0f)
+            if (_verticalVelocity < 2f)
                 _verticalVelocity = -2f;
         }
         else
@@ -78,12 +78,6 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
             }
         }
 
-    }
-
-    private void UpdateCharacterGravity()
-    {
-        _verticalDirection.Set(0f, _verticalVelocity, 0f);
-        _characterController.Move(_verticalDirection * Time.deltaTime);
     }
 
     //坡道检测
@@ -103,7 +97,9 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
     protected void UpdateCharacterMoveDirection(Vector3 direction)
     {
         _moveDirection = SlopResetDirection(direction);
-        _characterController.Move(_moveDirection * Time.deltaTime);
+        _verticalDirection.Set(0f, _verticalVelocity, 0f);
+
+        _characterController.Move((_moveDirection + _verticalDirection) * Time.deltaTime);
     }
 
     private void OnDrawGizmos()

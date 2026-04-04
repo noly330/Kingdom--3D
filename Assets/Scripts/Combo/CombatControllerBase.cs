@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class CombatControllerBase : MonoBehaviour
@@ -13,7 +10,7 @@ public class CombatControllerBase : MonoBehaviour
     public Animator animator;
     public bool canExecuteCombo;
     public CharacterBase currentCharacter;
-    private int _currentComboIndex;
+    protected int _currentComboIndex;
     protected int _nextComboIndex;
     private Coroutine stopComboCoroutine;  //这次一个协程，为了防止多个协程同时触发
     private RunningEventIndex runningEventIndex;
@@ -42,7 +39,7 @@ public class CombatControllerBase : MonoBehaviour
     /// <summary>
     /// 处理普通攻击的伤害传递，特效和音效
     /// </summary>
-    private void RunEvent()
+    protected virtual void RunEvent()
     {
         if (currentComboList == null) return;
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName(currentComboList.TryGetComboName(_currentComboIndex))
@@ -80,6 +77,14 @@ public class CombatControllerBase : MonoBehaviour
         }
 
         //生成特效
+        TryPlayFX();
+        //生成音效
+        TryPlaySFX();
+        
+    }
+
+    private void TryPlayFX()
+    {
         FXConfig FX_Config = currentComboList.TryGetFXConfig(_currentComboIndex, runningEventIndex.FXIndex);
         if (FX_Config != null)
         {
@@ -95,8 +100,9 @@ public class CombatControllerBase : MonoBehaviour
 
             }
         }
-
-        //生成音效
+    }
+    private void TryPlaySFX()
+    {
         SFXConfig SFX_Config = currentComboList.TryGetSFXConfig(_currentComboIndex, runningEventIndex.SFXIndex);
         if (SFX_Config != null)
         {
@@ -220,7 +226,7 @@ public class CombatControllerBase : MonoBehaviour
     #region 追踪敌人
 
     [Header("索敌设置")]
-    private Transform currentTarget;
+    protected Transform _attackTarget;
     public Vector3 checkSize = new Vector3(3, 3, 3);  //检测范围大小
 
     private void FindTarget()
@@ -229,7 +235,7 @@ public class CombatControllerBase : MonoBehaviour
         Collider[] targetList = Physics.OverlapBox(transform.position, checkSize, Quaternion.identity, targetMask);
         if (targetList.Length == 0)
         {
-            currentTarget = null;
+            _attackTarget = null;
             return;
         }
 
@@ -241,18 +247,37 @@ public class CombatControllerBase : MonoBehaviour
             if (dis < distanceMin)
             {
                 distanceMin = dis;
-                currentTarget = target.transform;
+                _attackTarget = target.transform;
             }
         }
     }
     private void LookTarget()
     {
-        if (currentTarget == null) return;
-        Vector3 dir = currentTarget.position - transform.position;
+        if (_attackTarget == null) return;
+        Vector3 dir = _attackTarget.position - transform.position;
         dir.y = 0;
         transform.forward = dir.normalized;
     }
 
+
+    #endregion
+
+}
+
+public class RunningEventIndex
+{
+    public int attackDetectionIndex = 0;
+    public int FXIndex = 0;
+    public int SFXIndex = 0;
+    public int AttackFeedbackIndex = 0;
+    public void Reset()
+    {
+        attackDetectionIndex = 0;
+        FXIndex = 0;
+        SFXIndex = 0;
+        AttackFeedbackIndex = 0;
+    }
+}
     // private Coroutine executeMoveOffsetCoroutine;
     // protected void ExecuteMoveOffset(MoveOffsetConfig moveOffsetConfig, Transform user)
     // {
@@ -288,22 +313,3 @@ public class CombatControllerBase : MonoBehaviour
     //     }
     //     executeMoveOffsetCoroutine = null;
     // }
-
-    #endregion
-
-}
-
-public class RunningEventIndex
-{
-    public int attackDetectionIndex = 0;
-    public int FXIndex = 0;
-    public int SFXIndex = 0;
-    public int AttackFeedbackIndex = 0;
-    public void Reset()
-    {
-        attackDetectionIndex = 0;
-        FXIndex = 0;
-        SFXIndex = 0;
-        AttackFeedbackIndex = 0;
-    }
-}

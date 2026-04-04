@@ -24,7 +24,7 @@ public class EnemyDeadState : IEnemyState
         if (destoryTime <= 0f)
         {
             enemyFSM.GetComponent<LootSpawner>().CreatLootItem();
-            ObjectPool.instance.ReturnPool(enemyFSM.currentCharacter.characterPoolType, enemyFSM.gameObject);
+            ObjectPool.instance.ReturnPool(enemyFSM.enemyCharacter.characterPoolType, enemyFSM.gameObject);
 
         }
     }

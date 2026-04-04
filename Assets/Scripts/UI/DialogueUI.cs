@@ -2,8 +2,6 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using Unity.VisualScripting.ReorderableList.Element_Adder_Menu;
-
 public class DialogueUI : MonoBehaviour
 {
     [Header("UI基本面板")]

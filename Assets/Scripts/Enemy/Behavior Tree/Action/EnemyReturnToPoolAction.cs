@@ -4,14 +4,14 @@ using UnityEngine;
 [TaskCategory("Enemy")]
 public class EnemyReturnToPoolAction : Action
 {
-    private CharacterBase _character;
+    private EnemyCharacter _enemyCharacter;
     private bool _hasReturnedToPool;
     private Animator _animator;
 
     public override void OnAwake()
     {
         base.OnAwake();
-        _character = GetComponent<CharacterBase>();
+        _enemyCharacter = GetComponent<EnemyCharacter>();
         _animator = GetComponent<Animator>();
     }
 
@@ -26,9 +26,9 @@ public class EnemyReturnToPoolAction : Action
             return TaskStatus.Success;
 
         _hasReturnedToPool = true;
-        _character.isDead = false;
+        _enemyCharacter.isDead = false;
         _animator.SetBool("IsDead", false);
-        ObjectPool.instance.ReturnPool(_character.characterPoolType, _character.gameObject);
+        ObjectPool.instance.ReturnPool(_enemyCharacter.characterPoolType, _enemyCharacter.gameObject);
         return TaskStatus.Success;
     }
 }

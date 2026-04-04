@@ -14,8 +14,8 @@ public class PlayerMovementControl : CharacterMovementControlBase
     [Header("Jump")]
     [SerializeField] private float _jumpHeight = 1.6f;
     [SerializeField] private float _jumpCooldown = 0.1f;
+    [SerializeField] private float _airSpeed = 5f;
     private float _jumpCooldownTimer;
-
     private Vector3 _characterTargetDirection;
 
     protected override void Awake()
@@ -27,7 +27,8 @@ public class PlayerMovementControl : CharacterMovementControlBase
     protected override void Update()
     {
         base.Update();
-        CharacterRotationControl();
+        //CharacterRotationControl();
+        RotationController();
         CharacterSlide();
         HandleJump();
         UpdateJumpCooldown();
@@ -38,29 +39,43 @@ public class PlayerMovementControl : CharacterMovementControlBase
     {
     }
 
-    private void CharacterRotationControl()
+    protected override void OnAnimatorMove()
     {
-        //if (!isGround) return;
-        if (!_animator.GetBool("HasInput")) return;
-        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Turn"))  return;
-        
-        //获取目标转向角度
-        if (_animator.GetBool("HasInput"))
-            _rotationAngle = Mathf.Atan2(GameInputManager.Instance.Move.x, GameInputManager.Instance.Move.y) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-
-
-        if (_animator.GetBool("HasInput") &&
-        (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Motion") || _animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide")))
+        _animator.ApplyBuiltinRootMotion();
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Jump") || !isGround)
         {
-            _characterTargetDirection = Quaternion.Euler(0, _rotationAngle, 0) * Vector3.forward;  //拿到要转到的那个方向
+            Vector3 inputDir = new Vector3(GameInputManager.Instance.Move.x, 0.0f, GameInputManager.Instance.Move.y);
+            Vector3 targetDir = Quaternion.Euler(0f, _mainCamera.transform.eulerAngles.y, 0f) * inputDir;
 
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y,
-         _rotationAngle, ref _angleVelocity, _rotationSmoothTime);
-
-            //transform.eulerAngles = Vector3.up * _rotationAngle;
+            UpdateCharacterMoveDirection(targetDir * _airSpeed);
         }
-        _animator.SetFloat("DetalAngle", Vector3.SignedAngle(transform.forward, _characterTargetDirection, Vector3.up));
+        else
+        {
+            UpdateCharacterMoveDirection(_animator.deltaPosition);
+        }
+    }
 
+    public float _targetRot = 0.0f;
+    public Vector3 _targetDirection;
+    Vector3 _inputDir;
+
+    private void RotationController()
+    {
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Turn")) return;
+            
+        _inputDir = new Vector3(GameInputManager.Instance.Move.x, 0.0f, GameInputManager.Instance.Move.y).normalized;
+        //Mathf.Atan2(inputDir.x, inputDir.z)：计算输入方向的弧度值
+        //* Mathf.Rad2Deg：把弧度转换成角度
+        _targetRot = Mathf.Atan2(_inputDir.x, _inputDir.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
+        _targetDirection = Quaternion.Euler(0f, _targetRot, 0f) * Vector3.forward;
+
+        float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRot, ref _angleVelocity, _rotationSmoothTime);
+        if (GameInputManager.Instance.Move != Vector2.zero)
+        {
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && !_animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt"))
+                transform.rotation = Quaternion.Euler(0f, rotation, 0f);
+        }
+        _animator.SetFloat("DetalAngle", Vector3.SignedAngle(transform.forward, _targetDirection, Vector3.up));
     }
 
     private void CharacterSlide()
@@ -68,17 +83,19 @@ public class PlayerMovementControl : CharacterMovementControlBase
         if (GameInputManager.Instance.playerInput.actions["Slide"].triggered)
         {
 
-            transform.eulerAngles = Vector3.up * _rotationAngle;
+            transform.eulerAngles = Vector3.up * _targetRot;
             _animator.CrossFadeInFixedTime("Slide", 0, 0, 0);
         }
     }
+
+    #region 跳跃
 
     private void HandleJump()
     {
         if (_jumpCooldownTimer > 0f) return;
         if (!isGround) return;
         if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Turn")) return;
-        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide")) return;
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide") && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.5f) return;
 
         if (GameInputManager.Instance.Jump)
         {
@@ -97,24 +114,26 @@ public class PlayerMovementControl : CharacterMovementControlBase
         }
     }
 
+    #endregion
+
     private void UpdateAniamator()
     {
         _animator.SetFloat("VerticalVelocity", _verticalVelocity);
         _animator.SetBool("IsGround", isGround);
-        if (!isGround) return;
+        //if (!isGround) return;
 
         _animator.SetBool("HasInput", GameInputManager.Instance.Move != Vector2.zero);
 
         if (_animator.GetBool("HasInput"))
         {
-            _animator.SetFloat("Movement", (_animator.GetBool("IsRun") ? 2f : GameInputManager.Instance.Move.magnitude));
+            _animator.SetFloat("Movement", (_animator.GetBool("IsRun") ? 3f : 2f * GameInputManager.Instance.Move.magnitude), 0.1F, Time.deltaTime);
 
             if (GameInputManager.Instance.Run)
                 _animator.SetBool("IsRun", true);
         }
         else
         {
-            _animator.SetFloat("Movement", 0f, 0.2f, Time.deltaTime);
+            _animator.SetFloat("Movement", 0f, 0.3f, Time.deltaTime);
             if (_animator.GetFloat("Movement") < 0.2f)
             {
                 _animator.SetBool("IsRun", false);

@@ -4,21 +4,20 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     [SerializeField] private float _scanRadius = 10f;
+    public float GetScanRadius() => _scanRadius;
     [SerializeField] private LayerMask _targetLayer;
 
     [Header("无需拖拽")]
     public NavMeshAgent navMeshAgent;
     public Transform target;
     public ScannerMode scannerMode;
-    public EnemyState enemyState;
-    private TargetScanner _targetScanner;
+    private TargetScanner _targetScanner = new TargetScanner();
     private float scannerTime = 0.3f;
     private float scannerTimer = 0f;
 
     private void Awake()
     {
         
-        _targetScanner = GetComponent<TargetScanner>();
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -30,10 +29,10 @@ public class EnemyAI : MonoBehaviour
             switch(scannerMode)
             {
                 case ScannerMode.Forward:
-                    target = _targetScanner.FindForwardTarget(_scanRadius, _targetLayer);
+                    target = _targetScanner.FindForwardTarget(transform, _scanRadius, _targetLayer);
                     break;
                 case ScannerMode.Nearest:
-                    target = _targetScanner.FindNearestTarget(_scanRadius, _targetLayer);
+                    target = _targetScanner.FindNearestTarget(transform, _scanRadius, _targetLayer);
                     break;
             }
         }
@@ -53,12 +52,4 @@ public class EnemyAI : MonoBehaviour
     }
 }
 
-public enum ScannerMode
-{
-    Forward,Nearest
-}
 
-public enum EnemyState
-{
-    None,Fight
-}

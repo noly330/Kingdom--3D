@@ -31,7 +31,7 @@ public class EnemyMovementController : CharacterMovementControlBase
     {
         if (_applyFightMovement)
             return;
-        _animator.SetFloat("Lock", 0f, 0.3f, Time.deltaTime);
+        _animator.SetFloat("Lock", 0f, 0.3f, Time.deltaTime);  //加上平滑过渡，切换更丝滑就不会闪来闪去
         _animator.SetFloat("Movement", movement, 0.2f, Time.deltaTime);
     }
 

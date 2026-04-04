@@ -40,3 +40,8 @@ public enum ObjectPoolType
     DamageText,
     AttackEffect,FootEffect
 }
+
+public enum ScannerMode
+{
+    Forward,Nearest
+}

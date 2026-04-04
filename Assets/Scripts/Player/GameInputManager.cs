@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameInputManager : MonoBehaviour
 {
@@ -14,12 +15,28 @@ public class GameInputManager : MonoBehaviour
     public bool Run => playerInput.actions["Run"].triggered;
     public bool Jump => playerInput.actions["Jump"].triggered;
     public bool Fire1 => playerInput.actions["Fire1"].triggered;
+    public bool Skill1 => playerInput.actions["Skill1"].triggered;
+    public bool Skill2 => playerInput.actions["Skill2"].triggered;
+
     // public bool Slide => playerInput.actions["Slide"].triggered;
     
     private void Awake()
     {
         Instance = this;
         playerInput = GetComponent<PlayerInput>();
+    }
+
+    private void Start()
+    {
+        //SceneManager.LoadScene("Playground");
+    }
+
+    private void Update()
+    {
+        if (Fire1)
+        {
+            Debug.Log("Fire1");
+        }
     }
 
     private void OnEnable()
@@ -30,5 +47,7 @@ public class GameInputManager : MonoBehaviour
     {
         playerInput.actions.Disable();
     }
+
+    
 }
 

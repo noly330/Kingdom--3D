@@ -12,6 +12,7 @@ public class EnemyFSM : CombatControllerBase
     private Dictionary<StateType, IEnemyState> states = new Dictionary<StateType, IEnemyState>();
     private NavMeshAgent agent;
     private Collider collider;
+    public EnemyCharacter enemyCharacter;
 
     public NavMeshAgent M_agent => agent;
 
@@ -27,6 +28,7 @@ public class EnemyFSM : CombatControllerBase
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
         collider = GetComponent<Collider>();
+        enemyCharacter = GetComponent<EnemyCharacter>();
 
         states.Add(StateType.Idle, new EnemyIdleState(this));
         states.Add(StateType.Patrol, new EnemyPatrolState(this));
