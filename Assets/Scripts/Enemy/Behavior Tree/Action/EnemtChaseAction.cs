@@ -26,9 +26,6 @@ public class EnemtChaseAction : Action
     public override TaskStatus OnUpdate()
     {
         base.OnUpdate();
-        //提前中断的条件
-        if (_enemyAI.target == null)
-            return TaskStatus.Success;
 
         if (_enemyAI.navMeshAgent.pathPending)
             return TaskStatus.Running;
@@ -42,6 +39,5 @@ public class EnemtChaseAction : Action
 
         return TaskStatus.Running;
     }
-
 
 }

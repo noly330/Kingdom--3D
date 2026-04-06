@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementControl : CharacterMovementControlBase
 {
-    private float _rotationAngle;
     private float _angleVelocity;
     private GameObject _mainCamera;
     [SerializeField] private float _rotationSmoothTime;
@@ -16,7 +15,6 @@ public class PlayerMovementControl : CharacterMovementControlBase
     [SerializeField] private float _jumpCooldown = 0.1f;
     [SerializeField] private float _airSpeed = 5f;
     private float _jumpCooldownTimer;
-    private Vector3 _characterTargetDirection;
 
     protected override void Awake()
     {
@@ -75,12 +73,12 @@ public class PlayerMovementControl : CharacterMovementControlBase
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && !_animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt"))
                 transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
-        _animator.SetFloat("DetalAngle", Vector3.SignedAngle(transform.forward, _targetDirection, Vector3.up));
+        _animator.SetFloat(AnimationID.DetalAngleID, Vector3.SignedAngle(transform.forward, _targetDirection, Vector3.up));
     }
 
     private void CharacterSlide()
     {
-        if (GameInputManager.Instance.playerInput.actions["Slide"].triggered)
+        if (GameInputManager.Instance.Slide)
         {
 
             transform.eulerAngles = Vector3.up * _targetRot;
@@ -103,7 +101,7 @@ public class PlayerMovementControl : CharacterMovementControlBase
             _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
             _jumpCooldownTimer = _jumpCooldown;
 
-            _animator.SetTrigger("Jump");
+            _animator.SetTrigger(AnimationID.JumpID);
         }
     }
     private void UpdateJumpCooldown()
@@ -118,25 +116,26 @@ public class PlayerMovementControl : CharacterMovementControlBase
 
     private void UpdateAniamator()
     {
-        _animator.SetFloat("VerticalVelocity", _verticalVelocity);
-        _animator.SetBool("IsGround", isGround);
+        _animator.SetFloat(AnimationID.VerticalVelocityID, _verticalVelocity);
+        _animator.SetBool(AnimationID.IsGroundID, isGround);
+        _animator.SetBool(AnimationID.IsFallID, isFall);
         //if (!isGround) return;
 
-        _animator.SetBool("HasInput", GameInputManager.Instance.Move != Vector2.zero);
+        _animator.SetBool(AnimationID.HasInputID, GameInputManager.Instance.Move != Vector2.zero);
 
-        if (_animator.GetBool("HasInput"))
+        if (_animator.GetBool(AnimationID.HasInputID))
         {
-            _animator.SetFloat("Movement", (_animator.GetBool("IsRun") ? 3f : 2f * GameInputManager.Instance.Move.magnitude), 0.1F, Time.deltaTime);
+            _animator.SetFloat(AnimationID.MovementID, (_animator.GetBool(AnimationID.IsRunID) ? 3f : 2f * GameInputManager.Instance.Move.magnitude), 0.1F, Time.deltaTime);
 
             if (GameInputManager.Instance.Run)
-                _animator.SetBool("IsRun", true);
+                _animator.SetBool(AnimationID.IsRunID, true);
         }
         else
         {
-            _animator.SetFloat("Movement", 0f, 0.3f, Time.deltaTime);
-            if (_animator.GetFloat("Movement") < 0.2f)
+            _animator.SetFloat(AnimationID.MovementID, 0f, 0.3f, Time.deltaTime);
+            if (_animator.GetFloat(AnimationID.MovementID) < 0.2f)
             {
-                _animator.SetBool("IsRun", false);
+                _animator.SetBool(AnimationID.IsRunID, false);
             }
         }
     }

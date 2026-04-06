@@ -13,7 +13,7 @@ public class CharacterSpawnPoint : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayerInRange && player.GetComponent<PlayerInput>().actions["Interact"].triggered)
+        if (isPlayerInRange && GameInputManager.Instance.Interact)
         {
             SpawnCharacter();
         }

@@ -11,6 +11,7 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
     //地面检测
     [Header("地面检测")]
     [SerializeField] public bool isGround;
+    [SerializeField] public bool isFall;
     [SerializeField] protected float _groundDetectionPositionOffset;
     [SerializeField] protected float _deyectionRange;
     [SerializeField] protected LayerMask _whatIsGround;
@@ -37,6 +38,7 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
     protected virtual void Update()
     {
         SetCharacterGravity();
+        SetCharacterFall();
         //UpdateCharacterGravity();
     }
 
@@ -71,13 +73,25 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
             else
             {
                 //说明角色还没落地
+                
                 if (_verticalVelocity > _verticalMaxVelocity)
                 {
                     _verticalVelocity += _gravity * 1.5f * Time.deltaTime;
                 }
             }
         }
-
+    }
+    private void SetCharacterFall()
+    {
+        if(_animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt") ||
+        _animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack") ||
+        isGround)
+        {
+            isFall = false;
+            return;
+        }
+        if(_verticalVelocity < -2.5f)
+            isFall = true;
     }
 
     //坡道检测

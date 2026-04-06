@@ -9,7 +9,19 @@ public class TargetScanner
         Collider[] targets = Physics.OverlapSphere(transform.position, scanRadius, targetLayer);
         if (targets.Length == 0)
             return null;
-        return targets[0].transform;
+
+        Transform nearestTarget = null;
+        float nearestDistance = float.MaxValue;
+
+        foreach(Collider collider in targets)
+        {
+            if(Vector3.Distance(transform.position, collider.transform.position) < nearestDistance)
+            {
+                nearestTarget = collider.transform;
+                nearestDistance = Vector3.Distance(transform.position, collider.transform.position);
+            }
+        }
+        return nearestTarget;
     }
 
     public Transform FindForwardTarget(Transform transform, float scanRadius, LayerMask targetLayer)

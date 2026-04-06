@@ -64,6 +64,15 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -5416651000045457355, guid: bce44f2ab64e1c847b2ade1020ec6a3b,
       type: 3}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Movement
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 1652673175506064298, guid: c5ac01c5546a68e4b86d02db7c1f3d7d,
+      type: 3}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -90,7 +99,7 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: Movement
   m_BlendParameterY: Blend
-  m_MinThreshold: 1
+  m_MinThreshold: 0
   m_MaxThreshold: 3
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
@@ -1071,6 +1080,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: IsFall
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   - m_Name: Jump
     m_Type: 9
     m_DefaultFloat: 0
@@ -1079,12 +1094,6 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: IsDead
     m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Lock
-    m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -1577,8 +1586,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: IsGround
+  - m_ConditionMode: 1
+    m_ConditionEvent: IsFall
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5603105655890784326}
@@ -2024,7 +2033,7 @@ AnimatorStateMachine:
   - first: {fileID: 1215705012286168541}
     second: []
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -190, y: 10, z: 0}
+  m_AnyStatePosition: {x: -170, y: 10, z: 0}
   m_EntryPosition: {x: -10, y: 130, z: 0}
   m_ExitPosition: {x: 970, y: 10, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}

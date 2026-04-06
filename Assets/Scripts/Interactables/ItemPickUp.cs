@@ -11,7 +11,7 @@ public class ItemPickUp : MonoBehaviour
 
     void Update()
     {
-        if (isPlayerInRange && player.GetComponent<PlayerInput>().actions["Interact"].triggered)
+        if (isPlayerInRange && GameInputManager.Instance.Interact)
         {
             OnPickUpItem();
         }
@@ -19,7 +19,7 @@ public class ItemPickUp : MonoBehaviour
     public void OnPickUpItem()
     {
 
-        InventoryManager playerBag = player.GetComponent<InventoryManager>();
+        InventoryManager playerBag = player.GetComponentInParent<InventoryManager>();
         playerBag.inventoryData.AddItem(itemData, itemData.itemAmount);
         playerBag.bagContainer.ReFreshUI(itemData.itemType);
         UIManager.instance.interactPrompt.HidePrompt();

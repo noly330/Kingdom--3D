@@ -15,14 +15,19 @@ public class EnemyAI : MonoBehaviour
     private float scannerTime = 0.3f;
     private float scannerTimer = 0f;
 
+    private CharacterController _characterController;
     private void Awake()
     {
-        
         navMeshAgent = GetComponent<NavMeshAgent>();
+        _characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
     {
+        // if(navMeshAgent != null && navMeshAgent.enabled)
+        // {
+        //     navMeshAgent.nextPosition = _characterController.transform.position;
+        // }
         if(scannerTimer <= 0f)
         {
             scannerTimer = scannerTime;

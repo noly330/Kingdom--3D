@@ -47,9 +47,9 @@ public class ObjectPool : MonoBehaviour
         }
 
         GameObject obj = _poolDictionary[poolType].Dequeue();
-        obj.SetActive(true);
         obj.transform.position = position;
         obj.transform.rotation = rotation;
+        obj.SetActive(true);
 
         return obj;
     }

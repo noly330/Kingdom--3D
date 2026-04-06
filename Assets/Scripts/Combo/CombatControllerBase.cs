@@ -25,6 +25,17 @@ public class CombatControllerBase : MonoBehaviour
         runningEventIndex = new RunningEventIndex();
     }
 
+    protected virtual void OnEnable()
+    {
+        canExecuteCombo = true;
+    }
+
+    protected virtual void OnDisable()
+    {
+        _nextComboIndex = 0;
+        StopAllCoroutines();
+    }
+
     protected virtual void Start()
     {
 

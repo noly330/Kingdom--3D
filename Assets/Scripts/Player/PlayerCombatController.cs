@@ -11,7 +11,6 @@ public class PlayerCombatController : CombatControllerBase
     [SerializeField] private ComboListSO fallComboList;
     [SerializeField] private ComboListSO[] skillComboList;
     private PlayerMovementControl moveController;
-    private PlayerInput playerInput;
 
     [Header("完美闪避相关")]
     public AudioClip perfectAvoidClip;
@@ -28,7 +27,6 @@ public class PlayerCombatController : CombatControllerBase
     {
         base.Awake();
         moveController = GetComponent<PlayerMovementControl>();
-        playerInput = GetComponent<PlayerInput>();
         skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
@@ -45,6 +43,7 @@ public class PlayerCombatController : CombatControllerBase
 
     }
 
+
     protected override void RunEvent()
     {
 
@@ -52,7 +51,8 @@ public class PlayerCombatController : CombatControllerBase
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName(currentComboList.TryGetComboName(_currentComboIndex))
         || animator.IsInTransition(0)) return;
 
-        ExecuteAttackOffset();
+        //TODO: 这个有问题，以后要改
+        //ExecuteAttackOffset();
         base.RunEvent();
 
     }
@@ -109,7 +109,7 @@ public class PlayerCombatController : CombatControllerBase
     public void TransitionToDeadState()
     {
         Debug.Log("触发死亡状态");
-        playerInput.actions.FindActionMap("Player").Disable();
+        //playerInput.actions.FindActionMap("Player").Disable();
     }
 
     private Coroutine perfectAvoidCoroutine;
@@ -195,13 +195,13 @@ public class PlayerCombatController : CombatControllerBase
     private IEnumerator IE_HitStun()
     {
         float duration = hitStunDuration;
-        playerInput.actions.FindActionMap("Player").Disable();
+        //playerInput.actions.FindActionMap("Player").Disable();
         while (duration > 0)
         {
             duration -= Time.deltaTime;
             yield return null;
         }
-        playerInput.actions.FindActionMap("Player").Enable();
+        //playerInput.actions.FindActionMap("Player").Enable();
         hitStunCoroutine = null;
     }
 

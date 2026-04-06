@@ -21,15 +21,16 @@ public class CompanionMovementAgent : CharacterMovementControlBase
 
     private void SetAnimatorValue()
     {
-        _animator.SetFloat("VerticalVelocity", _verticalVelocity);
-        _animator.SetBool("IsGround", isGround);
+        _animator.SetFloat(AnimationID.VerticalVelocityID, _verticalVelocity);
+        _animator.SetBool(AnimationID.IsGroundID, isGround);
+        _animator.SetBool(AnimationID.IsFallID, isFall);
     }
 
     public void SetAnimatorMovementValue(float movement)
     {
         _animator.SetFloat("Movement", movement, 0.2f, Time.deltaTime);
     }
-
+    
     public void PlayFootSound()
     {
 

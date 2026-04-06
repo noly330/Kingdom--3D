@@ -13,7 +13,7 @@ public class TeleportPoint : MonoBehaviour
     void Update()
     {
         if(player == null) return;
-        if(playerInRange && player.GetComponent<PlayerInput>().actions["Interact"].triggered)
+        if(playerInRange && GameInputManager.Instance.Interact)
         {
             StartCoroutine(TeleportPlayer());
         }
