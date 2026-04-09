@@ -53,8 +53,8 @@ public class PlayerMovementControl : CharacterMovementControlBase
         }
     }
 
-    public float _targetRot = 0.0f;
-    public Vector3 _targetDirection;
+    private float _targetRot = 0.0f;
+    private Vector3 _targetDirection;
     Vector3 _inputDir;
 
     private void RotationController()

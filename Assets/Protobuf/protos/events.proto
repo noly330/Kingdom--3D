@@ -14,3 +14,9 @@ message SwitchMainCharacter{
     int32 new_index = 1;
     int32 old_index = 2;
 }
+
+message CharacterStateChanged{
+
+    int32 character_index = 1;
+
+}

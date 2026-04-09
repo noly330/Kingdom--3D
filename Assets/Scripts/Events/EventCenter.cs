@@ -12,7 +12,7 @@ public static class EventCenter
     //where T : class：
     // 泛型约束：T必须是引用类型
     // protobuf消息都是class，所以这个约束很合理
-    public static void Addlistener<T>(Action<T> listener) where T : class
+    public static void AddListener<T>(Action<T> listener) where T : class
     {
         if(listener == null)  throw new ArgumentNullException(nameof(listener));
         var type = typeof(T);

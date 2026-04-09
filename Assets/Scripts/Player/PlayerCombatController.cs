@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Scripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -80,19 +81,20 @@ public class PlayerCombatController : CombatControllerBase
                 currentComboList = fallComboList;
             }
             ExecuteCombo();
+            
         }
-        if (GameInputManager.Instance.Skill1 && canExecuteCombo)
-        {
-            if (currentCharacter.currentEnergy < skillComboList[0].energyCost)
-                return;
-            currentCharacter.currentEnergy -= skillComboList[0].energyCost;
-            Debug.Log("触发技能1");
-            _nextComboIndex = 0;
-            currentComboList = skillComboList[0];
+        // if (GameInputManager.Instance.Skill1 && canExecuteCombo)
+        // {
+        //     if (currentCharacter.currentEnergy < skillComboList[0].energyCost)
+        //         return;
+        //     currentCharacter.currentEnergy -= skillComboList[0].energyCost;
+        //     Debug.Log("触发技能1");
+        //     _nextComboIndex = 0;
+        //     currentComboList = skillComboList[0];
 
-            StartCoroutine(IE_ChangePoise(ForceLevel.Mid));
-            ExecuteCombo();
-        }
+        //     StartCoroutine(IE_ChangePoise(ForceLevel.Mid));
+        //     ExecuteCombo();
+        // }
     }
     public void UpdateNormalComboList(ComboListSO comboList)
     {
@@ -122,7 +124,8 @@ public class PlayerCombatController : CombatControllerBase
         {
             if (perfectAvoidCoroutine == null)  //确保完美闪避不连续触发
             {
-                currentCharacter.currentEnergy += 8f;
+                //TODO: 完美闪避回复能量
+                //currentCharacter.currentEnergy += 8f;  
                 //播放完美闪避音效
                 animator.CrossFadeInFixedTime("Avoid", 0, 0, 0);
                 AudioManager.instance.PlaySFX(perfectAvoidClip, 0.8f);

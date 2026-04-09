@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerCharacter : CharacterBase
 {
+    public CharacterInfoSO characterInfo;
     public Transform weaponSlot;
     private InventoryData_SO equipmentData;
     protected override void Awake()
@@ -14,7 +15,10 @@ public class PlayerCharacter : CharacterBase
     {
         base.Start();
         UpdateCharacterStats();
-        UIManager.instance.playerInfoUI.OnHealthChange();
+        EventCenter.Broadcast(new Events.CharacterStateChanged()
+        {
+            CharacterIndex = TeamManager.Instance.GetSlotIndex(transform),
+        });
     }
 
     void OnEnable()
@@ -24,6 +28,15 @@ public class PlayerCharacter : CharacterBase
     void OnDisable()
     {
 
+    }
+
+    protected override void OnBeHit(Damage newDamage)
+    {
+        base.OnBeHit(newDamage);
+        EventCenter.Broadcast(new Events.CharacterStateChanged()
+        {
+            CharacterIndex = TeamManager.Instance.GetSlotIndex(transform),
+        });
     }
 
 

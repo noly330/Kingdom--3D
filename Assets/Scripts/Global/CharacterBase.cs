@@ -19,8 +19,6 @@ public class CharacterBase : MonoBehaviour
     public float baseDefence;
     public float currentDefence;
     public float speed;
-    public float maxEnergy;
-    public float currentEnergy;
 
     [Header("角色状态")]
     public bool isDead;
@@ -37,27 +35,20 @@ public class CharacterBase : MonoBehaviour
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
+        currentHealth = maxHealth;
+        currentAttack = baseAttack;
+        currentCritChance = baseCritChance;
+        currentDefence = baseDefence;
     }
 
     protected virtual void Start()
     {
-        currentHealth = maxHealth;
-        currentAttack = baseAttack;
-        currentEnergy = maxEnergy;
-        currentCritChance = baseCritChance;
-        currentDefence = baseDefence;
 
     }
 
     private void Update()
     {
         CheckState();
-        if (currentEnergy < maxEnergy)
-        {
-            currentEnergy += Time.deltaTime * 5f;
-        }
-        else
-            currentEnergy = maxEnergy;
     }
 
     private void CheckState()

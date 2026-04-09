@@ -21,7 +21,7 @@ public class CompanionAI : MonoBehaviour
 
     private void OnEnable()
     {
-        EventCenter.Addlistener<Events.SwitchMainCharacter>(FindPlayerTransform);
+        EventCenter.AddListener<Events.SwitchMainCharacter>(FindPlayerTransform);
         FindPlayerTransform(null);
     }
 

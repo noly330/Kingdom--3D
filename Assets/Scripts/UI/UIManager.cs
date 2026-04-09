@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour
     public InputUIManager inputUIManager;
     public InteractPrompt interactPrompt;
     public FadeManager fadeManager;
-    public PlayerInfoUI playerInfoUI;
     public DialogueUI dialogueUI;
 
     private void Awake()
@@ -30,7 +29,6 @@ public class UIManager : MonoBehaviour
         inputUIManager = GetComponent<InputUIManager>();
         interactPrompt = GetComponent<InteractPrompt>();
         fadeManager = GetComponent<FadeManager>();
-        playerInfoUI = GetComponent<PlayerInfoUI>();
         dialogueUI = GetComponent<DialogueUI>();
 
     }

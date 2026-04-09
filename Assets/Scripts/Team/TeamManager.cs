@@ -7,8 +7,11 @@ public class TeamManager : MonoBehaviour
 {
     public static TeamManager Instance;
     public List<Transform> teamMembers = new List<Transform>();
-    private int currentIndex;
-    private int nextIndex;
+    public int mainCharacterIndex;
+    public float teamMaxEnergy;
+    public float teamCurrentEnergy;
+    private int _currentIndex;
+    private int _nextIndex;
 
     private void Awake()
     {
@@ -31,11 +34,32 @@ public class TeamManager : MonoBehaviour
         }
     }
 
+    #region 公共方法
+
+    public int GetSlotIndex(Transform character)
+    {
+        return teamMembers.IndexOf(character);
+    }
+
+    public PlayerCharacter GetPlayerCharacter(int index)
+    {
+        return teamMembers[index].GetComponent<PlayerCharacter>();
+    }
+
+    #endregion
+
+
+    #region 私有方法
+
     private void SwitchCharacter()
     {
-        teamMembers[currentIndex].gameObject.tag = "Companion";
-        nextIndex = (currentIndex + 1) % teamMembers.Count;
-        teamMembers[nextIndex].gameObject.tag = "Player";
+        _currentIndex = mainCharacterIndex;
+
+        teamMembers[_currentIndex].gameObject.tag = "Companion";
+        _nextIndex = (_currentIndex + 1) % teamMembers.Count;
+        teamMembers[_nextIndex].gameObject.tag = "Player";
+        
+        mainCharacterIndex = _nextIndex;
 
         SwitchPosition();
         OpenCompanionController();
@@ -43,25 +67,25 @@ public class TeamManager : MonoBehaviour
 
         EventCenter.Broadcast(new Events.SwitchMainCharacter()
         {
-            NewIndex = nextIndex,
-            OldIndex = currentIndex,
+            NewIndex = _nextIndex,
+            OldIndex = _currentIndex,
         });
-        currentIndex = nextIndex;
+        
     }
 
     private void OpenCompanionController()
     {
         // 原玩家角色 → 变成同伴
-        teamMembers[currentIndex].GetComponent<PlayerCombatController>().enabled = false;
-        teamMembers[currentIndex].GetComponent<PlayerMovementControl>().enabled = false;
+        teamMembers[_currentIndex].GetComponent<PlayerCombatController>().enabled = false;
+        teamMembers[_currentIndex].GetComponent<PlayerMovementControl>().enabled = false;
 
-        teamMembers[currentIndex].GetComponent<CompanionAI>().enabled = true;
-        teamMembers[currentIndex].GetComponent<CompanionMovementAgent>().enabled = true;
-        teamMembers[currentIndex].GetComponent<CompanionCombatAgent>().enabled = true;
+        teamMembers[_currentIndex].GetComponent<CompanionAI>().enabled = true;
+        teamMembers[_currentIndex].GetComponent<CompanionMovementAgent>().enabled = true;
+        teamMembers[_currentIndex].GetComponent<CompanionCombatAgent>().enabled = true;
 
-        BehaviorTree behaviorTree = teamMembers[currentIndex].GetComponent<BehaviorTree>();
+        BehaviorTree behaviorTree = teamMembers[_currentIndex].GetComponent<BehaviorTree>();
 
-        NavMeshAgent agent = teamMembers[currentIndex].GetComponent<NavMeshAgent>();
+        NavMeshAgent agent = teamMembers[_currentIndex].GetComponent<NavMeshAgent>();
         if (agent != null)
         {
             agent.enabled = true;
@@ -76,18 +100,18 @@ public class TeamManager : MonoBehaviour
     private void OpenPlayerController()
     {
         // 原同伴角色 → 变成玩家
-        teamMembers[nextIndex].GetComponent<PlayerCombatController>().enabled = true;
-        teamMembers[nextIndex].GetComponent<PlayerMovementControl>().enabled = true;
+        teamMembers[_nextIndex].GetComponent<PlayerCombatController>().enabled = true;
+        teamMembers[_nextIndex].GetComponent<PlayerMovementControl>().enabled = true;
 
-        teamMembers[nextIndex].GetComponent<CompanionAI>().enabled = false;
-        teamMembers[nextIndex].GetComponent<CompanionMovementAgent>().enabled = false;
-        teamMembers[nextIndex].GetComponent<CompanionCombatAgent>().enabled = false;
+        teamMembers[_nextIndex].GetComponent<CompanionAI>().enabled = false;
+        teamMembers[_nextIndex].GetComponent<CompanionMovementAgent>().enabled = false;
+        teamMembers[_nextIndex].GetComponent<CompanionCombatAgent>().enabled = false;
 
-        BehaviorTree behaviorTree = teamMembers[nextIndex].GetComponent<BehaviorTree>();
+        BehaviorTree behaviorTree = teamMembers[_nextIndex].GetComponent<BehaviorTree>();
         behaviorTree.DisableBehavior();
         behaviorTree.enabled = false;
 
-        NavMeshAgent agent = teamMembers[nextIndex].GetComponent<NavMeshAgent>();
+        NavMeshAgent agent = teamMembers[_nextIndex].GetComponent<NavMeshAgent>();
         agent.isStopped = true;
         agent.enabled = false;
         
@@ -95,15 +119,18 @@ public class TeamManager : MonoBehaviour
 
     private void SwitchPosition()
     {
-        teamMembers[currentIndex].gameObject.SetActive(false);
-        teamMembers[nextIndex].gameObject.SetActive(false);
+        teamMembers[_currentIndex].gameObject.SetActive(false);
+        teamMembers[_nextIndex].gameObject.SetActive(false);
 
-        Vector3 tempPosition = teamMembers[currentIndex].position;
-        teamMembers[currentIndex].position = teamMembers[nextIndex].position;
-        teamMembers[nextIndex].position = tempPosition;
+        Vector3 tempPosition = teamMembers[_currentIndex].position;
+        teamMembers[_currentIndex].position = teamMembers[_nextIndex].position;
+        teamMembers[_nextIndex].position = tempPosition;
 
-        teamMembers[currentIndex].gameObject.SetActive(true);
-        teamMembers[nextIndex].gameObject.SetActive(true);
+        teamMembers[_currentIndex].gameObject.SetActive(true);
+        teamMembers[_nextIndex].gameObject.SetActive(true);
     }
+
+    #endregion
+
     
 }

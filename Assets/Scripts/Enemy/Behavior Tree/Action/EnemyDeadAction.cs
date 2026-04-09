@@ -19,7 +19,6 @@ public class EnemyEnterDeadAction : Action
             _enemyMovementController.SetApplyFightMovement(false);
             _enemyMovementController.SetAnimatorMovementValue(0f);
         }
-        Debug.Log("敌人死亡");
     }
 
     public override TaskStatus OnUpdate()

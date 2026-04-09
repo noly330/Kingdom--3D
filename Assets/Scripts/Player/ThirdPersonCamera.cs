@@ -30,7 +30,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void OnEnable()
     {
-        EventCenter.Addlistener<Events.SwitchMainCharacter>(ChangeCameraTarget);
+        EventCenter.AddListener<Events.SwitchMainCharacter>(ChangeCameraTarget);
     }
 
     private void OnDisable()
