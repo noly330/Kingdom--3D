@@ -11,7 +11,6 @@ public class TeamUIManager : MonoBehaviour
     [SerializeField] private MainStateCard mainStateCard;
     [SerializeField] private List<StateCard> stateCards = new List<StateCard>();
 
-
     private void Awake()
     {
         instance = this;
@@ -38,7 +37,7 @@ public class TeamUIManager : MonoBehaviour
         for (int i = 0; i < TeamManager.Instance.teamMembers.Count; i++)
         {
             stateCards[i].gameObject.SetActive(true);
-            UpdateStateCard(i, TeamManager.Instance.teamMembers[i].GetComponent<PlayerCharacter>());
+            UpdateStateCard(i, TeamManager.Instance.playerCharacters[i]);
         }
     }
 
@@ -48,7 +47,7 @@ public class TeamUIManager : MonoBehaviour
         {
             mainStateCard.UpdateMainStateCard();
         }
-        UpdateStateCard(message.CharacterIndex, TeamManager.Instance.teamMembers[message.CharacterIndex].GetComponent<PlayerCharacter>());
+        UpdateStateCard(message.CharacterIndex, TeamManager.Instance.playerCharacters[message.CharacterIndex]);
     }
     public void UpdateStateCard(int index, PlayerCharacter Character)
     {

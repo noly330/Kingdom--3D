@@ -41,13 +41,13 @@ public class MainStateCard : MonoBehaviour
 
     public void UpdateMainStateCard()
     {
-        PlayerCharacter playerCharacter = TeamManager.Instance.GetPlayerCharacter(TeamManager.Instance.mainCharacterIndex);
-        if(playerCharacter == null)
+        PlayerCharacter mainCharacter = TeamManager.Instance.playerCharacters[TeamManager.Instance.mainCharacterIndex];
+        if(mainCharacter == null)
             return;
         
-        float targetPersent = playerCharacter.currentHealth / playerCharacter.maxHealth;
+        float targetPersent = mainCharacter.currentHealth / mainCharacter.maxHealth;
 
-        helathText.text = playerCharacter.currentHealth.ToString("F0") + "/" + playerCharacter.maxHealth.ToString("F0");
+        helathText.text = mainCharacter.currentHealth.ToString("F0") + "/" + mainCharacter.maxHealth.ToString("F0");
         if (healthCoroutine != null)
             StopCoroutine(healthCoroutine);
         StartCoroutine(HealthBarSmoothChange(targetPersent));

@@ -7,6 +7,7 @@ public class TeamManager : MonoBehaviour
 {
     public static TeamManager Instance;
     public List<Transform> teamMembers = new List<Transform>();
+    public List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
     public int mainCharacterIndex;
     public float teamMaxEnergy;
     public float teamCurrentEnergy;
@@ -22,6 +23,7 @@ public class TeamManager : MonoBehaviour
         foreach (Transform child in transform)  // transform = TeamManager 的子物体
         {
             teamMembers.Add(child);
+            playerCharacters.Add(child.GetComponent<PlayerCharacter>());
             Debug.Log($"找到队员: {child.name}");
         }
     }
@@ -41,13 +43,8 @@ public class TeamManager : MonoBehaviour
         return teamMembers.IndexOf(character);
     }
 
-    public PlayerCharacter GetPlayerCharacter(int index)
-    {
-        return teamMembers[index].GetComponent<PlayerCharacter>();
-    }
 
     #endregion
-
 
     #region 私有方法
 
@@ -58,7 +55,7 @@ public class TeamManager : MonoBehaviour
         teamMembers[_currentIndex].gameObject.tag = "Companion";
         _nextIndex = (_currentIndex + 1) % teamMembers.Count;
         teamMembers[_nextIndex].gameObject.tag = "Player";
-        
+
         mainCharacterIndex = _nextIndex;
 
         SwitchPosition();
