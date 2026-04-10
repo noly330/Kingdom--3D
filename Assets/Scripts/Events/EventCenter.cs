@@ -8,7 +8,6 @@ public static class EventCenter
 {
     private static Dictionary<Type, Delegate> _events = new Dictionary<Type, Delegate>();
 
-
     //where T : class：
     // 泛型约束：T必须是引用类型
     // protobuf消息都是class，所以这个约束很合理

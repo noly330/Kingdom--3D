@@ -83,18 +83,18 @@ public class PlayerCombatController : CombatControllerBase
             ExecuteCombo();
             
         }
-        // if (GameInputManager.Instance.Skill1 && canExecuteCombo)
-        // {
-        //     if (currentCharacter.currentEnergy < skillComboList[0].energyCost)
-        //         return;
-        //     currentCharacter.currentEnergy -= skillComboList[0].energyCost;
-        //     Debug.Log("触发技能1");
-        //     _nextComboIndex = 0;
-        //     currentComboList = skillComboList[0];
+        if (GameInputManager.Instance.Skill1 && canExecuteCombo)
+        {
+            if (TeamManager.Instance.teamCurrentEnergy < skillComboList[0].energyCost)
+                return;
+            TeamManager.Instance.teamCurrentEnergy -= skillComboList[0].energyCost;
+            Debug.Log("触发技能1");
+            _nextComboIndex = 0;
+            currentComboList = skillComboList[0];
 
-        //     StartCoroutine(IE_ChangePoise(ForceLevel.Mid));
-        //     ExecuteCombo();
-        // }
+            StartCoroutine(IE_ChangePoise(ForceLevel.Mid));
+            ExecuteCombo();
+        }
     }
     public void UpdateNormalComboList(ComboListSO comboList)
     {

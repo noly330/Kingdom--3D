@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 public class CharacterBase : MonoBehaviour
 {
 
     [Header("基础属性")]
-    
     public float baseHealth;
     public float maxHealth;
     public float currentHealth;

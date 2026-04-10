@@ -12,8 +12,6 @@ public class MainStateCard : MonoBehaviour
     public Image[] energyFill;
     private float energy3;
     private float smoothTime;
-
-
     private void OnEnable()
     {
         EventCenter.AddListener<Events.SwitchMainCharacter>(UpdateMainStateCard);
@@ -28,7 +26,6 @@ public class MainStateCard : MonoBehaviour
     {
         energy3 = TeamManager.Instance.teamMaxEnergy / 3;
     }
-
 
     private void Update()
     {

@@ -34,6 +34,9 @@ public class TeamManager : MonoBehaviour
         {
             SwitchCharacter();
         }
+        UpdateTeamEnergy();
+
+
     }
 
     #region 公共方法
@@ -43,10 +46,21 @@ public class TeamManager : MonoBehaviour
         return teamMembers.IndexOf(character);
     }
 
-
     #endregion
 
-    #region 私有方法
+    private void UpdateTeamEnergy()
+    {
+        if (teamCurrentEnergy <= teamMaxEnergy)
+        {
+            teamCurrentEnergy += Time.deltaTime;
+        }
+        else
+        {
+            teamCurrentEnergy = teamMaxEnergy;
+        }
+    }
+
+    #region 角色切换
 
     private void SwitchCharacter()
     {
@@ -67,12 +81,11 @@ public class TeamManager : MonoBehaviour
             NewIndex = _nextIndex,
             OldIndex = _currentIndex,
         });
-        
+
     }
 
     private void OpenCompanionController()
     {
-        // 原玩家角色 → 变成同伴
         teamMembers[_currentIndex].GetComponent<PlayerCombatController>().enabled = false;
         teamMembers[_currentIndex].GetComponent<PlayerMovementControl>().enabled = false;
 
@@ -96,7 +109,6 @@ public class TeamManager : MonoBehaviour
 
     private void OpenPlayerController()
     {
-        // 原同伴角色 → 变成玩家
         teamMembers[_nextIndex].GetComponent<PlayerCombatController>().enabled = true;
         teamMembers[_nextIndex].GetComponent<PlayerMovementControl>().enabled = true;
 
@@ -111,7 +123,7 @@ public class TeamManager : MonoBehaviour
         NavMeshAgent agent = teamMembers[_nextIndex].GetComponent<NavMeshAgent>();
         agent.isStopped = true;
         agent.enabled = false;
-        
+
     }
 
     private void SwitchPosition()
@@ -120,8 +132,11 @@ public class TeamManager : MonoBehaviour
         teamMembers[_nextIndex].gameObject.SetActive(false);
 
         Vector3 tempPosition = teamMembers[_currentIndex].position;
+        Vector3 tempRotation = teamMembers[_currentIndex].eulerAngles;
+
         teamMembers[_currentIndex].position = teamMembers[_nextIndex].position;
         teamMembers[_nextIndex].position = tempPosition;
+        teamMembers[_nextIndex].eulerAngles = tempRotation;
 
         teamMembers[_currentIndex].gameObject.SetActive(true);
         teamMembers[_nextIndex].gameObject.SetActive(true);
@@ -129,5 +144,5 @@ public class TeamManager : MonoBehaviour
 
     #endregion
 
-    
+
 }
