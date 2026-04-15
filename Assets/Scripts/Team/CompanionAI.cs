@@ -35,6 +35,7 @@ public class CompanionAI : MonoBehaviour
         if(_scannerTimer <= 0)
         {
             enemyTransform = _targetScanner.FindNearestTarget(transform, _scanRadius, _EnemyLayer);
+            _scannerTimer = _scannerTime;
         }
         // if(navMeshAgent != null && navMeshAgent.enabled)
         // {

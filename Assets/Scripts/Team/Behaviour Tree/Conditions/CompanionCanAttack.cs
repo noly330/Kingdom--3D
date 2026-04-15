@@ -3,12 +3,12 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("Companion")]
 public class CompanionCanAttack : Conditional
 {
-    private CombatControllerBase _combatController;
+    private ComboControllerBase _combatController;
 
     public override void OnAwake()
     {
         base.OnAwake();
-        _combatController = GetComponent<CombatControllerBase>();
+        _combatController = GetComponent<ComboControllerBase>();
     }
 
     public override TaskStatus OnUpdate()

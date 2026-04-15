@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyFreeMovementAction : Action
 {
     private EnemyMovementController _enemyMovementController;
-    private EnemyCombatController _enemyCombatController;
+    private CombatControllerBase _combatController;
     private Animator _animator;
     private EnemyAI _enemyAI;
     private int _actionIndex = 0;  //动作索引
@@ -14,7 +14,7 @@ public class EnemyFreeMovementAction : Action
     {
         base.OnAwake();
         _enemyMovementController = GetComponent<EnemyMovementController>();
-        _enemyCombatController = GetComponent<EnemyCombatController>();
+        _combatController = GetComponent<CombatControllerBase>();
         _enemyAI = GetComponent<EnemyAI>();
         _animator = GetComponent<Animator>();
         _lastActionIndex = _actionIndex;
@@ -34,7 +34,7 @@ public class EnemyFreeMovementAction : Action
         //if(!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
             //LookAtTarget();
         _enemyAI.navMeshAgent.SetDestination(_enemyAI.target.transform.position);
-        if (!_enemyCombatController.canExecuteCombo)
+        if (!_combatController.CanNormalAttack())
         {
             _enemyMovementController.SetApplyFightMovement(true);
             FreeMovement();

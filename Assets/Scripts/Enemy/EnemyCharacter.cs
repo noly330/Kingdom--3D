@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyCharacter : CharacterBase
 {
     public EnemyHealthBar enemyHealthBar;
-    public ObjectPoolType characterPoolType;  
+    public ObjectPoolType characterPoolType;  //在行为树里面用
 
     protected override void Awake()
     {

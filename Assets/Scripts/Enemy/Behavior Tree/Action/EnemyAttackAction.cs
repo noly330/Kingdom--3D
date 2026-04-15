@@ -4,12 +4,14 @@ using BehaviorDesigner.Runtime.Tasks;
 public class EnemyAttackAction : Action
 {
     private CombatControllerBase _combatController;
+    private EnemyCombatInputControllerBase _enemyCombatInputController;
     private EnemyAI _enemyAI;
 
     public override void OnAwake()
     {
         base.OnAwake();
         _combatController = GetComponent<CombatControllerBase>();
+        _enemyCombatInputController = GetComponent<EnemyCombatInputControllerBase>();
         _enemyAI = GetComponent<EnemyAI>();
     }
 
@@ -23,7 +25,7 @@ public class EnemyAttackAction : Action
 
     public override TaskStatus OnUpdate()
     {
-        _combatController.ExecuteCombo();
+        _enemyCombatInputController.TryToNormalAttack();
         return TaskStatus.Success;
     }
 }

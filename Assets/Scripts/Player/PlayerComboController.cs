@@ -3,7 +3,7 @@ using UnityEditor.Scripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerCombatController : CombatControllerBase
+public class PlayerComboController : ComboControllerBase
 {
 
     [Header("玩家战斗招式")]

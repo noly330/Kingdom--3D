@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class EnemyFSM : CombatControllerBase
+public class EnemyFSM : ComboControllerBase
 {
     [SerializeField] private ComboListSO normalComboList;
     private IEnemyState currentState;

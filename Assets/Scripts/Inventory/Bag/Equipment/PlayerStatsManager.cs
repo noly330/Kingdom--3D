@@ -6,7 +6,7 @@ public class PlayerStatsManager : MonoBehaviour
 {
     public InventoryData_SO targetBagData;
     public PlayerCharacter playerCharacter;
-    public PlayerCombatController playerCombatController;
+    public PlayerComboController playerCombatController;
 
     void Start()
     {

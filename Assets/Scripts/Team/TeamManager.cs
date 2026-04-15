@@ -86,7 +86,7 @@ public class TeamManager : MonoBehaviour
 
     private void OpenCompanionController()
     {
-        teamMembers[_currentIndex].GetComponent<PlayerCombatController>().enabled = false;
+        teamMembers[_currentIndex].GetComponent<PlayerComboController>().enabled = false;
         teamMembers[_currentIndex].GetComponent<PlayerMovementControl>().enabled = false;
 
         teamMembers[_currentIndex].GetComponent<CompanionAI>().enabled = true;
@@ -109,7 +109,7 @@ public class TeamManager : MonoBehaviour
 
     private void OpenPlayerController()
     {
-        teamMembers[_nextIndex].GetComponent<PlayerCombatController>().enabled = true;
+        teamMembers[_nextIndex].GetComponent<PlayerComboController>().enabled = true;
         teamMembers[_nextIndex].GetComponent<PlayerMovementControl>().enabled = true;
 
         teamMembers[_nextIndex].GetComponent<CompanionAI>().enabled = false;

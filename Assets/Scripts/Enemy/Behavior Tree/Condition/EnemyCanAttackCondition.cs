@@ -13,6 +13,6 @@ public class EnemyCanAttackCondition : Conditional
 
     public override TaskStatus OnUpdate()
     {
-        return _combatController.canExecuteCombo ? TaskStatus.Success : TaskStatus.Failure;
+        return _combatController.CanNormalAttack() ? TaskStatus.Success : TaskStatus.Failure;
     }
 }

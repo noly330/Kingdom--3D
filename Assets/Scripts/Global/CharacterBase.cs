@@ -66,10 +66,32 @@ public class CharacterBase : MonoBehaviour
             isInvulnerable = false;
         }
     }
+
+    /// <summary>
+    /// 老的伤害计算
+    /// </summary>
+    /// <param name="comboInteractionConfig"></param>
+    /// <returns></returns>
     public Damage TryGetDamage(ComboInteractionConfig comboInteractionConfig)
     {
         bool isCrit = Random.value < currentCritChance;
         float damage = currentAttack * comboInteractionConfig.damageMul * (isCrit ? 1.5f : 1f);
+
+        return new Damage()
+        {
+            damage = damage,
+            isCrit = isCrit
+        };
+    }
+    /// <summary>
+    /// 新的伤害计算
+    /// </summary>
+    /// <param name="combatInteractionConfig"></param>
+    /// <returns></returns>
+    public Damage TryGetDamage(CombatInteractionConfig combatInteractionConfig)
+    {
+        bool isCrit = Random.value < currentCritChance;
+        float damage = currentAttack * combatInteractionConfig.damageMul * (isCrit ? 1.5f : 1f);
 
         return new Damage()
         {

@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class CombatControllerBase : MonoBehaviour
+public class ComboControllerBase : MonoBehaviour 
 {
     public LayerMask targetMask;
     [Header("自动获取无需拖拽")]
@@ -78,7 +78,7 @@ public class CombatControllerBase : MonoBehaviour
                     //攻击位移
 
                     //攻击敌人
-                    target.GetComponent<CombatControllerBase>().CharacterCombatBeHit(
+                    target.GetComponent<ComboControllerBase>().CharacterCombatBeHit(
                         currentComboList.TryGetComboInteractionConfig(_currentComboIndex, runningEventIndex.attackDetectionIndex), currentCharacter
                         );
                 }
