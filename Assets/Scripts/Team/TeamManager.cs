@@ -8,6 +8,7 @@ public class TeamManager : MonoBehaviour
     public static TeamManager Instance;
     public List<Transform> teamMembers = new List<Transform>();
     public List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
+    public List<OperatorCombatInputController> operatorCombatInputControllers = new List<OperatorCombatInputController>();
     public int mainCharacterIndex;
     public float teamMaxEnergy;
     public float teamCurrentEnergy;
@@ -24,6 +25,7 @@ public class TeamManager : MonoBehaviour
         {
             teamMembers.Add(child);
             playerCharacters.Add(child.GetComponent<PlayerCharacter>());
+            operatorCombatInputControllers.Add(child.GetComponent<OperatorCombatInputController>());
             Debug.Log($"找到队员: {child.name}");
         }
     }
@@ -86,12 +88,11 @@ public class TeamManager : MonoBehaviour
 
     private void OpenCompanionController()
     {
-        teamMembers[_currentIndex].GetComponent<PlayerComboController>().enabled = false;
+        //teamMembers[_currentIndex].GetComponent<PlayerCombatInputController>().enabled = false;
         teamMembers[_currentIndex].GetComponent<PlayerMovementControl>().enabled = false;
 
         teamMembers[_currentIndex].GetComponent<CompanionAI>().enabled = true;
         teamMembers[_currentIndex].GetComponent<CompanionMovementAgent>().enabled = true;
-        teamMembers[_currentIndex].GetComponent<CompanionCombatAgent>().enabled = true;
 
         BehaviorTree behaviorTree = teamMembers[_currentIndex].GetComponent<BehaviorTree>();
 
@@ -109,12 +110,11 @@ public class TeamManager : MonoBehaviour
 
     private void OpenPlayerController()
     {
-        teamMembers[_nextIndex].GetComponent<PlayerComboController>().enabled = true;
+        //teamMembers[_nextIndex].GetComponent<PlayerCombatInputController>().enabled = true;
         teamMembers[_nextIndex].GetComponent<PlayerMovementControl>().enabled = true;
 
         teamMembers[_nextIndex].GetComponent<CompanionAI>().enabled = false;
         teamMembers[_nextIndex].GetComponent<CompanionMovementAgent>().enabled = false;
-        teamMembers[_nextIndex].GetComponent<CompanionCombatAgent>().enabled = false;
 
         BehaviorTree behaviorTree = teamMembers[_nextIndex].GetComponent<BehaviorTree>();
         behaviorTree.DisableBehavior();

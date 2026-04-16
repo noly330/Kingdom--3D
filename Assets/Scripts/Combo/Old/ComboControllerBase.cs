@@ -96,7 +96,7 @@ public class ComboControllerBase : MonoBehaviour
 
     private void TryPlayFX()
     {
-        FXConfig FX_Config = currentComboList.TryGetFXConfig(_currentComboIndex, runningEventIndex.FXIndex);
+        FXConfig FX_Config = currentComboList.TryGetFXConfig(_currentComboIndex, runningEventIndex.VFXIndex);
         if (FX_Config != null)
         {
 
@@ -107,7 +107,7 @@ public class ComboControllerBase : MonoBehaviour
                 ToolManager.instance.PlayOneFX(FX_Config.FXObject, fxPosition
                 + transform.position, transform.eulerAngles + FX_Config.rotation, FX_Config.scale);
 
-                runningEventIndex.FXIndex++;
+                runningEventIndex.VFXIndex++;
 
             }
         }
@@ -278,13 +278,13 @@ public class ComboControllerBase : MonoBehaviour
 public class RunningEventIndex
 {
     public int attackDetectionIndex = 0;
-    public int FXIndex = 0;
+    public int VFXIndex = 0;
     public int SFXIndex = 0;
     public int AttackFeedbackIndex = 0;
     public void Reset()
     {
         attackDetectionIndex = 0;
-        FXIndex = 0;
+        VFXIndex = 0;
         SFXIndex = 0;
         AttackFeedbackIndex = 0;
     }

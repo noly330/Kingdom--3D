@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CompanionCombatAgent : ComboControllerBase
+public class CompanionCombatAgent : MonoBehaviour
 {
-    //TODO: 暂时调用基类就能实现普工了，战技连携技终结技后续添加
+    //旧时代遗留，暂时没用
 }

@@ -90,7 +90,7 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
             isFall = false;
             return;
         }
-        if(_verticalVelocity < -2.5f)
+        if(_verticalVelocity < -2.2f)
             isFall = true;
     }
 

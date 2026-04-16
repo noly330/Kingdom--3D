@@ -7,7 +7,6 @@ public class CompanionAI : MonoBehaviour
     public Transform playerTransform;
     public Transform enemyTransform;
     public NavMeshAgent navMeshAgent;
-    private CharacterController _characterController;
     [SerializeField] private LayerMask _EnemyLayer ;
     [SerializeField] private float _scanRadius = 10f;
     private float _scannerTime = 0.3f;
@@ -16,7 +15,6 @@ public class CompanionAI : MonoBehaviour
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
-        _characterController = GetComponent<CharacterController>();
     }
 
     private void OnEnable()

@@ -19,6 +19,9 @@ public class GameInputManager : MonoBehaviour
     public bool Fire1 => playerInput.actions["Fire1"].triggered;
     public bool Skill1 => playerInput.actions["Skill1"].triggered;
     public bool Skill2 => playerInput.actions["Skill2"].triggered;
+    public bool Skill3 => playerInput.actions["Skill3"].triggered;
+    public bool Skill4 => playerInput.actions["Skill4"].triggered;
+    public bool Link => playerInput.actions["Link"].triggered;
 
     
     private void Awake()

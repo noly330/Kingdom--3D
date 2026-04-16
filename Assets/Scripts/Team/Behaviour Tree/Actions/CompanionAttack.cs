@@ -5,8 +5,7 @@ using UnityEngine;
 
 [TaskCategory("Companion")]
 public class CompanionAttack : Action
-{
-    private CompanionCombatAgent _companionCombatAgent;
+{    private OperatorCombatInputController _companionCombatController;
     private CompanionMovementAgent _companionMovementAgent;
     private CompanionAI _companionAI;
     private Animator _animator;
@@ -14,8 +13,8 @@ public class CompanionAttack : Action
     public override void OnAwake()
     {
         base.OnAwake();
-        _companionCombatAgent = GetComponent<CompanionCombatAgent>();
         _companionMovementAgent = GetComponent<CompanionMovementAgent>();
+        _companionCombatController = GetComponent<OperatorCombatInputController>();
         _companionAI = GetComponent<CompanionAI>();
         _animator = GetComponent<Animator>();
     }
@@ -32,7 +31,7 @@ public class CompanionAttack : Action
 
     public override TaskStatus OnUpdate()
     {
-        _companionCombatAgent.ExecuteCombo();
+        _companionCombatController.TryToNormalAttack();
         return TaskStatus.Success;
     }
 }
