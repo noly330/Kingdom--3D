@@ -54,7 +54,7 @@ public class TeamManager : MonoBehaviour
     {
         if (teamCurrentEnergy <= teamMaxEnergy)
         {
-            teamCurrentEnergy += Time.deltaTime;
+            teamCurrentEnergy += Time.deltaTime * 5f;
         }
         else
         {

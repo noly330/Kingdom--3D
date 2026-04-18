@@ -8,16 +8,16 @@ public class CombatControllerBase : MonoBehaviour, IDamageable
     public CombatListSO normalCombatList => _normalCombatList;
     public Animator animator;
     public LayerMask targetMask;
-    private CharacterBase _characterBase;
+    protected CharacterBase _characterBase;
     public CharacterBase characterBase => _characterBase;
-    private CombatStateMachineBase _combatStateMachine;
+    protected CombatStateMachineBase _combatStateMachine;
     private float _normalAttackCooldownTimer;
     private float _resetNormalAttackIndexTimer;
     [Header("索敌设置")]
     protected Transform _attackTarget;
     [SerializeField] private Vector3 checkSize = new Vector3(3, 3, 3);
 
-    private void Awake()
+    protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
         _characterBase = GetComponent<CharacterBase>();
@@ -42,7 +42,7 @@ public class CombatControllerBase : MonoBehaviour, IDamageable
 
     public void TriggerResetNormalAttackIndexCold(float coldTime)
     {
-        _resetNormalAttackIndexTimer = 2.5f * coldTime;
+        _resetNormalAttackIndexTimer = 3.5f * coldTime;
     }
 
     public bool ResetNormalAttackIndex()
@@ -114,11 +114,9 @@ public class CombatControllerBase : MonoBehaviour, IDamageable
         AudioManager.instance.PlaySFX(SfxConfig.audioClip, SfxConfig.volume);
     }
 
-
-
     #endregion
 
-    public void BeHit(CombatInteractionConfig interactionConfig, CharacterBase attacker)
+    public virtual void BeHit(CombatInteractionConfig interactionConfig, CharacterBase attacker)
     {
         if (interactionConfig == null) return;
         if (_characterBase.isInvulnerable) return;

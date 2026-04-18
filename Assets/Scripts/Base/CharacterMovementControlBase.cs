@@ -6,6 +6,7 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
 {
     protected CharacterController _characterController;
     protected Animator _animator;
+    public Animator animator => _animator;
     protected Vector3 _moveDirection;
 
     //地面检测

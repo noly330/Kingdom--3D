@@ -77,11 +77,7 @@ public class CharacterBase : MonoBehaviour
         bool isCrit = Random.value < currentCritChance;
         float damage = currentAttack * comboInteractionConfig.damageMul * (isCrit ? 1.5f : 1f);
 
-        return new Damage()
-        {
-            damage = damage,
-            isCrit = isCrit
-        };
+        return new Damage(damage,isCrit);
     }
     /// <summary>
     /// 新的伤害计算
@@ -93,11 +89,7 @@ public class CharacterBase : MonoBehaviour
         bool isCrit = Random.value < currentCritChance;
         float damage = currentAttack * combatInteractionConfig.damageMul * (isCrit ? 1.5f : 1f);
 
-        return new Damage()
-        {
-            damage = damage,
-            isCrit = isCrit
-        };
+        return new Damage(damage,isCrit);
     }
 
     public void BeHit(Damage newDamage)
@@ -118,6 +110,11 @@ public class CharacterBase : MonoBehaviour
 
 public class Damage
 {
+    public Damage(float damage,bool isCrit)
+    {
+        this.damage = damage;
+        this.isCrit = isCrit;
+    }
     public float damage;
     public bool isCrit;
 }

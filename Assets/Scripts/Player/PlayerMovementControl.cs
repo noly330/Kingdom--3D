@@ -8,6 +8,7 @@ public class PlayerMovementControl : CharacterMovementControlBase
 {
     private float _angleVelocity;
     private GameObject _mainCamera;
+    private OperatorCombatStateMachine _combatStateMachine;
     [SerializeField] private float _rotationSmoothTime;
 
     [Header("Jump")]
@@ -19,6 +20,7 @@ public class PlayerMovementControl : CharacterMovementControlBase
     protected override void Awake()
     {
         base.Awake();
+        _combatStateMachine = GetComponent<OperatorCombatStateMachine>();
         _mainCamera = GameObject.Find("Main Camera");
     }
 
@@ -54,6 +56,7 @@ public class PlayerMovementControl : CharacterMovementControlBase
     }
 
     private float _targetRot = 0.0f;
+    public float targetRot => _targetRot;
     private Vector3 _targetDirection;
     Vector3 _inputDir;
 
@@ -81,8 +84,9 @@ public class PlayerMovementControl : CharacterMovementControlBase
         if (GameInputManager.Instance.Slide)
         {
 
-            transform.eulerAngles = Vector3.up * _targetRot;
-            _animator.CrossFadeInFixedTime("Slide", 0, 0, 0);
+            // transform.eulerAngles = Vector3.up * _targetRot;
+            // _animator.CrossFadeInFixedTime("Slide", 0, 0, 0);
+            _combatStateMachine.TryTransitionTO(CombatStateType.Slide);
         }
     }
 

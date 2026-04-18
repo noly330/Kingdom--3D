@@ -96,14 +96,16 @@ public class CombatStateMachineBase : MonoBehaviour
             case CombatStateType.None:
                 return 0f;
             case CombatStateType.NormalAttack:
-                return 20f;
+                return 10f;
             case CombatStateType.Skill:
-                return 40f;
+                return 20f;
             case CombatStateType.LinkSkill:
+                return 20f;
+            case CombatStateType.Slide:
                 return 40f;
-            case CombatStateType.UltimateSkill:
-                return 60f;
             case CombatStateType.Hit:
+                return 60f;
+            case CombatStateType.UltimateSkill:
                 return 80f;
             case CombatStateType.Dead:
                 return 100f;
@@ -121,6 +123,8 @@ public enum CombatStateType
     Skill,
     LinkSkill,
     UltimateSkill,
+    Slide,
+    Avoid,
     Hit,
     Dead
 }
