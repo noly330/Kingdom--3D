@@ -35,7 +35,7 @@ public class CompanionFollowPlayer : Action
             return TaskStatus.Success;
         }
 
-        _companionAI.navMeshAgent.SetDestination(_companionAI.playerTransform.position);
+        _companionAI.navMeshAgent.SetDestination(_companionAI.playerTransform.position);  
 
         if (_companionAI.GetDistanceToPlayer() <= _toChaseDistance)
         {

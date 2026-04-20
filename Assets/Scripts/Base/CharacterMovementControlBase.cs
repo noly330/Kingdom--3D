@@ -49,6 +49,13 @@ public abstract class CharacterMovementControlBase : MonoBehaviour
         UpdateCharacterMoveDirection(_animator.deltaPosition);
     }
 
+    private void OnAnimatorIK(int layerIndex) {
+        animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+        animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
+        animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+        animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+    }
+
 
     private bool GroundDetection()
     {

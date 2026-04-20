@@ -24,8 +24,7 @@ public class CombatInteractionConfig
 {
     public string hitName;
     public float damageMul;
-
-    //TODO:未来需要加上攻击力度之类的，用来判断能否打断敌人某某状态
+    public ForceLevel attackForceLevel;
     public AttackEffectType attackEffectType;
 }
 

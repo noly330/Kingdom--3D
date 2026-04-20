@@ -33,7 +33,11 @@ public class EnemyCombatController : CombatControllerBase
         }
     }
 
-
+    /// <summary>
+    /// 处理物理异常
+    /// </summary>
+    /// <param name="attackEffectType"></param>
+    /// <param name="attacker"></param>
     public void PhysicsAbnormality(AttackEffectType attackEffectType, CharacterBase attacker)
     {
         switch (attackEffectType)

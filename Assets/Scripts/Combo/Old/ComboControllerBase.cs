@@ -275,20 +275,7 @@ public class ComboControllerBase : MonoBehaviour
 
 }
 
-public class RunningEventIndex
-{
-    public int attackDetectionIndex = 0;
-    public int VFXIndex = 0;
-    public int SFXIndex = 0;
-    public int AttackFeedbackIndex = 0;
-    public void Reset()
-    {
-        attackDetectionIndex = 0;
-        VFXIndex = 0;
-        SFXIndex = 0;
-        AttackFeedbackIndex = 0;
-    }
-}
+
     // private Coroutine executeMoveOffsetCoroutine;
     // protected void ExecuteMoveOffset(MoveOffsetConfig moveOffsetConfig, Transform user)
     // {

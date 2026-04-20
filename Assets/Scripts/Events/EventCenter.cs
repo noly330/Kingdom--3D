@@ -11,6 +11,7 @@ public static class EventCenter
     //where T : class：
     // 泛型约束：T必须是引用类型
     // protobuf消息都是class，所以这个约束很合理
+    //listener 是一个 委托实例，通俗地说，它就是 "一个装着方法的容器"
     public static void AddListener<T>(Action<T> listener) where T : class
     {
         if(listener == null)  throw new ArgumentNullException(nameof(listener));
@@ -22,6 +23,7 @@ public static class EventCenter
         }
         else
         {
+            //直接存
             _events[type] = listener;
         }
     }

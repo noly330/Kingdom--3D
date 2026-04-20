@@ -23,7 +23,7 @@ public class DamageText : MonoBehaviour
     {
         randomDirection = new Vector3(Random.Range(-1f, 1f), 0.2f, 0f);
 
-        StartCoroutine(MoveText(1f));
+        StartCoroutine(MoveText(2f));
     }
 
     private void LateUpdate()
