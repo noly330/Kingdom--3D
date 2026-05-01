@@ -68,7 +68,7 @@ public class PlayerMovementControl : CharacterMovementControlBase
         //Mathf.Atan2(inputDir.x, inputDir.z)：计算输入方向的弧度值
         //* Mathf.Rad2Deg：把弧度转换成角度
         _targetRot = Mathf.Atan2(_inputDir.x, _inputDir.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-        _targetDirection = Quaternion.Euler(0f, _targetRot, 0f) * Vector3.forward;
+        _targetDirection = Quaternion.Euler(0f, _targetRot, 0f) * Vector3.forward;  //为了计算是否触发转身动画
 
         float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRot, ref _angleVelocity, _rotationSmoothTime);
         if (GameInputManager.Instance.Move != Vector2.zero)
@@ -97,7 +97,7 @@ public class PlayerMovementControl : CharacterMovementControlBase
         if (_jumpCooldownTimer > 0f) return;
         if (!isGround) return;
         if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Turn")) return;
-        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide") && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.5f) return;
+        // if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Slide") && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.3f) return;
 
         if (GameInputManager.Instance.Jump)
         {

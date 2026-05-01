@@ -12,6 +12,7 @@ public class EnemyCombatController : CombatControllerBase
     }
     public override void BeHit(CombatInteractionConfig interactionConfig, CharacterBase attacker)
     {
+        //直接不要基类的实现了
         if (interactionConfig == null) return;
         if (_characterBase.isInvulnerable) return;
 
@@ -21,13 +22,10 @@ public class EnemyCombatController : CombatControllerBase
         //看向攻击者
         transform.forward = -attacker.transform.forward;
         //播放受击动画
-        if (interactionConfig.attackEffectType == AttackEffectType.None)
-        {
 
-            animator.Play(interactionConfig.hitName, 0, 0);
-            _combatStateMachine.TryTransitionTO(CombatStateType.Hit);
-        }
-        else
+        animator.Play(interactionConfig.hitName, 0, 0);
+        _combatStateMachine.TryTransitionTO(CombatStateType.Hit);
+        if (interactionConfig.attackEffectType != AttackEffectType.None)
         {
             PhysicsAbnormality(interactionConfig.attackEffectType, attacker);
         }
@@ -43,12 +41,14 @@ public class EnemyCombatController : CombatControllerBase
         switch (attackEffectType)
         {
             case AttackEffectType.Launch:
-                if (_enemyAbnormalityManager.breakstack <= 4)
-                    _enemyAbnormalityManager.breakstack++;
+
+                if (_enemyAbnormalityManager.breakstack > 0)
+                    animator.Play("Hit_Up", 0, 0);
+                _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
                 break;
             case AttackEffectType.KnockDown:
-                if (_enemyAbnormalityManager.breakstack <= 4)
-                    _enemyAbnormalityManager.breakstack++;
+
+                _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
                 //TODO:播放倒地动画
                 break;
             case AttackEffectType.Smash:
@@ -61,11 +61,11 @@ public class EnemyCombatController : CombatControllerBase
                 }
                 else
                 {
-                    _enemyAbnormalityManager.breakstack++;
+                    _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
                 }
                 break;
             case AttackEffectType.Sunder:
-            //TODO:碎甲效果
+                //TODO:碎甲效果
                 break;
 
         }

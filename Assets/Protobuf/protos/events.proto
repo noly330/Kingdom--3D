@@ -20,3 +20,13 @@ message CharacterStateChanged{
     int32 character_index = 1;
 
 }
+//战斗通知
+
+//挂上物理破防
+message OnPhysicalDefenseBreakApplied{
+
+}
+
+message OnLinkSkillTriggered{
+    
+}

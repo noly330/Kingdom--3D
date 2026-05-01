@@ -9,6 +9,7 @@ public class TeamManager : MonoBehaviour
     public List<Transform> teamMembers = new List<Transform>();
     public List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
     public List<OperatorCombatInputController> operatorCombatInputControllers = new List<OperatorCombatInputController>();
+    public List<OperatorCombatController> operatorCombatControllers = new List<OperatorCombatController>();
     public int mainCharacterIndex;
     public float teamMaxEnergy;
     public float teamCurrentEnergy;
@@ -26,6 +27,7 @@ public class TeamManager : MonoBehaviour
             teamMembers.Add(child);
             playerCharacters.Add(child.GetComponent<PlayerCharacter>());
             operatorCombatInputControllers.Add(child.GetComponent<OperatorCombatInputController>());
+            operatorCombatControllers.Add(child.GetComponent<OperatorCombatController>());
             Debug.Log($"找到队员: {child.name}");
         }
     }

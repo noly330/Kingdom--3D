@@ -10,6 +10,7 @@ public class SkillAttackState : ICombatState
     private CombatListSO _currentCombatList;
     private RunningEventIndex _runningEventIndex;
     private Animator _animator;
+    private bool _isEnd = true;
     public SkillAttackState(OperatorCombatController operatorCombatController, OperatorCombatStateMachine operatorCombatStateMachine)
     {
         _combatController = operatorCombatController;
@@ -25,17 +26,24 @@ public class SkillAttackState : ICombatState
 
     public void OnEnterAgain()
     {
-
+        
     }
 
     public void OnExit()
     {
         _combatController.poiseLevel = ForceLevel.Basy;
+        _isEnd = true;
     }
 
     public void OnUpdate()
     {
         RunningEvent();
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill"))
+            _isEnd = false;
+        if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill") && !_isEnd)
+        {
+            _combatStateMachine.ReturnToDefaultState();
+        }
     }
 
 
@@ -51,6 +59,8 @@ public class SkillAttackState : ICombatState
         _combatController.FindTarget();
         _combatController.LookTarget();
         _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(0), 0.2f);
+
+        //在这里减能量条
         TeamManager.Instance.teamCurrentEnergy -= 100f;
     }
 
@@ -59,8 +69,6 @@ public class SkillAttackState : ICombatState
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName(_currentCombatList.TryGetCombatName(0)) ||
         _animator.IsInTransition(0)) return;
 
-        if(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.6f)
-            _combatStateMachine.ReturnToDefaultState();
         //传递伤害
         CombatDetectConfig combatDetectConfig = _currentCombatList.TryGetDetectConfig(
             0, _runningEventIndex.attackDetectionIndex);

@@ -131,7 +131,10 @@ public class CombatControllerBase : MonoBehaviour, IDamageable
         if (interactionConfig.attackForceLevel < poiseLevel)
             return;
         transform.forward = -attacker.transform.forward;
-        animator.Play(interactionConfig.hitName, 0, 0);
+
+        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Hit_Up"))
+            animator.Play(interactionConfig.hitName, 0, 0);
+            
         _combatStateMachine.TryTransitionTO(CombatStateType.Hit);
     }
 

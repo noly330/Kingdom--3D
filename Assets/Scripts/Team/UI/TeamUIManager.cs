@@ -37,7 +37,7 @@ public class TeamUIManager : MonoBehaviour
         for (int i = 0; i < TeamManager.Instance.teamMembers.Count; i++)
         {
             stateCards[i].gameObject.SetActive(true);
-            UpdateStateCard(i, TeamManager.Instance.playerCharacters[i]);
+            InitStateCard(i, TeamManager.Instance.playerCharacters[i]);
         }
     }
 
@@ -48,6 +48,11 @@ public class TeamUIManager : MonoBehaviour
             mainStateCard.UpdateMainStateCard();
         }
         UpdateStateCard(message.CharacterIndex, TeamManager.Instance.playerCharacters[message.CharacterIndex]);
+    }
+
+    private void InitStateCard(int index , PlayerCharacter playerCharacter)
+    {
+        stateCards[index].InitStateCard(playerCharacter,TeamManager.Instance.operatorCombatControllers[index]);
     }
     public void UpdateStateCard(int index, PlayerCharacter Character)
     {
