@@ -19,15 +19,27 @@ public class OperatorCombatController : CombatControllerBase
         return TeamManager.Instance.teamCurrentEnergy >= 100;
     }
 
-    public void StartLinkTimeSlow(float slowScale, float realDuration)
+    protected void LinkSkillCold()
     {
-        StartCoroutine(LinkTimeSlowCoroutine(slowScale, realDuration));
+        if (currentLinkEnergy < linkEnergy + 0.01f)
+        {
+            currentLinkEnergy += Time.deltaTime * 1f;
+        }
+        else
+        {
+            currentLinkEnergy = linkEnergy;
+        }
     }
 
-    private IEnumerator LinkTimeSlowCoroutine(float slowScale, float realDuration)
-    {
-        Time.timeScale = slowScale;
-        yield return new WaitForSecondsRealtime(realDuration);
-        Time.timeScale = 1f;
-    }
+    // public void StartLinkTimeSlow(float slowScale, float realDuration)
+    // {
+    //     StartCoroutine(LinkTimeSlowCoroutine(slowScale, realDuration));
+    // }
+
+    // private IEnumerator LinkTimeSlowCoroutine(float slowScale, float realDuration)
+    // {
+    //     Time.timeScale = slowScale;
+    //     yield return new WaitForSecondsRealtime(realDuration);
+    //     Time.timeScale = 1f;
+    // }
 }

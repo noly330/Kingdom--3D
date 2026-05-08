@@ -21,7 +21,7 @@ public class LinkAttackState : ICombatState
     }
     public void OnEnter()
     {
-        _combatController.StartLinkTimeSlow(0.3f, 0.5f);
+        //_combatController.StartLinkTimeSlow(0.3f, 0.5f);
         ExecuteSkillAttack();
     }
 

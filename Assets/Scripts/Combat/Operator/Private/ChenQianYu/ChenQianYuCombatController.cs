@@ -29,23 +29,13 @@ public class ChenQianYuCombatController : OperatorCombatController
 
     private void OnPhysicalDefenseBreakApplied(OnPhysicalDefenseBreakApplied message)
     {
-        Debug.Log("可以释放连携技了");
 
         if (currentLinkEnergy >= linkEnergy)
         {
+            Debug.Log("陈千语可以释放连携技了");
             TeamInputManager.Instance.TryEnqueueLinkAttack(TeamManager.Instance.GetSlotIndex(this.transform));
         }
     }
 
-    private void LinkSkillCold()
-    {
-        if (currentLinkEnergy < linkEnergy + 0.01f)
-        {
-            currentLinkEnergy += Time.deltaTime * 1f;
-        }
-        else
-        {
-            currentLinkEnergy = linkEnergy;
-        }
-    }
+    
 }

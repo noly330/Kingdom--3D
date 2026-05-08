@@ -39,7 +39,7 @@ public class SlideState : ICombatState
             _isEnd = false;
         }
 
-        if(!_isEnd && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f)
+        if(!_isEnd && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.6f)
         {
             _combatStateMachine.ReturnToDefaultState();
         }

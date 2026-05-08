@@ -55,7 +55,7 @@ public class EnemyCombatController : CombatControllerBase
                 if (_enemyAbnormalityManager.breakstack > 0)
                 {
                     Damage newDamage = new Damage(attacker.currentAttack, false);
-                    newDamage.damage *= _enemyAbnormalityManager.breakstack;
+                    newDamage.damage *= _enemyAbnormalityManager.breakstack *1.25f;
                     _characterBase.BeHit(newDamage);
                     _enemyAbnormalityManager.breakstack = 0;
                 }

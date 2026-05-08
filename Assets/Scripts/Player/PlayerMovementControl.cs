@@ -73,10 +73,18 @@ public class PlayerMovementControl : CharacterMovementControlBase
         float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRot, ref _angleVelocity, _rotationSmoothTime);
         if (GameInputManager.Instance.Move != Vector2.zero)
         {
-            if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && !_animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt"))
+            if (CanRotate())
                 transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
         _animator.SetFloat(AnimationID.DetalAngleID, Vector3.SignedAngle(transform.forward, _targetDirection, Vector3.up));
+    }
+
+    private bool CanRotate()
+    {
+        if(_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")) return false;
+        if(_animator.GetCurrentAnimatorStateInfo(0).IsTag("Hurt")) return false;
+        if(_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill")) return false;
+        return true;
     }
 
     private void CharacterSlide()
