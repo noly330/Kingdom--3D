@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -38,7 +37,7 @@ public class ThirdPersonCamera : MonoBehaviour
         EventCenter.RemoveListener<Events.SwitchMainCharacter>(ChangeCameraTarget);
     }
 
-    private void ChangeCameraTarget(SwitchMainCharacter message)
+    private void ChangeCameraTarget(Events.SwitchMainCharacter message)
     {
         Transform newTarget = TeamManager.Instance.teamMembers[message.NewIndex];
         Transform newCameraPoint = null;

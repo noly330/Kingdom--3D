@@ -28,7 +28,6 @@ public class CombatControllerBase : MonoBehaviour, IDamageable
     protected virtual void Update()
     {
         ColdTimer();
-
     }
     #region 普攻冷却
     public bool CanNormalAttack()

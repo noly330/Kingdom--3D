@@ -10,7 +10,7 @@ public class TeamManager : MonoBehaviour
     public List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
     public List<OperatorCombatInputController> operatorCombatInputControllers = new List<OperatorCombatInputController>();
     public List<OperatorCombatController> operatorCombatControllers = new List<OperatorCombatController>();
-    public int mainCharacterIndex;
+    public int mainCharacterIndex;  //当前主控干员索引
     public float teamMaxEnergy;
     public float teamCurrentEnergy;
     private int _currentIndex;

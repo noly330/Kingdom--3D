@@ -68,18 +68,6 @@ public class CharacterBase : MonoBehaviour
     }
 
     /// <summary>
-    /// 老的伤害计算
-    /// </summary>
-    /// <param name="comboInteractionConfig"></param>
-    /// <returns></returns>
-    public Damage TryGetDamage(ComboInteractionConfig comboInteractionConfig)
-    {
-        bool isCrit = Random.value < currentCritChance;
-        float damage = currentAttack * comboInteractionConfig.damageMul * (isCrit ? 1.5f : 1f);
-
-        return new Damage(damage,isCrit);
-    }
-    /// <summary>
     /// 新的伤害计算
     /// </summary>
     /// <param name="combatInteractionConfig"></param>

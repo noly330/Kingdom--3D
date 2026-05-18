@@ -57,14 +57,14 @@ public class NormalAttackState : ICombatState
             return;
         _runningEventIndex.Reset();
 
-        _combatController.FindTarget();
-        _combatController.LookTarget();
         //先检测当前需不需要重制普攻索引
         if (_combatController.ResetNormalAttackIndex())
             _nextCombatIndex = 0;
 
         _currentCombatIndex = _nextCombatIndex;
         _combatController.animator.CrossFadeInFixedTime(_currentCombatListSO.TryGetCombatName(_currentCombatIndex), 0.155f, 0, 0);
+        _combatController.FindTarget();
+        _combatController.LookTarget();
 
         //TODO:以后要制作保留平a的机制，这个更新索引以后可能要挪到出伤之后再更新
         UpdateCombatIndex();

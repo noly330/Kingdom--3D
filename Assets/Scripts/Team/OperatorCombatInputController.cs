@@ -6,6 +6,7 @@ public class OperatorCombatInputController : MonoBehaviour
 {
     private CombatStateMachineBase _combatStateMachine;
 
+
     private void Awake()
     {
         _combatStateMachine = GetComponent<CombatStateMachineBase>();
@@ -18,7 +19,10 @@ public class OperatorCombatInputController : MonoBehaviour
 
     public void TryToSkillAttack()
     {
-        _combatStateMachine.TryTransitionTO(CombatStateType.Skill);
+        if(TeamManager.Instance.teamCurrentEnergy >= 100f)
+        {
+            _combatStateMachine.TryTransitionTO(CombatStateType.Skill);
+        }
     }
 
     public void TryToLinkAttack()

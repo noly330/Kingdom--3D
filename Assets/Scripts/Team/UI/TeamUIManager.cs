@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Events;
 using UnityEngine;
 
 public class TeamUIManager : MonoBehaviour
@@ -39,7 +38,7 @@ public class TeamUIManager : MonoBehaviour
         }
     }
 
-    private void UpdateStateCard(CharacterStateChanged message)
+    private void UpdateStateCard(Events.CharacterStateChanged message)
     {
         if(message.CharacterIndex == TeamManager.Instance.mainCharacterIndex)
         {

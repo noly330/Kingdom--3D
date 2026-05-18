@@ -19,7 +19,6 @@ public class ItemData_SO : ScriptableObject
     //武器需要生成在游戏中所以需要预制体，其他装备拿数据就行了
     public GameObject weaponPrefab;
     public EquipmentData_SO equipmentData;
-    public ComboListSO comboList;
 
     [Header("食物信息")]
     public float hpGain;

@@ -6,7 +6,7 @@ public class PlayerStatsManager : MonoBehaviour
 {
     public InventoryData_SO targetBagData;
     public PlayerCharacter playerCharacter;
-    public PlayerComboController playerCombatController;
+
 
     void Start()
     {
@@ -32,7 +32,7 @@ public class PlayerStatsManager : MonoBehaviour
         if (equipment.itemType == ItemType.Weapon)
         {
             playerCharacter.EquipWeapon(equipment);
-            playerCombatController.UpdateNormalComboList(equipment.comboList);
+            //playerCombatController.UpdateNormalComboList(equipment.comboList);
         }
     }
 
@@ -56,7 +56,7 @@ public class PlayerStatsManager : MonoBehaviour
         if (itemType == ItemType.Weapon)
         {
             playerCharacter.UnEquipWeapon();
-            playerCombatController.UpdateNormalComboList(null);
+            //playerCombatController.UpdateNormalComboList(null);
         }
     }
 

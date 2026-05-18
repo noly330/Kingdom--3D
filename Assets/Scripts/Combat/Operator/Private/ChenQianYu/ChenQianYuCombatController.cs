@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Events;
 using UnityEngine;
 
 public class ChenQianYuCombatController : OperatorCombatController
@@ -24,10 +23,10 @@ public class ChenQianYuCombatController : OperatorCombatController
     {
         base.Update();
 
-        LinkSkillCold();
+        LinkSkillEnemyRecover();
     }
 
-    private void OnPhysicalDefenseBreakApplied(OnPhysicalDefenseBreakApplied message)
+    private void OnPhysicalDefenseBreakApplied(Events.OnPhysicalDefenseBreakApplied message)
     {
 
         if (currentLinkEnergy >= linkEnergy)

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +30,7 @@ public class MainStateCard : MonoBehaviour
     {
         UpdateEnemyUI();
     }
-    private void UpdateMainStateCard(SwitchMainCharacter character)
+    private void UpdateMainStateCard(Events.SwitchMainCharacter character)
     {
         UpdateMainStateCard();
     }

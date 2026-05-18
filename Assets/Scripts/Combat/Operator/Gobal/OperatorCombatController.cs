@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class OperatorCombatController : CombatControllerBase
 {
-    [SerializeField] private CombatListSO _skillCombatList;
-    public CombatListSO skillCombatList => _skillCombatList;
-    [SerializeField] private CombatListSO _linkCombatList;
-    public CombatListSO linkCombatList => _linkCombatList;
+    [SerializeField] private CombatListSO[] _skillCombatLists;
+    public CombatListSO GetSkillComabtList(int index) => _skillCombatLists[index];
+    [SerializeField] private CombatListSO[] _linkCombatLists;
+    public CombatListSO GetLinkCombatList(int index) => _linkCombatLists[index];
     [SerializeField] private CombatListSO _ultimateCombatList;
     public CombatListSO ultimateCombatList => _ultimateCombatList;
 
@@ -19,7 +19,7 @@ public class OperatorCombatController : CombatControllerBase
         return TeamManager.Instance.teamCurrentEnergy >= 100;
     }
 
-    protected void LinkSkillCold()
+    protected void LinkSkillEnemyRecover()
     {
         if (currentLinkEnergy < linkEnergy + 0.01f)
         {

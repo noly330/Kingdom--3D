@@ -16,19 +16,31 @@ public class EnemyCombatController : CombatControllerBase
         if (interactionConfig == null) return;
         if (_characterBase.isInvulnerable) return;
 
+        //传递伤害
         Damage newDamage = attacker.TryGetDamage(interactionConfig);
+        newDamage.damage *= _enemyAbnormalityManager.GetShatterDamageMultiplier();
         _characterBase.BeHit(newDamage);
-
         //看向攻击者
         transform.forward = -attacker.transform.forward;
         //播放受击动画
+        if (ChangeHitAnimation())
+            animator.CrossFadeInFixedTime(interactionConfig.hitName, 0.1f, 0);
 
-        animator.Play(interactionConfig.hitName, 0, 0);
         _combatStateMachine.TryTransitionTO(CombatStateType.Hit);
         if (interactionConfig.attackEffectType != AttackEffectType.None)
         {
             PhysicsAbnormality(interactionConfig.attackEffectType, attacker);
         }
+    }
+
+
+    private bool ChangeHitAnimation()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Hit_Up") || animator.GetCurrentAnimatorStateInfo(0).IsName("Hit_Down"))
+        {
+            return false;
+        }
+        return true;
     }
 
     /// <summary>
@@ -42,22 +54,32 @@ public class EnemyCombatController : CombatControllerBase
         {
             case AttackEffectType.Launch:
 
-                if (_enemyAbnormalityManager.breakstack > 0)
-                    animator.Play("Hit_Up", 0, 0);
+                if (_enemyAbnormalityManager.breakStack > 0)
+                    animator.CrossFadeInFixedTime("Hit_Up", 0.1f, 0);
                 _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
                 break;
             case AttackEffectType.KnockDown:
 
+                if (_enemyAbnormalityManager.breakStack > 0)
+                {
+                    animator.CrossFadeInFixedTime("Hit_Down", 1f, 0);
+                }
+
                 _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
-                //TODO:播放倒地动画
+
                 break;
             case AttackEffectType.Smash:
-                if (_enemyAbnormalityManager.breakstack > 0)
+                if (_enemyAbnormalityManager.breakStack > 0)
                 {
                     Damage newDamage = new Damage(attacker.currentAttack, false);
-                    newDamage.damage *= _enemyAbnormalityManager.breakstack *1.25f;
+
+                    //猛击的时候，会额外造成攻击力×破防层数的伤害
+                    newDamage.damage *= _enemyAbnormalityManager.breakStack * 1.25f;  //消耗破防层数的额外增伤
+                    //碎甲效果带来的乘区
+                    newDamage.damage *= _enemyAbnormalityManager.GetShatterDamageMultiplier();
+
                     _characterBase.BeHit(newDamage);
-                    _enemyAbnormalityManager.breakstack = 0;
+                    _enemyAbnormalityManager.ResetBreakStack();
                 }
                 else
                 {
@@ -65,7 +87,20 @@ public class EnemyCombatController : CombatControllerBase
                 }
                 break;
             case AttackEffectType.Sunder:
-                //TODO:碎甲效果
+
+                if (_enemyAbnormalityManager.breakStack > 0)
+                {
+                    _enemyAbnormalityManager.SetShatter(_enemyAbnormalityManager.breakStack);
+                    Damage newDamage = new Damage(attacker.currentAttack, false);
+                    newDamage.damage *= 0.2f * _enemyAbnormalityManager.breakStack;  //消耗破防层数的额外增伤
+                    newDamage.damage *= _enemyAbnormalityManager.GetShatterDamageMultiplier();
+                    _characterBase.BeHit(newDamage);
+                    _enemyAbnormalityManager.ResetBreakStack();
+                }
+                else
+                {
+                    _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
+                }
                 break;
 
         }

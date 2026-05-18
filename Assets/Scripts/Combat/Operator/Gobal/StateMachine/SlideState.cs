@@ -5,12 +5,12 @@ using UnityEngine;
 public class SlideState : ICombatState
 {
     private PlayerMovementControl _playerMovementControl;
-    private OperatorCombatStateMachine _combatStateMachine;
+    private CombatStateMachineBase _combatStateMachine;
     
     private Animator _animator;
 
     bool _isEnd = true;
-    public SlideState(OperatorCombatStateMachine combatStateMachine, PlayerMovementControl playerMovementControl)
+    public SlideState( PlayerMovementControl playerMovementControl,CombatStateMachineBase combatStateMachine)
     {
         _combatStateMachine = combatStateMachine;
         _playerMovementControl = playerMovementControl;

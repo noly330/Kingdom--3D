@@ -6,21 +6,21 @@ using Unity.Mathematics;
 public class SkillAttackState : ICombatState
 {
     private OperatorCombatController _combatController;
-    private OperatorCombatStateMachine _combatStateMachine;
+    private CombatStateMachineBase _combatStateMachine;
     private CombatListSO _currentCombatList;
     private RunningEventIndex _runningEventIndex;
     private Animator _animator;
-    private bool _isEnd = true;
-    public SkillAttackState(OperatorCombatController operatorCombatController, OperatorCombatStateMachine operatorCombatStateMachine)
+    public SkillAttackState(OperatorCombatController operatorCombatController, CombatStateMachineBase combatStateMachine)
     {
         _combatController = operatorCombatController;
-        _currentCombatList = operatorCombatController.skillCombatList;
+        _currentCombatList = operatorCombatController.GetSkillComabtList(0);
         _animator = operatorCombatController.animator;
-        _combatStateMachine = operatorCombatStateMachine;
+        _combatStateMachine = combatStateMachine;
         _runningEventIndex = new RunningEventIndex();
     }
     public void OnEnter()
     {
+        _combatController.poiseLevel = ForceLevel.Mid;
         ExecuteSkillAttack();
     }
 
@@ -32,15 +32,13 @@ public class SkillAttackState : ICombatState
     public void OnExit()
     {
         _combatController.poiseLevel = ForceLevel.Basy;
-        _isEnd = true;
     }
 
     public void OnUpdate()
     {
         RunningEvent();
-        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill"))
-            _isEnd = false;
-        if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill") && !_isEnd)
+
+        if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill") && !_animator.IsInTransition(0))
         {
             _combatStateMachine.ReturnToDefaultState();
         }
@@ -51,14 +49,10 @@ public class SkillAttackState : ICombatState
 
     private void ExecuteSkillAttack()
     {
-        if (!_combatController.CanSkillAttack())
-            return;
-        
-        _combatController.poiseLevel = ForceLevel.Mid;
         _runningEventIndex.Reset();
+        _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(0), 0.1f);
         _combatController.FindTarget();
         _combatController.LookTarget();
-        _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(0), 0.2f);
 
         //在这里减能量条
         TeamManager.Instance.teamCurrentEnergy -= 100f;

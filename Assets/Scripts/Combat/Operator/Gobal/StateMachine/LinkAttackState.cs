@@ -6,23 +6,24 @@ using UnityEngine;
 public class LinkAttackState : ICombatState
 {
     private OperatorCombatController _combatController;
-    private OperatorCombatStateMachine _combatStateMachine;
+    private CombatStateMachineBase _combatStateMachine;
     private CombatListSO _currentCombatList;
     private RunningEventIndex _runningEventIndex;
     private Animator _animator;
-    private bool _isEnd = true;
-    public LinkAttackState(OperatorCombatController operatorCombatController, OperatorCombatStateMachine operatorCombatStateMachine)
+    public LinkAttackState(OperatorCombatController operatorCombatController, CombatStateMachineBase combatStateMachine)
     {
         _combatController = operatorCombatController;
-        _currentCombatList = operatorCombatController.linkCombatList;
+        _currentCombatList = operatorCombatController.GetLinkCombatList(0);
         _animator = operatorCombatController.animator;
-        _combatStateMachine = operatorCombatStateMachine;
+        _combatStateMachine = combatStateMachine;
         _runningEventIndex = new RunningEventIndex();
     }
     public void OnEnter()
     {
         //_combatController.StartLinkTimeSlow(0.3f, 0.5f);
         ExecuteSkillAttack();
+        _combatController.currentLinkEnergy = 0;  //连携技能量重置
+        EventCenter.Broadcast(new Events.OnLinkSkillTriggered());  //触发事件
     }
 
     public void OnEnterAgain()
@@ -33,21 +34,17 @@ public class LinkAttackState : ICombatState
     public void OnExit()
     {
         _combatController.poiseLevel = ForceLevel.Basy;
-        _isEnd = true;
     }
 
     public void OnUpdate()
     {
         RunningEvent();
-        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill"))
-            _isEnd = false;
-        if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill") && !_isEnd)
+
+        if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill") && !_animator.IsInTransition(0))
         {
             _combatStateMachine.ReturnToDefaultState();
         }
     }
-
-    //TODO: 技能暂时就一段吧，以后有时间拓展多段技能，比如鹰佐三段
 
     private void ExecuteSkillAttack()
     {
@@ -56,13 +53,12 @@ public class LinkAttackState : ICombatState
         
         _combatController.poiseLevel = ForceLevel.Mid;
         _runningEventIndex.Reset();
+        _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(0), 0.1f);
         _combatController.FindTarget();
         _combatController.LookTarget();
-        _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(0), 0.2f);
         
         TeamInputManager.Instance.DequeueLinkAttack();
-        _combatController.currentLinkEnergy = 0;  //连携技能量重置
-        EventCenter.Broadcast(new Events.OnLinkSkillTriggered());  //触发事件
+        
     }
 
     private void RunningEvent()

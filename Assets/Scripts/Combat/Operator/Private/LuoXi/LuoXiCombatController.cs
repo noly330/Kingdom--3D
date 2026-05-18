@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Events;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -21,10 +20,10 @@ public class LuoXiCombatController : OperatorCombatController
     {
         base.Update();
 
-        LinkSkillCold();
+        LinkSkillEnemyRecover();
     }
 
-    private void TryQueueLinkSkill(OnLinkSkillTriggered triggered)
+    private void TryQueueLinkSkill(Events.OnLinkSkillTriggered triggered)
     {
         if(currentLinkEnergy >= linkEnergy)
         {
