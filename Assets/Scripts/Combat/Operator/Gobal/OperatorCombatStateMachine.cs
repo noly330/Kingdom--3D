@@ -20,5 +20,6 @@ public class OperatorCombatStateMachine : CombatStateMachineBase
         states.Add(CombatStateType.Skill, new SkillAttackState(_operatorCombatController, this));
         states.Add(CombatStateType.LinkSkill, new LinkAttackState(_operatorCombatController, this));
         states.Add(CombatStateType.Slide, new SlideState(_playerMovementControl, this));
+        states.Add(CombatStateType.Avoid, new AvoidState(_playerMovementControl, this));
     }
 }

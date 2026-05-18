@@ -19,7 +19,7 @@ public class SlideState : ICombatState
     public void OnEnter()
     {
         _playerMovementControl.transform.eulerAngles = Vector3.up * _playerMovementControl.targetRot;
-        _animator.CrossFadeInFixedTime("Slide", 0.25f, 0, 0);
+        _animator.CrossFadeInFixedTime("Slide", 0.2f, 0, 0);
     }
 
     public void OnEnterAgain()

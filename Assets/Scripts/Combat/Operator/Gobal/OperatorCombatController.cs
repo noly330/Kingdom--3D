@@ -31,15 +31,21 @@ public class OperatorCombatController : CombatControllerBase
         }
     }
 
-    // public void StartLinkTimeSlow(float slowScale, float realDuration)
-    // {
-    //     StartCoroutine(LinkTimeSlowCoroutine(slowScale, realDuration));
-    // }
+    public override void BeHit(CombatInteractionConfig interactionConfig, CharacterBase attacker)
+    {
+        if (_combatStateMachine.GetCurrentStateType() == CombatStateType.Avoid)
+        {
+            return;
+        }
+        // 完美闪避触发条件只放在受击入口：角色处于Slide动画标签时被命中，改为进入Avoid状态，不结算本次受击。
+        if (_combatStateMachine.GetCurrentStateType() == CombatStateType.Slide)
+        {
+            _combatStateMachine.ForceTransitionTo(CombatStateType.Avoid);
+            return;
+        }
 
-    // private IEnumerator LinkTimeSlowCoroutine(float slowScale, float realDuration)
-    // {
-    //     Time.timeScale = slowScale;
-    //     yield return new WaitForSecondsRealtime(realDuration);
-    //     Time.timeScale = 1f;
-    // }
+        base.BeHit(interactionConfig, attacker);
+    }
+
+    
 }

@@ -4,9 +4,11 @@ using UnityEngine;
 public class CombatStateMachineBase : MonoBehaviour
 {
     private CombatControllerBase _combatController;
+    
     public Dictionary<CombatStateType, ICombatState> states = new Dictionary<CombatStateType, ICombatState>();
 
     [SerializeField] private CombatStateType _currentStateType = CombatStateType.None;
+    public CombatStateType GetCurrentStateType() => _currentStateType;
     [SerializeField] private CombatStateType _defaultStateType = CombatStateType.None;
 
     protected virtual void Awake()

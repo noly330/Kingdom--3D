@@ -21,5 +21,6 @@ public class FeiBiCombatStateMachine : CombatStateMachineBase
         states.Add(CombatStateType.Skill, new SkillAttackState(_controller, this));
         states.Add(CombatStateType.LinkSkill, new FeiBiLinkAttackState(_controller, this));
         states.Add(CombatStateType.Slide, new SlideState(_movementControl, this));
+        states.Add(CombatStateType.Avoid, new AvoidState(_movementControl, this));
     }
 }

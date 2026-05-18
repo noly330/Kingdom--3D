@@ -130,8 +130,8 @@ public class TeamManager : MonoBehaviour
 
     private void SwitchPosition()
     {
-        teamMembers[_currentIndex].gameObject.SetActive(false);
-        teamMembers[_nextIndex].gameObject.SetActive(false);
+        teamMembers[_currentIndex].GetComponent<CharacterController>().enabled = false;
+        teamMembers[_nextIndex].GetComponent<CharacterController>().enabled = false;
 
         Vector3 tempPosition = teamMembers[_currentIndex].position;
         Vector3 tempRotation = teamMembers[_currentIndex].eulerAngles;
@@ -140,8 +140,8 @@ public class TeamManager : MonoBehaviour
         teamMembers[_nextIndex].position = tempPosition;
         teamMembers[_nextIndex].eulerAngles = tempRotation;
 
-        teamMembers[_currentIndex].gameObject.SetActive(true);
-        teamMembers[_nextIndex].gameObject.SetActive(true);
+        teamMembers[_currentIndex].GetComponent<CharacterController>().enabled = true;
+        teamMembers[_nextIndex].GetComponent<CharacterController>().enabled = true;
     }
 
     #endregion
