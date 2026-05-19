@@ -107,6 +107,8 @@ public class NormalAttackState : ICombatState
                     IDamageable damageable = taget.GetComponent<IDamageable>();
                     if (damageable != null)
                     {
+                        if (_combatController.CompareTag("Player"))
+                            CombatControllerBase.CacheAttackTarget(taget.transform);
                         damageable.BeHit(_currentCombatListSO.TryGetInteractionConfig(_currentCombatIndex, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
                     }
                 }

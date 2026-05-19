@@ -50,8 +50,10 @@ public class SkillAttackState : ICombatState
     private void ExecuteSkillAttack()
     {
         _runningEventIndex.Reset();
+        bool hasCachedTarget = _combatController.TeleportNearCachedAttackTargetIfCompanion(_combatController.skillDistance);
         _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(0), 0.1f);
-        _combatController.FindTarget();
+        if (!hasCachedTarget)
+            _combatController.FindTarget();
         _combatController.LookTarget();
 
         //在这里减能量条
@@ -84,6 +86,8 @@ public class SkillAttackState : ICombatState
                     IDamageable damageable = taget.GetComponent<IDamageable>();
                     if (damageable != null)
                     {
+                        if (_combatController.CompareTag("Player"))
+                            CombatControllerBase.CacheAttackTarget(taget.transform);
                         damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
                     }
                 }

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class CombatControllerBase : MonoBehaviour, IDamageable
 {
+    // 缓存攻击目标
+    private const float CachedAttackTargetLifeTime = 10f;
+    private static Transform _cachedAttackTarget;
+    private static float _cachedAttackTargetTime;
+
     [SerializeField] private CombatListSO _normalCombatList;
     public CombatListSO normalCombatList => _normalCombatList;
     public ForceLevel poiseLevel;
@@ -80,7 +85,37 @@ public class CombatControllerBase : MonoBehaviour, IDamageable
                 _attackTarget = target.transform;
             }
         }
+
+        if (CompareTag("Player"))
+            CacheAttackTarget(_attackTarget);
     }
+
+    public static bool TryGetCachedAttackTarget(out Transform target)
+    {
+        target = null;
+
+        if (_cachedAttackTarget == null)
+            return false;
+
+        if (!_cachedAttackTarget.gameObject.activeInHierarchy || Time.time - _cachedAttackTargetTime > CachedAttackTargetLifeTime)
+        {
+            _cachedAttackTarget = null;
+            return false;
+        }
+
+        target = _cachedAttackTarget;
+        return true;
+    }
+
+    public static void CacheAttackTarget(Transform target)
+    {
+        if (target == null)
+            return;
+
+        _cachedAttackTarget = target;
+        _cachedAttackTargetTime = Time.time;
+    }
+
     public void LookTarget()
     {
         if (_attackTarget == null) return;

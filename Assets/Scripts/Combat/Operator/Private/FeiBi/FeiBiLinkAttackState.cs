@@ -92,9 +92,11 @@ public class FeiBiLinkAttackState : ICombatState
         
         _combatController.poiseLevel = ForceLevel.Mid;
         _runningEventIndex.Reset();
+        bool hasCachedTarget = _combatController.TeleportNearCachedAttackTargetIfCompanion();
 
         _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(_currentCombatIndex), 0.1f);
-        _combatController.FindTarget();
+        if (!hasCachedTarget)
+            _combatController.FindTarget();
         _combatController.LookTarget();
         UpdateCombatIndex();
         
@@ -132,6 +134,8 @@ public class FeiBiLinkAttackState : ICombatState
                     IDamageable damageable = taget.GetComponent<IDamageable>();
                     if (damageable != null)
                     {
+                        if (_combatController.CompareTag("Player"))
+                            CombatControllerBase.CacheAttackTarget(taget.transform);
                         damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
                     }
                 }

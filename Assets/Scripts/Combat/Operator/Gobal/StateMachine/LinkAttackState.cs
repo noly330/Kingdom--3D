@@ -53,8 +53,10 @@ public class LinkAttackState : ICombatState
         
         _combatController.poiseLevel = ForceLevel.Mid;
         _runningEventIndex.Reset();
+        bool hasCachedTarget = _combatController.TeleportNearCachedAttackTargetIfCompanion(_combatController.linkDistance);  //如果是非主控干员，就把该干员瞬移到缓存目标位置
         _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(0), 0.1f);
-        _combatController.FindTarget();
+        if (!hasCachedTarget)
+            _combatController.FindTarget();
         _combatController.LookTarget();
         
         TeamInputManager.Instance.DequeueLinkAttack();
@@ -87,6 +89,8 @@ public class LinkAttackState : ICombatState
                     IDamageable damageable = taget.GetComponent<IDamageable>();
                     if (damageable != null)
                     {
+                        if (_combatController.CompareTag("Player"))
+                            CombatControllerBase.CacheAttackTarget(taget.transform);
                         damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
                     }
                 }
