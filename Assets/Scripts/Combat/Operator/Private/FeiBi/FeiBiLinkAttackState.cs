@@ -92,7 +92,7 @@ public class FeiBiLinkAttackState : ICombatState
         
         _combatController.poiseLevel = ForceLevel.Mid;
         _runningEventIndex.Reset();
-        bool hasCachedTarget = _combatController.TeleportNearCachedAttackTargetIfCompanion();
+        bool hasCachedTarget = _combatController.TeleportNearCachedAttackTargetIfCompanion(_combatController.linkDistance);
 
         _combatController.animator.CrossFadeInFixedTime(_currentCombatList.TryGetCombatName(_currentCombatIndex), 0.1f);
         if (!hasCachedTarget)

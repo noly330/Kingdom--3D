@@ -1,14 +1,16 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-public class EnemyHealthBar : MonoBehaviour
+public class EnemyStatusHUD : MonoBehaviour
 {
-    public GameObject healthBar;
-    public Image healthFill;
-    public float smoothTime = 0.3f;
-    public float showTime = 2.5f;
+    [SerializeField] private GameObject healthBar;
+    [SerializeField] private Image healthFill;
+    [SerializeField] private Image _defenseBreakStackFill;
+    [SerializeField] private float smoothTime = 0.3f;
+    [SerializeField] private float showTime = 2.5f;
 
     private CharacterBase character;
+    private EnemyAbnormalityManager _enemyAbnormalityManager;
     private Camera mainCamera;
     private Coroutine healthCoroutine;
     private Coroutine showTimeCoroutine;
@@ -16,7 +18,22 @@ public class EnemyHealthBar : MonoBehaviour
     private void Awake()
     {
         character = GetComponent<CharacterBase>();
+        _enemyAbnormalityManager = GetComponent<EnemyAbnormalityManager>();
         mainCamera = Camera.main;
+    }
+
+    private void OnEnable()
+    {
+        UpdateDefenseBreakStackFill();
+        UpdateHealthBar();
+    }
+
+    private void OnDisable()
+    {
+        if (healthCoroutine != null)
+            StopCoroutine(healthCoroutine);
+        if (showTimeCoroutine != null)
+            StopCoroutine(showTimeCoroutine);
     }
 
     private void LateUpdate()
@@ -47,6 +64,20 @@ public class EnemyHealthBar : MonoBehaviour
         if (showTimeCoroutine != null)
             StopCoroutine(showTimeCoroutine);
         showTimeCoroutine = StartCoroutine(ShowTime(showTime));
+    }
+
+    public void UpdateDefenseBreakStackFill()
+    {
+        if(_enemyAbnormalityManager == null)
+            return;
+
+        if(_enemyAbnormalityManager.breakStack == 0)
+        {
+            _defenseBreakStackFill.gameObject.SetActive(false);
+            return;
+        }
+        _defenseBreakStackFill.gameObject.SetActive(true);
+        _defenseBreakStackFill.fillAmount = _enemyAbnormalityManager.breakStack / 4f;
     }
 
     private IEnumerator HealthBarSmoothChange(float target)

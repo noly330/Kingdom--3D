@@ -13,6 +13,7 @@ public class TeamManager : MonoBehaviour
     public int mainCharacterIndex;  //当前主控干员索引
     public float teamMaxEnergy;
     public float teamCurrentEnergy;
+    private float _energyRecoverSpeed = 8f;
     private int _currentIndex;
     private int _nextIndex;
 
@@ -56,7 +57,7 @@ public class TeamManager : MonoBehaviour
     {
         if (teamCurrentEnergy <= teamMaxEnergy)
         {
-            teamCurrentEnergy += Time.deltaTime * 5f;
+            teamCurrentEnergy += Time.deltaTime * _energyRecoverSpeed;
         }
         else
         {

@@ -62,7 +62,7 @@ public class EnemyCombatController : CombatControllerBase
 
                 if (_enemyAbnormalityManager.breakStack > 0)
                 {
-                    animator.CrossFadeInFixedTime("Hit_Down", 1f, 0);
+                    animator.CrossFadeInFixedTime("Hit_Down", 0.1f, 0);
                 }
 
                 _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
@@ -90,7 +90,7 @@ public class EnemyCombatController : CombatControllerBase
 
                 if (_enemyAbnormalityManager.breakStack > 0)
                 {
-                    _enemyAbnormalityManager.SetShatter(_enemyAbnormalityManager.breakStack);
+                    _enemyAbnormalityManager.TriggerShatter(_enemyAbnormalityManager.breakStack);
                     Damage newDamage = new Damage(attacker.currentAttack, false);
                     newDamage.damage *= 0.2f * _enemyAbnormalityManager.breakStack;  //消耗破防层数的额外增伤
                     newDamage.damage *= _enemyAbnormalityManager.GetShatterDamageMultiplier();

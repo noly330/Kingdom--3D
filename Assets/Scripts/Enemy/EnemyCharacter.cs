@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EnemyCharacter : CharacterBase
 {
-    public EnemyHealthBar enemyHealthBar;
+    public EnemyStatusHUD enemyHealthBar;
     public ObjectPoolType characterPoolType;  //在行为树里面用
 
     protected override void Awake()
     {
         base.Awake();
-        enemyHealthBar = GetComponent<EnemyHealthBar>();
+        enemyHealthBar = GetComponent<EnemyStatusHUD>();
     }
     protected override void Start()
     {
@@ -21,15 +21,15 @@ public class EnemyCharacter : CharacterBase
     {
         currentHealth = maxHealth;
         isDead = false;
-        if (enemyHealthBar == null)
-        {
-            Debug.LogError("EnemyA1Character: enemyHealthBar is null");
+        // if (enemyHealthBar == null)
+        // {
+        //     Debug.LogError("EnemyA1Character: enemyHealthBar is null");
 
-        }
-        else
-        {
-            enemyHealthBar.UpdateHealthBar();
-        }
+        // }
+        // else
+        // {
+        //     enemyHealthBar.UpdateEnemyStateBar();
+        // }
 
     }
     void OnDisable()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 /// <summary>
@@ -9,8 +10,12 @@ using UnityEngine;
 public class EnemyAbnormalityManager : MonoBehaviour
 {
     public int breakStack;  //TODO:我知道不能暴露，但是为了方便调试，先暴露出来，毕竟这个项目只有我一个人在做
-    public int shatterStacks = 0;  //碎甲层数
-    private float _shatterTimer=0f;
+    public int shatterStacks = 0;  //碎甲层数  
+    private bool _isShatterActive = false;
+    private float _shatterTimer = 0f;
+
+    public UnityEvent OnPhysicalDefenseBreakChangedEvent;
+    public UnityEvent OnShatterChangedEvent;
 
 
     private void Update()
@@ -23,15 +28,17 @@ public class EnemyAbnormalityManager : MonoBehaviour
     /// </summary>
     public void OnPhysicalDefenseBreakApplied()
     {
-        if(breakStack <=4)
+        if (breakStack <= 4)
             breakStack++;
         EventCenter.Broadcast(new Events.OnPhysicalDefenseBreakApplied());
+        OnPhysicalDefenseBreakChangedEvent?.Invoke();
     }
 
     public void ResetBreakStack()
     {
         EventCenter.Broadcast(new Events.OnPhysicalDefenseBreakConsumed() { breakStack = breakStack });
         breakStack = 0;
+        OnPhysicalDefenseBreakChangedEvent?.Invoke();
     }
 
 
@@ -39,25 +46,33 @@ public class EnemyAbnormalityManager : MonoBehaviour
     public float GetShatterDamageMultiplier()
     {
         //TODO；以后碎甲的增上不能是线性函数，以后记得改
-        if(shatterStacks == 0)
+        if (shatterStacks == 0)
             return 1;
 
-        return 1 + 0.12f +shatterStacks * 0.04f;
+        return 1 + 0.12f + shatterStacks * 0.04f;
     }
 
-    public void SetShatter(int stack)
+    public void TriggerShatter(int stack)
     {
         shatterStacks = stack;
-        _shatterTimer = 12f +stack * 4f;
+        _shatterTimer = 12f + stack * 4f;
+        _isShatterActive = true;
+        OnShatterChangedEvent?.Invoke();
     }
 
     private void UpdateShatterTimer()
     {
-        _shatterTimer -= Time.deltaTime;
-        if(_shatterTimer <= 0)
+        if (_isShatterActive)
         {
-            shatterStacks = 0;
-            _shatterTimer = 0f;
+
+            _shatterTimer -= Time.deltaTime;
+            if (_shatterTimer <= 0)
+            {
+                shatterStacks = 0;
+                _shatterTimer = 0f;
+                _isShatterActive = false;
+                OnShatterChangedEvent?.Invoke();
+            }
         }
     }
 

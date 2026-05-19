@@ -26,7 +26,7 @@ public class SkillAttackState : ICombatState
 
     public void OnEnterAgain()
     {
-        
+
     }
 
     public void OnExit()
@@ -65,7 +65,7 @@ public class SkillAttackState : ICombatState
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName(_currentCombatList.TryGetCombatName(0)) ||
         _animator.IsInTransition(0)) return;
 
-        //传递伤害
+        
         CombatDetectConfig combatDetectConfig = _currentCombatList.TryGetDetectConfig(
             0, _runningEventIndex.attackDetectionIndex);
 
@@ -80,16 +80,23 @@ public class SkillAttackState : ICombatState
                 Collider[] targetList = Physics.OverlapBox(_combatController.transform.position + boxPosition,
                 combatDetectConfig.scale, quaternion.identity, _combatController.targetMask);
 
-                //TODO:遍历敌人
-                foreach (Collider taget in targetList)
+                bool isHit = targetList.Length > 0;
+
+                if (isHit)
                 {
-                    IDamageable damageable = taget.GetComponent<IDamageable>();
-                    if (damageable != null)
+
+                    //TODO:遍历敌人
+                    foreach (Collider taget in targetList)
                     {
-                        if (_combatController.CompareTag("Player"))
-                            CombatControllerBase.CacheAttackTarget(taget.transform);
-                        damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
+                        IDamageable damageable = taget.GetComponent<IDamageable>();
+                        if (damageable != null)
+                        {
+                            if (_combatController.CompareTag("Player"))
+                                CombatControllerBase.CacheAttackTarget(taget.transform);
+                            damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
+                        }
                     }
+                    
                 }
 
                 _runningEventIndex.attackDetectionIndex++;
