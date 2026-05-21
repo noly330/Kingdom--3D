@@ -35,10 +35,13 @@ public class FeiBiLinkAttackState : ICombatState
         Debug.Log(_currentCombatList.name);
         //_combatController.StartLinkTimeSlow(0.3f, 0.5f);
 
-        TeamInputManager.Instance.DequeueLinkAttack();  //连携技出队
+
         _combatController.currentLinkEnergy = 0;  //连携技能量重置
         EventCenter.Broadcast(new Events.OnLinkSkillTriggered());  //触发事件
 
+        TeamInputManager.Instance.DequeueLinkAttack();  //连携技出队
+        EventCenter.Broadcast(new Events.OnLinkSkillQueueChanged());  //触发事件
+        
         _skillCooldown = _currentCombatList.TryGetColdTime(0);
         ExecuteSkillAttack();
     }

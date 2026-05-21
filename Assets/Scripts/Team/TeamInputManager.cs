@@ -6,6 +6,7 @@ public class TeamInputManager : MonoBehaviour
 {
     public static TeamInputManager Instance;
     private Queue<int> _linkAttackQueue = new Queue<int>();
+    public Queue<int> GetlinkAttackQueue() => _linkAttackQueue;
     private HashSet<int> _queuedSkillIds = new HashSet<int>();
     private void Awake()
     {
@@ -52,14 +53,21 @@ public class TeamInputManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 尝试入队链接攻击
+    /// 尝试入队连携攻击
     /// </summary>
     /// <param name="index"></param>
     public void TryEnqueueLinkAttack(int index)
     {
         if (!CanEnqueueLinkAttack(index)) return;
+        EnequeueLinkAttack(index);
+    }
+
+    private void EnequeueLinkAttack(int index)
+    {
         _queuedSkillIds.Add(index);
         _linkAttackQueue.Enqueue(index);
+        EventCenter.Broadcast<Events.OnLinkSkillQueueChanged>(new Events.OnLinkSkillQueueChanged());
+        
     }
 
     private bool CanEnqueueLinkAttack(int index)

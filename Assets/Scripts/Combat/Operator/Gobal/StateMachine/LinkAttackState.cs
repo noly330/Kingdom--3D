@@ -24,6 +24,8 @@ public class LinkAttackState : ICombatState
         ExecuteSkillAttack();
         _combatController.currentLinkEnergy = 0;  //连携技能量重置
         EventCenter.Broadcast(new Events.OnLinkSkillTriggered());  //触发事件
+        TeamInputManager.Instance.DequeueLinkAttack();
+        EventCenter.Broadcast(new Events.OnLinkSkillQueueChanged());  //触发事件
     }
 
     public void OnEnterAgain()
@@ -59,7 +61,6 @@ public class LinkAttackState : ICombatState
             _combatController.FindTarget();
         _combatController.LookTarget();
 
-        TeamInputManager.Instance.DequeueLinkAttack();
 
     }
 

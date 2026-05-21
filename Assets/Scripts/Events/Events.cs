@@ -36,4 +36,8 @@ public static class Events
     {
         public int breakStack;
     }
+
+    public class OnLinkSkillQueueChanged
+    {
+    }
 }
