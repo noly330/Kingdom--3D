@@ -84,7 +84,6 @@ public class SkillAttackState : ICombatState
 
                 if (isHit)
                 {
-
                     //TODO:遍历敌人
                     foreach (Collider taget in targetList)
                     {
@@ -95,6 +94,13 @@ public class SkillAttackState : ICombatState
                                 CombatControllerBase.CacheAttackTarget(taget.transform);
                             damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
                         }
+                    }
+
+                    //在这里加能量条
+                    CombatRecoverEnergyConfig recoverEnergyConfig = _currentCombatList.TryGetRecoverEnergyConfig(0,_runningEventIndex.attackDetectionIndex);
+                    if(recoverEnergyConfig != null)
+                    {
+                        TeamManager.Instance.teamCurrentEnergy += recoverEnergyConfig.energyRecover;
                     }
                     
                 }

@@ -13,7 +13,7 @@ public class TeamManager : MonoBehaviour
     public int mainCharacterIndex;  //当前主控干员索引
     public float teamMaxEnergy;
     public float teamCurrentEnergy;
-    private float _energyRecoverSpeed = 8f;
+    [SerializeField] private float _energyRecoverSpeed = 7f;
     private int _currentIndex;
     private int _nextIndex;
 

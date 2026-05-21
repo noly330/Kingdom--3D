@@ -53,4 +53,11 @@ public class CombatListSO : ScriptableObject
         if(vfxIndex > _combatList[index].vfxConfigs.Length - 1)  return null;
         return _combatList[index].vfxConfigs[vfxIndex];
     }
+
+    public CombatRecoverEnergyConfig TryGetRecoverEnergyConfig(int index,int recoverEnergyIndex)
+    {
+        if(index > _combatList.Length - 1)  return null;
+        if(recoverEnergyIndex > _combatList[index].recoverEnergyConfigs.Length - 1)  return null;
+        return _combatList[index].recoverEnergyConfigs[recoverEnergyIndex];
+    }
 }

@@ -105,6 +105,8 @@ public class CombatStateMachineBase : MonoBehaviour
                 return 20f;
             case CombatStateType.Slide:
                 return 40f;
+            case CombatStateType.Avoid:
+                return 50f;
             case CombatStateType.Hit:
                 return 60f;
             case CombatStateType.UltimateSkill:

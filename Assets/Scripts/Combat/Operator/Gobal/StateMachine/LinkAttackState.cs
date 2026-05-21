@@ -50,7 +50,7 @@ public class LinkAttackState : ICombatState
     {
         // if (!_combatController.CanSkillAttack())
         //     return;
-        
+
         _combatController.poiseLevel = ForceLevel.Mid;
         _runningEventIndex.Reset();
         bool hasCachedTarget = _combatController.TeleportNearCachedAttackTargetIfCompanion(_combatController.linkDistance);  //如果是非主控干员，就把该干员瞬移到缓存目标位置
@@ -58,9 +58,9 @@ public class LinkAttackState : ICombatState
         if (!hasCachedTarget)
             _combatController.FindTarget();
         _combatController.LookTarget();
-        
+
         TeamInputManager.Instance.DequeueLinkAttack();
-        
+
     }
 
     private void RunningEvent()
@@ -84,14 +84,27 @@ public class LinkAttackState : ICombatState
                 combatDetectConfig.scale, quaternion.identity, _combatController.targetMask);
 
                 //TODO:遍历敌人
-                foreach (Collider taget in targetList)
+
+                bool isHit = targetList.Length > 0;
+
+                if (isHit)
                 {
-                    IDamageable damageable = taget.GetComponent<IDamageable>();
-                    if (damageable != null)
+
+                    foreach (Collider taget in targetList)
                     {
-                        if (_combatController.CompareTag("Player"))
-                            CombatControllerBase.CacheAttackTarget(taget.transform);
-                        damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
+                        IDamageable damageable = taget.GetComponent<IDamageable>();
+                        if (damageable != null)
+                        {
+                            if (_combatController.CompareTag("Player"))
+                                CombatControllerBase.CacheAttackTarget(taget.transform);
+                            damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
+                        }
+                    }
+                    //在这里加能量条
+                    CombatRecoverEnergyConfig recoverEnergyConfig = _currentCombatList.TryGetRecoverEnergyConfig(0, _runningEventIndex.attackDetectionIndex);
+                    if (recoverEnergyConfig != null)
+                    {
+                        TeamManager.Instance.teamCurrentEnergy += recoverEnergyConfig.energyRecover;
                     }
                 }
 

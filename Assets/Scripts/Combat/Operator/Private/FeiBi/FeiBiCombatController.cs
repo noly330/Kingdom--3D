@@ -8,6 +8,7 @@ public class FeiBiCombatController : OperatorCombatController
 {
     private int _recieveBreakStack = 0;
     public int GetRecieveBreakStack() => _recieveBreakStack;
+    public void ResetRecieveBreakStack() => _recieveBreakStack = 0;
     private void OnEnable()
     {
         EventCenter.AddListener<Events.OnPhysicalDefenseBreakConsumed>(OnPhysicalDefenseBreakConsumed);
@@ -28,7 +29,7 @@ public class FeiBiCombatController : OperatorCombatController
         {
             Debug.Log("飞比可以释放连携技了");
             TeamInputManager.Instance.TryEnqueueLinkAttack(TeamManager.Instance.GetSlotIndex(this.transform));
-            _recieveBreakStack = message.breakStack;
+            _recieveBreakStack = Mathf.Max(_recieveBreakStack, message.breakStack);
         }
     }
 

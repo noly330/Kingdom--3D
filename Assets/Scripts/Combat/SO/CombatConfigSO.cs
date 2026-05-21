@@ -15,6 +15,8 @@ public class CombatConfigSO : ScriptableObject
     public CombatVFXConfig[] sfxConfigs;
     [Header("战斗音效配置")]
     public CombatSFXConfig[] vfxConfigs;
+    [Header("战斗能量恢复配置")]
+    public CombatRecoverEnergyConfig[] recoverEnergyConfigs;
 }
 
 
@@ -53,4 +55,11 @@ public class CombatSFXConfig
     public float startTime;
     public AudioClip audioClip;
     public float volume;
+}
+
+[System.Serializable]
+public class CombatRecoverEnergyConfig
+{
+    public int attackIndex;  //在第attackIndex段攻击的时候触发
+    public float energyRecover;
 }

@@ -30,6 +30,8 @@ public class FeiBiLinkAttackState : ICombatState
     public void OnEnter()
     {
         _currentCombatList = GetLinkCombatList(_combatController.GetRecieveBreakStack());
+        _combatController.ResetRecieveBreakStack();
+
         Debug.Log(_currentCombatList.name);
         //_combatController.StartLinkTimeSlow(0.3f, 0.5f);
 
@@ -43,7 +45,7 @@ public class FeiBiLinkAttackState : ICombatState
 
     public void OnEnterAgain()
     {
-        
+
     }
 
     public void OnExit()
@@ -57,7 +59,7 @@ public class FeiBiLinkAttackState : ICombatState
     {
         RunningEvent();
         TryExecuteSkillOnCooldownReady();
-        
+
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsTag("Skill") && !_animator.IsInTransition(0))
         {
             _combatStateMachine.ReturnToDefaultState();
@@ -84,12 +86,12 @@ public class FeiBiLinkAttackState : ICombatState
         // if (!_combatController.CanSkillAttack())
         //     return;
 
-        if(_currentCombatIndex >= _currentCombatList.TryGetCombatListCount())
+        if (_currentCombatIndex >= _currentCombatList.TryGetCombatListCount())
         {
             _combatStateMachine.ReturnToDefaultState();
             return;
         }
-        
+
         _combatController.poiseLevel = ForceLevel.Mid;
         _runningEventIndex.Reset();
         bool hasCachedTarget = _combatController.TeleportNearCachedAttackTargetIfCompanion(_combatController.linkDistance);
@@ -99,8 +101,8 @@ public class FeiBiLinkAttackState : ICombatState
             _combatController.FindTarget();
         _combatController.LookTarget();
         UpdateCombatIndex();
-        
-        
+
+
     }
 
     private void UpdateCombatIndex()
@@ -128,15 +130,27 @@ public class FeiBiLinkAttackState : ICombatState
                 Collider[] targetList = Physics.OverlapBox(_combatController.transform.position + boxPosition,
                 combatDetectConfig.scale, quaternion.identity, _combatController.targetMask);
 
-                //TODO:遍历敌人
-                foreach (Collider taget in targetList)
+
+                bool isHit = targetList.Length > 0;
+                if (isHit)
                 {
-                    IDamageable damageable = taget.GetComponent<IDamageable>();
-                    if (damageable != null)
+
+
+                    foreach (Collider taget in targetList)
                     {
-                        if (_combatController.CompareTag("Player"))
-                            CombatControllerBase.CacheAttackTarget(taget.transform);
-                        damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
+                        IDamageable damageable = taget.GetComponent<IDamageable>();
+                        if (damageable != null)
+                        {
+                            if (_combatController.CompareTag("Player"))
+                                CombatControllerBase.CacheAttackTarget(taget.transform);
+                            damageable.BeHit(_currentCombatList.TryGetInteractionConfig(0, _runningEventIndex.attackDetectionIndex), _combatController.characterBase);
+                        }
+                    }
+                    //在这里加能量条
+                    CombatRecoverEnergyConfig recoverEnergyConfig = _currentCombatList.TryGetRecoverEnergyConfig(_currentCombatIndex, _runningEventIndex.attackDetectionIndex);
+                    if (recoverEnergyConfig != null)
+                    {
+                        TeamManager.Instance.teamCurrentEnergy += recoverEnergyConfig.energyRecover;
                     }
                 }
 
@@ -168,15 +182,15 @@ public class FeiBiLinkAttackState : ICombatState
     }
     private CombatListSO GetLinkCombatList(int defenderBreakStack)
     {
-        if(defenderBreakStack == 1 || defenderBreakStack == 2)
+        if (defenderBreakStack == 1 || defenderBreakStack == 2)
         {
             return _combatController.GetLinkCombatList(0);
         }
-        else if(defenderBreakStack == 3)
+        else if (defenderBreakStack == 3)
         {
             return _combatController.GetLinkCombatList(1);
         }
-        else if(defenderBreakStack == 4)
+        else if (defenderBreakStack == 4)
         {
             return _combatController.GetLinkCombatList(2);
         }

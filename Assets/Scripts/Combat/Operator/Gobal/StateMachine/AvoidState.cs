@@ -137,12 +137,13 @@ public class AvoidState : ICombatState
             skinnedMeshRenderer.BakeMesh(mesh, true);
             meshFilter.mesh = mesh;
 
-            // 每个submesh都使用同一个蓝色材质，避免多材质模型只显示头发、衣服等局部。
+            // 每个submesh都使用同一个透明发光材质，避免多材质模型只显示头发、衣服等局部。
             Material[] materials = new Material[Mathf.Max(1, mesh.subMeshCount)];
             for (int j = 0; j < materials.Length; j++)
                 materials[j] = GetAfterimageMaterial();
             meshRenderer.sharedMaterials = materials;
 
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             meshRenderer.receiveShadows = false;
 
             Object.Destroy(mesh, MeshDestroyDelay);
@@ -155,18 +156,32 @@ public class AvoidState : ICombatState
         if (_afterimageMaterial != null)
             return _afterimageMaterial;
 
-        Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+        Shader shader = Resources.Load<Shader>("Shaders/AvoidAfterimageGlow");
+        if (shader == null)
+            shader = Shader.Find("Kingdom/Avoid Afterimage Glow");
+        if (shader == null)
+            shader = Shader.Find("Universal Render Pipeline/Unlit");
         if (shader == null)
             shader = Shader.Find("Unlit/Color");
 
         _afterimageMaterial = new Material(shader);
-        _afterimageMaterial.name = "Avoid Afterimage Blue";
+        _afterimageMaterial.name = "Avoid Afterimage Glow Blue";
 
-        Color color = new Color(0.15f, 0.75f, 1f, 1f);
+        Color color = new Color(0.05f, 0.55f, 1f, 0.28f);
         if (_afterimageMaterial.HasProperty("_BaseColor"))
             _afterimageMaterial.SetColor("_BaseColor", color);
         if (_afterimageMaterial.HasProperty("_Color"))
             _afterimageMaterial.SetColor("_Color", color);
+        if (_afterimageMaterial.HasProperty("_RimColor"))
+            _afterimageMaterial.SetColor("_RimColor", new Color(0.15f, 0.85f, 1f, 1f));
+        if (_afterimageMaterial.HasProperty("_Alpha"))
+            _afterimageMaterial.SetFloat("_Alpha", 0.32f);
+        if (_afterimageMaterial.HasProperty("_FresnelPower"))
+            _afterimageMaterial.SetFloat("_FresnelPower", 2.2f);
+        if (_afterimageMaterial.HasProperty("_EmissionIntensity"))
+            _afterimageMaterial.SetFloat("_EmissionIntensity", 2.6f);
+
+        _afterimageMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
 
         return _afterimageMaterial;
     }
