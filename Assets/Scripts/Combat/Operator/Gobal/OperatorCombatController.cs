@@ -95,5 +95,57 @@ public class OperatorCombatController : CombatControllerBase
         return true;
     }
 
+    private static Coroutine _linkSkillSlowCoroutine;
+    private static float _linkSlowEndTime;
+    private static float _savedTimeScale = 1f;
+    private static float _savedFixedDeltaTime = 0.02f;
+    private static bool _isLinkSlowActive;
+
+    /// <summary>
+    /// 连携技全局时间减速 (0.3x, 持续 1s) + 非主控干员镜头偏移。连续释放时后者覆盖前者。
+    /// </summary>
+    public void StartLinkSkillTimeSlow()
+    {
+        _linkSlowEndTime = Time.realtimeSinceStartup + 0.5f;
+
+        bool isCompanion = TeamManager.Instance != null &&
+                           TeamManager.Instance.GetSlotIndex(transform) != TeamManager.Instance.mainCharacterIndex;
+
+        if (isCompanion)
+        {
+            ThirdPersonCamera camera = FindObjectOfType<ThirdPersonCamera>();
+            camera?.StartLookAt(transform);
+        }
+
+        if (_linkSkillSlowCoroutine == null)
+            _linkSkillSlowCoroutine = StartCoroutine(LinkSkillSlowCoroutine());
+    }
+
+    private IEnumerator LinkSkillSlowCoroutine()
+    {
+        if (!_isLinkSlowActive)
+        {
+            _savedTimeScale = Time.timeScale;
+            _savedFixedDeltaTime = Time.fixedDeltaTime;
+        }
+        _isLinkSlowActive = true;
+
+        Time.timeScale = 0.3f;
+        Time.fixedDeltaTime = _savedFixedDeltaTime * 0.3f;
+
+        while (Time.realtimeSinceStartup < _linkSlowEndTime)
+            yield return null;
+
+        Time.timeScale = _savedTimeScale;
+        Time.fixedDeltaTime = _savedFixedDeltaTime;
+        _isLinkSlowActive = false;
+
+        // 减速结束后平滑复原镜头
+        ThirdPersonCamera camera = FindObjectOfType<ThirdPersonCamera>();
+        camera?.StartReturn();
+
+        _linkSkillSlowCoroutine = null;
+    }
+
     
 }

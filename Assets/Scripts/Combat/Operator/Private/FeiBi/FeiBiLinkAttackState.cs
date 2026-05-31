@@ -44,6 +44,12 @@ public class FeiBiLinkAttackState : ICombatState
         
         _skillCooldown = _currentCombatList.TryGetColdTime(0);
         ExecuteSkillAttack();
+
+        _combatController.StartLinkSkillTimeSlow();
+
+        PlayerCharacter playerCharacter = _combatController.GetComponent<PlayerCharacter>();
+        LinkLeftNoticeCharacterUI.Instance.SetCharacterIcon(playerCharacter.characterInfo.linkHeadSprite);
+        LinkLeftNoticeCharacterUI.Instance.Show();
     }
 
     public void OnEnterAgain()
@@ -137,8 +143,6 @@ public class FeiBiLinkAttackState : ICombatState
                 bool isHit = targetList.Length > 0;
                 if (isHit)
                 {
-
-
                     foreach (Collider taget in targetList)
                     {
                         IDamageable damageable = taget.GetComponent<IDamageable>();

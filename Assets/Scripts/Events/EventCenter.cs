@@ -12,29 +12,29 @@ public static class EventCenter
     // 泛型约束：T必须是引用类型
     // protobuf消息都是class，所以这个约束很合理
     //listener 是一个 委托实例，通俗地说，它就是 "一个装着方法的容器"
-    public static void AddListener<T>(Action<T> listener) where T : class
+    public static void AddListener<T>(Action<T> handler) where T : class
     {
-        if(listener == null)  throw new ArgumentNullException(nameof(listener));
+        if(handler == null)  throw new ArgumentNullException(nameof(handler));
         var type = typeof(T);
         if(_events.TryGetValue(type,out var existingDelegate))  //尝试从字典获取已有委托
         {
             //combine就是+=
-            _events[type] = Delegate.Combine(existingDelegate,listener);
+            _events[type] = Delegate.Combine(existingDelegate,handler);
         }
         else
         {
             //直接存
-            _events[type] = listener;
+            _events[type] = handler;
         }
     }
 
-    public static void RemoveListener<T>(Action<T> listener) where T : class
+    public static void RemoveListener<T>(Action<T> handler) where T : class
     {
-        if(listener == null)  throw new ArgumentNullException(nameof(listener));
+        if(handler == null)  throw new ArgumentNullException(nameof(handler));
         var type = typeof(T);
         if(_events.TryGetValue(type,out var existingDelegate))
         {
-            var newDelegate = Delegate.Remove(existingDelegate,listener);
+            var newDelegate = Delegate.Remove(existingDelegate,handler);
             if(newDelegate == null)
             {
                 _events.Remove(type);

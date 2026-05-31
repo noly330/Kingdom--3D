@@ -26,6 +26,12 @@ public class LinkAttackState : ICombatState
         EventCenter.Broadcast(new Events.OnLinkSkillTriggered());  //触发事件
         TeamInputManager.Instance.DequeueLinkAttack();
         EventCenter.Broadcast(new Events.OnLinkSkillQueueChanged());  //触发事件
+
+        _combatController.StartLinkSkillTimeSlow();
+
+        PlayerCharacter playerCharacter = _combatController.GetComponent<PlayerCharacter>();
+        LinkLeftNoticeCharacterUI.Instance.SetCharacterIcon(playerCharacter.characterInfo.linkHeadSprite);
+        LinkLeftNoticeCharacterUI.Instance.Show();
     }
 
     public void OnEnterAgain()
@@ -90,7 +96,6 @@ public class LinkAttackState : ICombatState
 
                 if (isHit)
                 {
-
                     foreach (Collider taget in targetList)
                     {
                         IDamageable damageable = taget.GetComponent<IDamageable>();

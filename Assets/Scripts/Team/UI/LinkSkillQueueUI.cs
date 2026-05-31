@@ -53,6 +53,7 @@ public class LinkSkillQueueUI : MonoBehaviour
             linkSkillUI.SetActive(true);
             LinkMemberHeadUI linkMemberHeadUI = linkSkillUI.GetComponent<LinkMemberHeadUI>();
             linkMemberHeadUI.UpdateHeadImage(TeamManager.Instance.teamMembers[id].GetComponent<PlayerCharacter>().characterInfo.headSprite);
+            linkMemberHeadUI.PlayShowAnimation();
         }
     }
 }

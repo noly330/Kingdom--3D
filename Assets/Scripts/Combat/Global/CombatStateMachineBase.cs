@@ -102,7 +102,7 @@ public class CombatStateMachineBase : MonoBehaviour
             case CombatStateType.Skill:
                 return 20f;
             case CombatStateType.LinkSkill:
-                return 20f;
+                return 30f;
             case CombatStateType.Slide:
                 return 40f;
             case CombatStateType.Avoid:

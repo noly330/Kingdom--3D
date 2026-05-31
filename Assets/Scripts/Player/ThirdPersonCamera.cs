@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,6 +24,16 @@ public class ThirdPersonCamera : MonoBehaviour
     private float cinemachineTargetPitch;  //记录相机的垂直旋转角度（绕 X 轴）
     private Vector2 look;  //存储鼠标视角输入
     private Vector2 scroll; //存储鼠标滚轮输入
+
+    // 镜头注视覆盖（用于连携技镜头偏移）
+    private bool _isLookAtOverride;
+    private float _lookAtTargetYaw;
+    private float _lookAtTargetPitch;
+    private float _lookAtOriginalYaw;
+    private float _lookAtOriginalPitch;
+    private bool _isReturning;
+    private float _returnDuration = 0.5f;
+    private float _returnTimer;
 
     private void OnEnable()
     {
@@ -78,12 +86,34 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        look = GameInputManager.Instance.Look;
-        scroll = GameInputManager.Instance.Scroll;
-        if (look.sqrMagnitude >= threshold)
+        if (_isLookAtOverride)
         {
-            cinemachineTargetYaw += look.x * mouseSensitivity;
-            cinemachineTargetPitch += look.y * mouseSensitivity * 0.4f;
+            float delta = Time.unscaledDeltaTime;
+
+            if (!_isReturning)
+            {
+                cinemachineTargetYaw = Mathf.LerpAngle(cinemachineTargetYaw, _lookAtTargetYaw, delta * 6f);
+                cinemachineTargetPitch = Mathf.LerpAngle(cinemachineTargetPitch, _lookAtTargetPitch, delta * 6f);
+            }
+            else
+            {
+                _returnTimer -= delta;
+                cinemachineTargetYaw = Mathf.LerpAngle(cinemachineTargetYaw, _lookAtOriginalYaw, delta * 3f);
+                cinemachineTargetPitch = Mathf.LerpAngle(cinemachineTargetPitch, _lookAtOriginalPitch, delta * 3f);
+
+                if (_returnTimer <= 0f)
+                    _isLookAtOverride = false;
+            }
+        }
+        else
+        {
+            look = GameInputManager.Instance.Look;
+            scroll = GameInputManager.Instance.Scroll;
+            if (look.sqrMagnitude >= threshold)
+            {
+                cinemachineTargetYaw += look.x * mouseSensitivity;
+                cinemachineTargetPitch += look.y * mouseSensitivity * 0.4f;
+            }
         }
 
         //把角度归一化到正确的区间
@@ -96,6 +126,36 @@ public class ThirdPersonCamera : MonoBehaviour
         HandleFovZoom();
     }
 
+    /// <summary>
+    /// 连携技镜头偏移：平滑旋转镜头注视目标干员
+    /// </summary>
+    public void StartLookAt(Transform target)
+    {
+        if (target == null || virtualCamera == null) return;
+
+        _isLookAtOverride = true;
+        _isReturning = false;
+
+        _lookAtOriginalYaw = cinemachineTargetYaw;
+        _lookAtOriginalPitch = cinemachineTargetPitch;
+
+        Vector3 lookDir = target.position - virtualCamera.transform.position;
+        lookDir.y = 0f;
+        if (lookDir.sqrMagnitude < 0.01f) return;
+
+        Quaternion lookRotation = Quaternion.LookRotation(lookDir);
+        _lookAtTargetYaw = lookRotation.eulerAngles.y;
+        _lookAtTargetPitch = cinemachineTargetPitch;
+    }
+
+    /// <summary>
+    /// 连携技镜头复原：平滑回到原注视方向
+    /// </summary>
+    public void StartReturn()
+    {
+        _isReturning = true;
+        _returnTimer = _returnDuration;
+    }
 
     private void HandleFovZoom()
     {

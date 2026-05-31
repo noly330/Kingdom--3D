@@ -44,6 +44,7 @@ public class AvoidState : ICombatState
             _skinnedMeshRenderers = _playerMovementControl.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         _animator.CrossFadeInFixedTime("Avoid", 0f, 0, 0);
+        TeamManager.Instance.teamCurrentEnergy += 25f;
         StartTimeSlow();
     }
 

@@ -55,14 +55,14 @@ public class EnemyCombatController : CombatControllerBase
             case AttackEffectType.Launch:
 
                 if (_enemyAbnormalityManager.breakStack > 0)
-                    animator.CrossFadeInFixedTime("Hit_Up", 0.1f, 0);
+                    animator.CrossFadeInFixedTime("Hit_Up", 0f, 0);
                 _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
                 break;
             case AttackEffectType.KnockDown:
 
                 if (_enemyAbnormalityManager.breakStack > 0)
                 {
-                    animator.CrossFadeInFixedTime("Hit_Down", 0.1f, 0);
+                    animator.CrossFadeInFixedTime("Hit_Down", 0f, 0);
                 }
 
                 _enemyAbnormalityManager.OnPhysicalDefenseBreakApplied();
